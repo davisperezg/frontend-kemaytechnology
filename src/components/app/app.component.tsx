@@ -8,14 +8,18 @@ import {
 } from "react-router-dom";
 import client from "../../apollo-client";
 import Home from "../../pages/home.page";
-import { ExchangeRates } from "../../hooks/user/useGet";
+import LoginPage from "../../pages/login.page";
 
 const App: React.FC = () => {
   return (
     <ApolloProvider client={client}>
-      <Router>
+      <LoginPage />
+      {/* <Router>
         <nav>
           <ul>
+            <li>
+              <NavLink to="/login">Login</NavLink>
+            </li>
             <li>
               <NavLink to="/">Index</NavLink>
             </li>
@@ -25,12 +29,10 @@ const App: React.FC = () => {
           </ul>
         </nav>
         <Switch>
-          <Route path="/home">
-            <Home />
-            <ExchangeRates />
-          </Route>
+          <Route path="/login" component={Login} />
+          <Route path="/home" component={ExchangeRates} />
         </Switch>
-      </Router>
+      </Router> */}
     </ApolloProvider>
   );
 };
