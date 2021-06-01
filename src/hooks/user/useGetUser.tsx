@@ -1,89 +1,22 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { User } from "../../interfaces/user.interface";
-import { gql, useQuery, useMutation } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 
-interface AuthInput {
-  variables: {
-    authInput: {
-      email: string;
-      password: string;
-    };
-  };
-}
-
-interface InputId {
-  variables: {
-    id: string;
-  };
-}
-
-export const POST = gql`
-  mutation login($authInput: AuthInput!) {
-    login(authInput: $authInput) {
-      access_token
-    }
-  }
-`;
-
-export const GETXID = gql`
-  query getUser($id: InputId!) {
+const GET_USER = gql`
+  query getUser($id: String!) {
     getUser(id: $id) {
-      id
-      name
-    }
-  }
-`;
-
-export const GET = gql`
-  {
-    getUser(id: "60906a68053f9a30ac12eddd") {
       id
       name
       lastName
       email
-      role {
-        name
-        description
-        modules {
-          name
-          description
-          access {
-            id
-            name
-          }
-          menus {
-            id
-            name
-            link
-          }
-        }
-      }
     }
   }
 `;
 
-export const useLogin = (): ((authInput: AuthInput) => any) => {
-  const [login, { error }] = useMutation(POST, {
-    update(cache, { data: { login } }) {
-      cache.modify({
-        fields: {
-          login(existingLogin = []) {
-            const newLoginRef = cache.writeFragment({
-              data: login,
-              fragment: gql`
-                fragment newLogin on Login {
-                  access_token
-                  refresh_token
-                }
-              `,
-            });
-            return [...existingLogin, newLoginRef];
-          },
-        },
-      });
-    },
+export const useGetUser = (id: string) => {
+  const { loading, error, data } = useQuery(GET_USER, {
+    variables: { id: id },
   });
-  return login;
+
+  return { loading, error, data };
 };
 
 // export function ExchangeRates() {
