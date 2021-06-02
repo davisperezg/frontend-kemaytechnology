@@ -6,6 +6,8 @@ import { clearAllLocal } from "../../lib/local-storage";
 import client from "../../apollo-client";
 import { User } from "../../interfaces/user.interface";
 import { useMe } from "../../hooks/user/useMe";
+import { connect } from "react-redux";
+import { suma, resta } from "../../store/auth/action";
 
 const initialUser = {
   id: "",
@@ -14,14 +16,21 @@ const initialUser = {
   email: "",
 };
 
-const Header = () => {
+const mapStateToProps = (state: any) => {
+  console.log(state);
+  return {
+    amount: state.amountReducer.amount,
+  };
+};
+
+const Header = ({ amount, suma, resta }: any) => {
   let history = useHistory();
 
-  const logout = () => {
-    clearAllLocal();
-    client.resetStore();
-    window.location.href = "/";
-  };
+  // const logout = () => {
+  //   clearAllLocal();
+  //   client.resetStore();
+  //   window.location.href = "/";
+  // };
 
   const url = (param: string) => history.push(`/${param}`);
   const { loading, data } = useMe();
@@ -38,12 +47,19 @@ const Header = () => {
       </div>
       <div className="content-options">
         <div className="options">
+          {amount}
+          <button className="buttonLogout" onClick={() => suma()}>
+            sumar
+          </button>
+          <button className="buttonLogout" onClick={() => resta()}>
+            restar
+          </button>
           <a>
             {loading
               ? `Loading...`
               : `Bienvenido, ${data.me.name} ${data.me.lastName}`}
           </a>
-          <button className="buttonLogout" onClick={logout}>
+          <button className="buttonLogout" onClick={() => alert("hola")}>
             Cerrar sesion
           </button>
         </div>
@@ -52,4 +68,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default connect(mapStateToProps, { suma, resta })(Header);
