@@ -1,65 +1,53 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React, { useEffect } from "react";
 import logo from "../../assets/logo.png";
-import { useHistory } from "react-router-dom";
-import "./header.css";
-import { clearAllLocal } from "../../lib/local-storage";
-import client from "../../apollo-client";
-import { User } from "../../interfaces/user.interface";
 import { useMe } from "../../hooks/user/useMe";
 import { connect } from "react-redux";
-import { suma, resta } from "../../store/auth/action";
-
-const initialUser = {
-  id: "",
-  name: "",
-  lastName: "",
-  email: "",
-};
+import { whoisme, setLoading, logout } from "../../store/auth/action";
+import { setLink } from "../../store/page/action";
+import { useHistory } from "react-router-dom";
+import "./header.css";
 
 const mapStateToProps = (state: any) => {
-  console.log(state);
   return {
-    amount: state.amountReducer.amount,
+    loading: state.authReducer.loading,
+    authUser: state.authReducer.authUser,
   };
 };
 
-const Header = ({ amount, suma, resta }: any) => {
-  let history = useHistory();
+const Header = ({ authUser, loading, whoisme, logout, setLink }: any) => {
+  const { me, data } = useMe();
+  const history = useHistory();
 
-  // const logout = () => {
-  //   clearAllLocal();
-  //   client.resetStore();
-  //   window.location.href = "/";
-  // };
+  const gotToHome = () => {
+    history.push(`/`);
+    setLink("/");
+  };
 
-  const url = (param: string) => history.push(`/${param}`);
-  const { loading, data } = useMe();
+  useEffect(() => {
+    me();
+    whoisme(data);
+  }, [me, whoisme, data]);
 
   return (
     <header>
       <div className="content-logo">
-        <div onClick={() => url("")} className="logo">
+        <div onClick={() => gotToHome()} className="logo">
           <img width="60" height="60" src={logo} alt="Logo" />
         </div>
-        <div onClick={() => url("")} className="title-logo">
+        <div onClick={() => gotToHome()} className="title-logo">
           <p>RPUM</p>
         </div>
       </div>
       <div className="content-options">
         <div className="options">
-          {amount}
-          <button className="buttonLogout" onClick={() => suma()}>
-            sumar
-          </button>
-          <button className="buttonLogout" onClick={() => resta()}>
-            restar
-          </button>
           <a>
             {loading
-              ? `Loading...`
-              : `Bienvenido, ${data.me.name} ${data.me.lastName}`}
+              ? `Cargando usuario...`
+              : `Bienvenido, ${authUser?.name} ${authUser?.lastName}`}
           </a>
-          <button className="buttonLogout" onClick={() => alert("hola")}>
+
+          <button className="buttonLogout" onClick={() => logout()}>
             Cerrar sesion
           </button>
         </div>
@@ -68,4 +56,9 @@ const Header = ({ amount, suma, resta }: any) => {
   );
 };
 
-export default connect(mapStateToProps, { suma, resta })(Header);
+export default connect(mapStateToProps, {
+  setLoading,
+  whoisme,
+  logout,
+  setLink,
+})(Header);

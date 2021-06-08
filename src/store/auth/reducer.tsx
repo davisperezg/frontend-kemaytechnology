@@ -1,30 +1,42 @@
-import { User } from "../../interfaces/user.interface";
-import { LOGIN_USER, LOGOUT_USER, RESTA, SUMA } from "./action";
+import { LOADING_USER, ERROR_USER, LOGIN_USER, LOGOUT_USER } from "./action";
 
-const initialState: User = {
-  id: "",
-  name: "",
-  lastName: "",
-  email: "",
-};
+interface RootState {
+  loading: boolean;
+  authUser: undefined;
+  error: undefined;
+}
 
-const istate = {
-  amount: 0,
+const initialState: RootState = {
+  loading: false,
+  authUser: undefined,
+  error: undefined,
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default (state = istate, action: any) => {
+export default (state: RootState = initialState, action: any) => {
   switch (action.type) {
-    case SUMA:
+    case LOADING_USER:
       return {
         ...state,
-        amount: state.amount + 10,
+        loading: action.payload,
       };
 
-    case RESTA:
+    case LOGIN_USER:
       return {
         ...state,
-        amount: state.amount - 10,
+        authUser: action.payload,
+      };
+
+    case LOGOUT_USER:
+      return {
+        ...state,
+        authUser: action.payload,
+      };
+
+    case ERROR_USER:
+      return {
+        ...state,
+        error: action.payload,
       };
 
     default:

@@ -1,14 +1,28 @@
-import { createStore, combineReducers } from "redux";
-import amountReducer from "./auth/reducer";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-const composeEnhancers =
-  (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-  (window as any).__REDUX_DEVTOOLS_EXTENSION__();
+import authReducer from "./auth/reducer";
+import pageReducer from "./page/reducer";
 
 const reducers = combineReducers({
-  amountReducer,
+  authReducer,
+  page: pageReducer,
 });
 
-const store = createStore(reducers, composeEnhancers);
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["page"],
+};
 
-export default store;
+const persistedReducer = persistReducer(persistConfig, reducers);
+
+export const store = createStore(
+  persistedReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
+
+export const persistor = persistStore(store);

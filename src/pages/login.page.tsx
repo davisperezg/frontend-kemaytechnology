@@ -1,54 +1,69 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import logo from "../assets/logo.png";
 import { useLogin } from "../hooks/login/useLogin";
-import { useForm } from "react-hook-form";
 import { Error } from "../interfaces/error.interface";
 import { Login } from "../interfaces/auth.interface";
 import { setLocal } from "../lib/local-storage";
 import client from "../apollo-client";
-import "./css/login.css";
 
-const LoginPage: React.FC = () => {
-  //const { error, loading, data } = useQuery(GET);
-  //   const { data } = useQuery(GETXID, {
-  //     variables: { id: "60906a68053f9a30ac12eddd" },
-  //   });
-  //useState<Error[]>([]);
+import "./css/login.css";
+import { setLoading } from "../store/auth/action";
+import { connect } from "react-redux";
+
+//for inputs
+type InputChange = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+//for selects
+//type SelectChange = ChangeEvent<HTMLSelectElement>;
+//for forms
+type FormChange = FormEvent<HTMLFormElement>;
+
+const initialUser = {
+  email: "",
+  password: "",
+};
+
+const mapStateToProps = (state: any) => {
+  return {
+    loading: state.authReducer.loading,
+  };
+};
+
+const LoginPage: React.FC = ({ loading, setLoading }: any) => {
   const [error, setError] = useState<Error>();
-  const { register, handleSubmit } = useForm<Login>();
-  const [isLoading, setLoading] = useState<Boolean>(false);
+  const [user, setUser] = useState<Login>(initialUser);
   const loginForm = useLogin();
 
-  const onSubmit = handleSubmit(({ email, password }) => {
+  const handleInputChange = (e: InputChange) =>
+    setUser({ ...user, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e: FormChange) => {
+    e.preventDefault();
     setLoading(true);
-    const resultLogin = async () => {
-      try {
-        const res = await loginForm({
-          variables: { authInput: { email, password } },
-        });
+    try {
+      const res = await loginForm({
+        variables: {
+          authInput: { email: user.email, password: user.password },
+        },
+      });
 
-        const {
-          data: {
-            login: { access_token, refresh_token },
-          },
-        } = res;
+      const {
+        data: {
+          login: { access_token, refresh_token },
+        },
+      } = res;
 
-        setLocal("accessToken", access_token);
-        setLocal("refreshToken", refresh_token);
-        client.resetStore();
-        window.location.href = "/";
-        setLoading(false);
-      } catch (e) {
-        setLoading(false);
-        setError(e.graphQLErrors[0].extensions.exception.response);
-      }
-    };
-
-    resultLogin();
-  });
+      setLocal("accessToken", access_token);
+      setLocal("refreshToken", refresh_token);
+      client.resetStore();
+      window.location.href = "/";
+    } catch (e) {
+      setError(e.graphQLErrors[0].extensions.exception.response);
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="login">
@@ -60,7 +75,7 @@ const LoginPage: React.FC = () => {
           <div className="content-login-form-header content-items-center">
             <h1>SISTEMA RPUM</h1>
           </div>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit}>
             <div className="content-login-form-body">
               <div className="content-login-form-input">
                 <TextField
@@ -68,7 +83,8 @@ const LoginPage: React.FC = () => {
                   id="idUsername"
                   label="Usuario"
                   helperText={error?.path === "username" ? error?.message : ""}
-                  {...register("email")}
+                  name="email"
+                  onChange={handleInputChange}
                   variant="outlined"
                   fullWidth
                 />
@@ -80,24 +96,29 @@ const LoginPage: React.FC = () => {
                   id="idPassword"
                   label="Contraseña"
                   helperText={error?.path === "password" ? error?.message : ""}
-                  {...register("password")}
+                  name="password"
+                  onChange={handleInputChange}
                   variant="outlined"
                   type="password"
                   fullWidth
                 />
               </div>
               <br />
-              <div className="content-login-form-input">
-                <Button
-                  disabled={isLoading ? true : false}
-                  type="submit"
-                  size="large"
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                >
-                  {isLoading ? <CircularProgress /> : "Iniciar sesion"}
-                </Button>
+              <div className="content-login-form-input content-items-center">
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  <Button
+                    disabled={loading ? true : false}
+                    type="submit"
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
+                    Iniciar sesion
+                  </Button>
+                )}
               </div>
               <br />
               <div className="content-login-form-footer content-items-center">
@@ -111,4 +132,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default connect(mapStateToProps, { setLoading })(LoginPage);

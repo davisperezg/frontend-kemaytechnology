@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { gql, useMutation } from "@apollo/client";
 
 interface AuthInput {
@@ -19,7 +20,7 @@ const POST_LOGIN = gql`
 `;
 
 export const useLogin = (): any => {
-  const [login, { error }] = useMutation(POST_LOGIN, {
+  const [login] = useMutation(POST_LOGIN, {
     update(cache, { data: { login } }) {
       cache.modify({
         fields: {

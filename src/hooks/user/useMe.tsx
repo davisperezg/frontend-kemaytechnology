@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 
 const ME = gql`
   query me {
@@ -7,14 +7,29 @@ const ME = gql`
       name
       lastName
       email
+      role {
+        name
+        modules {
+          id
+          name
+          access {
+            name
+          }
+          menus {
+            id
+            name
+            link
+          }
+        }
+      }
     }
   }
 `;
 
 export const useMe = () => {
-  const { loading, error, data } = useQuery(ME, {
+  const [me, { data, loading }] = useLazyQuery(ME, {
     pollInterval: 500,
   });
-  console.log(data);
-  return { loading, error, data };
+
+  return { me, data, loading };
 };

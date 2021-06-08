@@ -3,8 +3,8 @@ import Header from "../components/header/header.component";
 import Wrapper from "../components/wrapper/wrapper.component";
 import "./css/home.css";
 
-const Test = () => {
+const Profomas = () => {
   return <>Proformas</>;
 };
 
-export default Test;
+export default Profomas;
