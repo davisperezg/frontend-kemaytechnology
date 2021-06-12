@@ -15,7 +15,7 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-const Header = ({ authUser, loading, whoisme, logout, setLink }: any) => {
+const Header = ({ authUser, loading, whoisme, setLink, logout }: any) => {
   const { me, data } = useMe();
   const history = useHistory();
 

@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { gql, useMutation } from "@apollo/client";
+import { Login } from "../../interfaces/auth.interface";
 
 interface AuthInput {
   variables: {
-    authInput: {
-      email: string;
-      password: string;
-    };
+    authInput: Login;
   };
 }
 

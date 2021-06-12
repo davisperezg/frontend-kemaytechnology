@@ -11,20 +11,32 @@ interface RootState {
   authReducer: {
     loading: boolean;
     authUser: User;
-    link: string;
+  };
+  page: {
+    user: {
+      link: string;
+      page: string;
+    };
   };
 }
 
 const mapStateToProps = (state: RootState) => {
   const {
-    authReducer: { loading, authUser, link },
+    authReducer: { loading, authUser },
+    page: {
+      user: { link, page },
+    },
   } = state;
 
-  return { loading, authUser, link };
+  return { loading, authUser, page, link };
 };
 
-const Wrapper = ({ authUser }: any) => {
+const Wrapper = ({ authUser, page }: any) => {
   const data: User = authUser;
+  const title: String = page;
+  const firsCaracter: String = title.charAt(0).toUpperCase();
+  const restCaracter: String = title.substr(1, title.length);
+  const subTitle: String = `${firsCaracter}${restCaracter.toLowerCase()}`;
   const findModules = data?.role?.modules;
   const [modules, setModules] = useState<Module[]>([]);
 
@@ -43,18 +55,20 @@ const Wrapper = ({ authUser }: any) => {
           </ul>
         </div>
       </aside>
-      <section className="content-wrapper">
-        <div className="content-wrapper-header items-center">
-          <h1>Dashboard</h1>
-          <ol>
-            <li className="list-style-none text-active">
-              <strong>Home</strong>
-            </li>
-            <li className="list-style-none text-inactive">Dashboard</li>
-          </ol>
-        </div>
-        <div className="content-wrapper-main">
-          <SwitchContainer />
+      <section>
+        <div className="content-wrapper">
+          <div className="content-wrapper-header items-center">
+            <h1>{title}</h1>
+            <ol>
+              <li className="list-style-none text-active">
+                <strong>Home</strong>
+              </li>
+              <li className="list-style-none text-inactive">{subTitle}</li>
+            </ol>
+          </div>
+          <div className="content-wrapper-main">
+            <SwitchContainer />
+          </div>
         </div>
         <Footer />
       </section>

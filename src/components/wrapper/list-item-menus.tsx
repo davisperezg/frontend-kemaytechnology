@@ -25,6 +25,7 @@ const ListItemMenus = ({ menu, setLink }: { menu: Menu; setLink: any }) => {
 
   const goToPage = () => {
     setLink(menu.link);
+    document.title = `RPUM - ${menu.link.toUpperCase()}`;
     history.push(`/${menu.link}`);
   };
 

@@ -4,6 +4,7 @@ import { Redirect, Route, useLocation } from "react-router-dom";
 import NoMatch from "../pages/404.page";
 import Caja from "../pages/caja.page";
 import Clientes from "../pages/clientes.page";
+import ModulePage from "../pages/module.page";
 import { getLocal } from "./local-storage";
 
 interface RootState {
@@ -59,6 +60,10 @@ const ItemSwitch = ({ link, page }: any) => {
       case "HOME":
         const HOME = () => <Clientes />;
         return HOME;
+
+      case "MODULOS":
+        const MODULOS = () => <ModulePage />;
+        return MODULOS;
 
       case "CLIENTES":
         const CLIENTES = () => <Clientes />;

@@ -6,10 +6,12 @@ import storage from "redux-persist/lib/storage";
 
 import authReducer from "./auth/reducer";
 import pageReducer from "./page/reducer";
+import alertReducer from "./alert/reducer";
 
 const reducers = combineReducers({
   authReducer,
   page: pageReducer,
+  message: alertReducer,
 });
 
 const persistConfig = {
