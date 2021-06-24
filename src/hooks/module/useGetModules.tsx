@@ -1,7 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
-import { Module } from "../../interfaces/module.interface";
 
-const GET_MODULES = gql`
+export const GET_MODULES = gql`
   query getModules {
     getModules {
       id

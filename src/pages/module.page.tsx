@@ -13,9 +13,13 @@ import TableCell from "@material-ui/core/TableCell";
 import Paper from "@material-ui/core/Paper";
 //end tables
 import ItemModule from "../components/table/item-module.component";
+import DialogForm from "../components/dialog/dialog.component";
 import Tooltip from "@material-ui/core/Tooltip";
+import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
+import ModuleForm from "../components/module/module-form.component";
+import { useDispatch } from "react-redux";
+import { setAlert } from "../store/alert/action";
 
 const useStyles = makeStyles({
   table: {
@@ -23,11 +27,42 @@ const useStyles = makeStyles({
   },
 });
 
+interface Dialog {
+  name: string;
+  active: boolean;
+}
+
+const initialValueButton = {
+  name: "",
+  active: false,
+};
+
 const ModulePage = () => {
   const [modules, setModules] = useState<Module[]>([]);
   const { data, loading, error } = useGetModules();
-
+  const [dialog, setDialog] = useState<Dialog>(initialValueButton);
+  const dispatch = useDispatch();
   const classes = useStyles();
+
+  const handleClose = () => {
+    setDialog({ ...dialog, active: false });
+    dispatch(
+      setAlert({
+        type: "",
+        text: "",
+      })
+    );
+  };
+
+  const component = (name: string) => {
+    switch (name) {
+      case "Crear":
+        return <ModuleForm handleClose={handleClose} />;
+
+      default:
+        break;
+    }
+  };
 
   useEffect(() => {
     if (data) {
@@ -39,8 +74,28 @@ const ModulePage = () => {
     return <h1>Cargando...</h1>;
   }
 
+  if (error) {
+    return <h1>{error.message}</h1>;
+  }
+
   return (
     <>
+      <DialogForm
+        open={dialog.active}
+        title={`${dialog.name} Modulo`}
+        component={component(dialog.name)}
+        handleClose={handleClose}
+      />
+
+      <Tooltip title="Crear Rol">
+        <IconButton
+          aria-label="add"
+          size="small"
+          onClick={() => setDialog({ name: "Crear", active: true })}
+        >
+          <AddRoundedIcon />
+        </IconButton>
+      </Tooltip>
       <TableContainer component={Paper}>
         <Table
           className={classes.table}

@@ -1,15 +1,9 @@
 import { IAlert } from "../../interfaces/alert.interface";
 import { ALERT } from "./action";
 
-interface RootState {
-  alert: IAlert;
-}
-
-const initialState: RootState = {
-  alert: {
-    type: "",
-    text: "",
-  },
+const initialState: IAlert = {
+  type: "",
+  text: "",
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export

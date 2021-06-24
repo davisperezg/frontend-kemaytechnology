@@ -1,56 +1,56 @@
-import React, { useState, FormEvent, useCallback, useEffect } from "react";
-import { Access } from "../../interfaces/access.interface";
-import { Module } from "../../interfaces/module.interface";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect, FormEvent, useCallback } from "react";
+import { Role } from "../../interfaces/role.interface";
 import { setAlert } from "../../store/alert/action";
-import { useUpdateModule } from "../../hooks/module/useUpdateModule";
+import DialogActions from "@material-ui/core/DialogActions";
+import { useSelector } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import DialogActions from "@material-ui/core/DialogActions";
-import { useGetAllAccess } from "../../hooks/access/useGetAllAceess";
+import { useDispatch } from "react-redux";
+import { Module } from "../../interfaces/module.interface";
+import { useGetModules } from "../../hooks/module/useGetModules";
+import { useUpdateRole } from "../../hooks/role/useUpdateRole";
 import TrasnferList from "../../lib/transfer-list-component";
 
 type FormChange = FormEvent<HTMLFormElement>;
 
-const AccesoForm = ({
-  module,
+const ModuleTransferList = ({
+  role,
   handleClose,
 }: {
-  module: Module;
+  role: Role;
   handleClose: () => void;
 }) => {
-  const [listAvailable, setListAvailable] = useState<Access[]>([]);
-  const [listCurrent, setListCurrent] = useState<Access[]>([]);
-  const [checked, setChecked] = useState<Access[]>([]);
+  const [listAvailable, setListAvailable] = useState<Module[]>([]);
+  const [listCurrent, setListCurrent] = useState<Module[]>([]);
+  const [checked, setChecked] = useState<Module[]>([]);
   const dispatch = useDispatch();
-  const optionsUpdateModule = useUpdateModule();
-  const optionsGetAllAccess = useGetAllAccess();
+  const optionsGetModules = useGetModules();
+  const optionsUpdateRole = useUpdateRole();
   const alert = useSelector((state: any) => state.message);
   const { type, text } = alert;
 
   const onSubmit = async (e: FormChange) => {
     e.preventDefault();
 
-    const newData = listCurrent.map((access) => {
+    const newData = listCurrent.map((module) => {
       return {
-        name: access.name,
+        name: module.name,
       };
     });
 
     try {
-      await optionsUpdateModule.updateModule({
+      await optionsUpdateRole.updateRole({
         variables: {
-          moduleInput: {
-            id: module.id,
-            access: newData,
+          roleInput: {
+            id: role.id,
+            modules: newData,
           },
         },
       });
       return dispatch(
         setAlert({
           type: "success",
-          text: "El modulo actualizó sus accesos correctamente.",
+          text: "El modulo actualizó sus menu correctamente.",
         })
       );
     } catch (e) {
@@ -63,21 +63,21 @@ const AccesoForm = ({
     }
   };
 
-  const loadAccessAvailable = useCallback(() => {
-    const res = optionsGetAllAccess.data.getAccess.filter(
-      (dispo: Access) =>
-        !module.access?.some((actual) => dispo.name === actual.name)
+  const loadModuleAvailable = useCallback(() => {
+    const res = optionsGetModules.data.getModules.filter(
+      (dispo: Module) =>
+        !role.modules?.some((actual) => dispo.name === actual.name)
     );
 
     setListAvailable(res);
-  }, [module, optionsGetAllAccess.data]);
+  }, [role, optionsGetModules.data]);
 
   useEffect(() => {
-    if (module && optionsGetAllAccess.data) {
-      setListCurrent(module.access || []);
-      loadAccessAvailable();
+    if (role && optionsGetModules.data) {
+      setListCurrent(role.modules || []);
+      loadModuleAvailable();
     }
-  }, [module, optionsGetAllAccess.data, loadAccessAvailable]);
+  }, [role, optionsGetModules.data, loadModuleAvailable]);
 
   if (type === "error") {
     return <h1>{text}</h1>;
@@ -93,10 +93,10 @@ const AccesoForm = ({
             setChecked={setChecked}
             checked={checked}
             listAvailable={listAvailable}
-            titleAvailable="Accesos disponibles"
+            titleAvailable="Modulos disponibles"
             listCurrent={listCurrent}
-            titleCurrent="Accesos actuales"
-            loading={optionsGetAllAccess.loading}
+            titleCurrent="Modulos actuales"
+            loading={optionsGetModules.loading}
           />
         </Grid>
         <DialogActions style={{ width: "100%" }}>
@@ -109,7 +109,7 @@ const AccesoForm = ({
             color="primary"
             autoFocus
             variant="contained"
-            disabled={optionsUpdateModule.loading ? true : false}
+            disabled={optionsUpdateRole.loading ? true : false}
           >
             {module.id ? "Actualizar" : "Registrar"}
           </Button>
@@ -119,4 +119,4 @@ const AccesoForm = ({
   );
 };
 
-export default AccesoForm;
+export default ModuleTransferList;

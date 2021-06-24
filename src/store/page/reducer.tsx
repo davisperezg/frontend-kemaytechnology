@@ -3,6 +3,7 @@ import { LINK_USER } from "./action";
 interface RootState {
   user: {
     link: string;
+    module: string;
     page: string;
   };
 }
@@ -10,6 +11,7 @@ interface RootState {
 const initialState = {
   user: {
     link: "/",
+    module: "",
     page: "HOME",
   },
 };

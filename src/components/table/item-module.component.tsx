@@ -51,10 +51,10 @@ const ItemModule = ({ module }: { module: Module }) => {
         return <ModuleForm module={module} handleClose={handleClose} />;
 
       case "Acceso":
-        return <AccesoForm />;
+        return <AccesoForm module={module} handleClose={handleClose} />;
 
       case "Menu":
-        return <MenuForm />;
+        return <MenuForm module={module} handleClose={handleClose} />;
 
       default:
         break;
@@ -90,7 +90,7 @@ const ItemModule = ({ module }: { module: Module }) => {
               <ItemModuleAccess key={access.id} access={access} />
             ))}
         </TableCell>
-        <TableCell>
+        <TableCell align="right">
           <Tooltip
             title="Asignar menu"
             onClick={() => setDialog({ name: "Menu", active: true })}

@@ -39,7 +39,7 @@ const ListItemModules = ({ module }: { module: Module }) => {
       {isArrowActive && (
         <ul>
           {menus.map((menu) => (
-            <ListItemMenus key={menu.id} menu={menu} />
+            <ListItemMenus key={menu.id} menu={menu} module={module} />
           ))}
         </ul>
       )}

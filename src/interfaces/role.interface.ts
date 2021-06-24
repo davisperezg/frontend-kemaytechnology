@@ -3,5 +3,9 @@ import { Module } from "./module.interface";
 export interface Role {
   id?: string;
   name: string;
-  modules: Module[];
+  description?: string;
+  email?: string;
+  modules?: Module[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }

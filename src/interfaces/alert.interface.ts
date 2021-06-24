@@ -1,4 +1,4 @@
 export interface IAlert {
   type: string;
-  text: string;
+  text: string | any;
 }

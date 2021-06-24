@@ -16,14 +16,13 @@ import { useTheme } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
 import { useSelector } from "react-redux";
 //icons
-import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
 import IconButton from "@material-ui/core/IconButton";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import CloseIcon from "@material-ui/icons/Close";
 
 interface DialogOption {
   open: boolean;
-  dialog: any;
+  dialog?: any;
   title: string;
   component?: JSX.Element;
   handleClose: () => void;
@@ -77,7 +76,6 @@ const DialogForm = ({
   const alert = useSelector((state: any) => state.message);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
   /*  https://thoughtbot.com/blog/using-redux-with-react-hooks
     const { count, user } = useSelector(state => ({
       count: state.counter.count,
@@ -94,7 +92,7 @@ const DialogForm = ({
       disableEscapeKeyDown
     >
       <DialogTitle id="idModal" onClose={handleClose}>
-        {title} {dialog.name}
+        {title} {dialog?.name}
       </DialogTitle>
       {alert.type && <Alert severity={alert.type}>{alert.text}</Alert>}
       <DialogContent dividers style={{ overflowY: "visible" }}>

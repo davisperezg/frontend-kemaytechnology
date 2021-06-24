@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Menu } from "../../interfaces/menu.interface";
+import { Module } from "../../interfaces/module.interface";
 import { setLink } from "../../store/page/action";
 
 /** #1
@@ -20,11 +21,19 @@ import { setLink } from "../../store/page/action";
  * @returns name, link
  **/
 
-const ListItemMenus = ({ menu, setLink }: { menu: Menu; setLink: any }) => {
+const ListItemMenus = ({
+  menu,
+  setLink,
+  module,
+}: {
+  menu: Menu;
+  setLink: any;
+  module: Module;
+}) => {
   const history = useHistory();
 
   const goToPage = () => {
-    setLink(menu.link);
+    setLink(module.name, menu.link);
     document.title = `RPUM - ${menu.link.toUpperCase()}`;
     history.push(`/${menu.link}`);
   };

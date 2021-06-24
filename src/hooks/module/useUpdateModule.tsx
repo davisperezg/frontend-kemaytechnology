@@ -10,14 +10,23 @@ interface UpdateModuleInput {
 const UDATE_MODULE = gql`
   mutation updateModule($moduleInput: UpdateModuleInput!) {
     updateModule(moduleInput: $moduleInput) {
+      id
       name
       description
+      menus {
+        id
+        name
+      }
+      access {
+        id
+        name
+      }
     }
   }
 `;
 
 export const useUpdateModule = () => {
-  const [updateModule, error] = useMutation(UDATE_MODULE, {
+  const [updateModule, { error, loading }] = useMutation(UDATE_MODULE, {
     update(cache, { data: { updateModule } }) {
       cache.modify({
         fields: {
@@ -29,6 +38,14 @@ export const useUpdateModule = () => {
                   id
                   name
                   description
+                  menus {
+                    id
+                    name
+                  }
+                  access {
+                    id
+                    name
+                  }
                 }
               `,
             });
@@ -38,6 +55,6 @@ export const useUpdateModule = () => {
       });
     },
   });
-  console.log(error);
-  return { updateModule };
+
+  return { updateModule, error, loading };
 };
