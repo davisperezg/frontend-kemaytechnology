@@ -20,6 +20,9 @@ import IconButton from "@material-ui/core/IconButton";
 import ModuleForm from "../components/module/module-form.component";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../store/alert/action";
+import { useSelector } from "react-redux";
+import { User } from "../interfaces/user.interface";
+import { ROLSA } from "../const";
 
 const useStyles = makeStyles({
   table: {
@@ -43,6 +46,7 @@ const ModulePage = () => {
   const [dialog, setDialog] = useState<Dialog>(initialValueButton);
   const dispatch = useDispatch();
   const classes = useStyles();
+  const auth: User = useSelector((state: any) => state.authReducer.authUser);
 
   const handleClose = () => {
     setDialog({ ...dialog, active: false });
@@ -80,46 +84,50 @@ const ModulePage = () => {
 
   return (
     <>
-      <DialogForm
-        open={dialog.active}
-        title={`${dialog.name} Modulo`}
-        component={component(dialog.name)}
-        handleClose={handleClose}
-      />
+      {auth?.role?.name === ROLSA && (
+        <>
+          <DialogForm
+            open={dialog.active}
+            title={`${dialog.name} Modulo`}
+            component={component(dialog.name)}
+            handleClose={handleClose}
+          />
 
-      <Tooltip title="Crear Rol">
-        <IconButton
-          aria-label="add"
-          size="small"
-          onClick={() => setDialog({ name: "Crear", active: true })}
-        >
-          <AddRoundedIcon />
-        </IconButton>
-      </Tooltip>
-      <TableContainer component={Paper}>
-        <Table
-          className={classes.table}
-          size="small"
-          aria-label="a dense table"
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell>Modulo</TableCell>
-              <TableCell>Descripción</TableCell>
-              <TableCell>Fecha creada</TableCell>
-              <TableCell>Fecha modificada</TableCell>
-              <TableCell align="center">Menus</TableCell>
-              <TableCell align="center">Permisos</TableCell>
-              <TableCell align="right">Opciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {modules.map((module) => (
-              <ItemModule key={module.id} module={module} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          <Tooltip title="Crear Rol">
+            <IconButton
+              aria-label="add"
+              size="small"
+              onClick={() => setDialog({ name: "Crear", active: true })}
+            >
+              <AddRoundedIcon />
+            </IconButton>
+          </Tooltip>
+          <TableContainer component={Paper}>
+            <Table
+              className={classes.table}
+              size="small"
+              aria-label="a dense table"
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell>Modulo</TableCell>
+                  <TableCell>Descripción</TableCell>
+                  <TableCell>Fecha creada</TableCell>
+                  <TableCell>Fecha modificada</TableCell>
+                  <TableCell align="center">Menus</TableCell>
+                  <TableCell align="center">Permisos</TableCell>
+                  <TableCell align="right">Opciones</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {modules.map((module) => (
+                  <ItemModule key={module.id} module={module} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
+      )}
     </>
   );
 };

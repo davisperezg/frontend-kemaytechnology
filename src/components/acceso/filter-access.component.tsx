@@ -1,5 +1,11 @@
 import React from "react";
-import { PERMIT_ONE, PERMIT_TWO, PERMIT_TREE, PERMIT_FOUR } from "../../const";
+import {
+  PERMIT_ONE,
+  PERMIT_TWO,
+  PERMIT_TREE,
+  PERMIT_FOUR,
+  ROLSA,
+} from "../../const";
 import { User } from "../../interfaces/user.interface";
 
 export const loadAccess = (

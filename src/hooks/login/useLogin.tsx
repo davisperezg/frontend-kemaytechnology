@@ -18,26 +18,7 @@ const POST_LOGIN = gql`
 `;
 
 export const useLogin = (): any => {
-  const [login] = useMutation(POST_LOGIN, {
-    update(cache, { data: { login } }) {
-      cache.modify({
-        fields: {
-          login(existingLogin = []) {
-            const loginRef = cache.writeFragment({
-              data: login,
-              fragment: gql`
-                fragment newLogin on Login {
-                  access_token
-                  refresh_token
-                }
-              `,
-            });
-            return [...existingLogin, loginRef];
-          },
-        },
-      });
-    },
-  });
+  const [login] = useMutation(POST_LOGIN);
 
   return login;
 };

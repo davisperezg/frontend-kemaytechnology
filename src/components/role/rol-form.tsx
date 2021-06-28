@@ -23,6 +23,9 @@ import {
 } from "@material-ui/core/styles";
 import { Module } from "../../interfaces/module.interface";
 import { useGetModules } from "../../hooks/module/useGetModules";
+import { MODULE_FORBIDDEN, ROLSA } from "../../const";
+import { useSelector } from "react-redux";
+import { User } from "../../interfaces/user.interface";
 
 type InputChange = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 type FormChange = FormEvent<HTMLFormElement>;
@@ -88,6 +91,7 @@ const RoleForm = ({
   const theme = useTheme();
   const dispatch = useDispatch();
   const classes = useStyles();
+  const auth: User = useSelector((state: any) => state.authReducer.authUser);
 
   const handleInput = (e: InputChange) => {
     setRoleForm({ ...roleForm, [e.target.name]: e.target.value });
@@ -240,19 +244,35 @@ const RoleForm = ({
                   )}
                   MenuProps={MenuProps}
                 >
-                  {listModules.map((module) => (
-                    <MenuItem
-                      key={module.id}
-                      value={module.name}
-                      style={getStyles(
-                        module.name,
-                        roleForm.modules || [],
-                        theme
-                      )}
-                    >
-                      {module.name}
-                    </MenuItem>
-                  ))}
+                  {listModules.map((module) =>
+                    auth?.role?.name === ROLSA ? (
+                      <MenuItem
+                        key={module.id}
+                        value={module.name}
+                        style={getStyles(
+                          module.name,
+                          roleForm.modules || [],
+                          theme
+                        )}
+                      >
+                        {module.name}
+                      </MenuItem>
+                    ) : (
+                      module.name !== MODULE_FORBIDDEN && (
+                        <MenuItem
+                          key={module.id}
+                          value={module.name}
+                          style={getStyles(
+                            module.name,
+                            roleForm.modules || [],
+                            theme
+                          )}
+                        >
+                          {module.name}
+                        </MenuItem>
+                      )
+                    )
+                  )}
                 </Select>
               </FormControl>
             </Grid>

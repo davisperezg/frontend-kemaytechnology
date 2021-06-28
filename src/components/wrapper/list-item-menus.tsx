@@ -1,9 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { MENU_FORBIDDEN, ROLSA } from "../../const";
 import { Menu } from "../../interfaces/menu.interface";
 import { Module } from "../../interfaces/module.interface";
 import { setLink } from "../../store/page/action";
+import { useSelector } from "react-redux";
+import { User } from "../../interfaces/user.interface";
 
 /** #1
  * @param { name, link }: Menu = {}
@@ -31,6 +34,7 @@ const ListItemMenus = ({
   module: Module;
 }) => {
   const history = useHistory();
+  const auth: User = useSelector((state: any) => state.authReducer.authUser);
 
   const goToPage = () => {
     setLink(module.name, menu.link);
@@ -38,7 +42,17 @@ const ListItemMenus = ({
     history.push(`/${menu.link}`);
   };
 
-  return <li onClick={() => goToPage()}>{menu.name}</li>;
+  return (
+    <>
+      {auth?.role?.name === ROLSA ? (
+        <li onClick={() => goToPage()}>{menu.name}</li>
+      ) : (
+        menu.name !== MENU_FORBIDDEN && (
+          <li onClick={() => goToPage()}>{menu.name}</li>
+        )
+      )}
+    </>
+  );
 };
 
 export default connect(null, { setLink })(ListItemMenus);

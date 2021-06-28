@@ -17,7 +17,9 @@ import {
   useDesactivateUser,
 } from "../../hooks/user/useUpdateAccessToLogin";
 import { loadAccess } from "../acceso/filter-access.component";
-import { PERMIT_FOUR, PERMIT_TWO } from "../../const";
+import { PERMIT_FOUR, PERMIT_TWO, ROLSA } from "../../const";
+import LockRoundedIcon from "@material-ui/icons/LockRounded";
+import PasswordForm from "../password/password-form";
 
 interface Dialog {
   name: string;
@@ -50,6 +52,9 @@ const UserList = ({ user }: { user: User }) => {
     switch (name) {
       case "Usuario":
         return <UserForm user={user} handleClose={handleClose} />;
+
+      case "Contraseña":
+        return <PasswordForm user={user} handleClose={handleClose} />;
 
       default:
         break;
@@ -101,6 +106,15 @@ const UserList = ({ user }: { user: User }) => {
             <EditRoundedIcon />
           </IconButton>
         </Tooltip>
+
+        <Tooltip
+          title="Cambiar contraseña"
+          onClick={() => setDialog({ name: "Contraseña", active: true })}
+        >
+          <IconButton aria-label="password" size="small">
+            <LockRoundedIcon />
+          </IconButton>
+        </Tooltip>
       </TableCell>
     </>
   );
@@ -115,14 +129,37 @@ const UserList = ({ user }: { user: User }) => {
         handleClose={handleClose}
       />
       <TableRow>
-        <TableCell component="th" scope="row">
-          {user.name} {user.lastName}
-        </TableCell>
-        <TableCell>{user.role?.name}</TableCell>
-        <TableCell>{user.email}</TableCell>
-        <TableCell>{moment(user.createdAt).format("DD/MM/YYYY")}</TableCell>
-        <TableCell>{moment(user.updatedAt).format("DD/MM/YYYY")}</TableCell>
-        {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
+        {auth?.role?.name === ROLSA ? (
+          <>
+            <TableCell component="th" scope="row">
+              {user.name} {user.lastName}
+            </TableCell>
+            <TableCell>{user.role?.name}</TableCell>
+            <TableCell>{user.email}</TableCell>
+            <TableCell>{moment(user.createdAt).format("DD/MM/YYYY")}</TableCell>
+            <TableCell>{moment(user.updatedAt).format("DD/MM/YYYY")}</TableCell>
+            {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
+          </>
+        ) : (
+          <>
+            {user.role?.name === ROLSA || (
+              <>
+                <TableCell component="th" scope="row">
+                  {user.name} {user.lastName}
+                </TableCell>
+                <TableCell>{user.role?.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  {moment(user.createdAt).format("DD/MM/YYYY")}
+                </TableCell>
+                <TableCell>
+                  {moment(user.updatedAt).format("DD/MM/YYYY")}
+                </TableCell>
+                {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
+              </>
+            )}
+          </>
+        )}
       </TableRow>
     </>
   );

@@ -17,7 +17,7 @@ import DialogForm from "../dialog/dialog.component";
 import RoleForm from "./rol-form";
 import ModuleTransferList from "../module/module-transfer-list";
 import ViewModuleRoundedIcon from "@material-ui/icons/ViewModuleRounded";
-import { PERMIT_FOUR, PERMIT_TWO } from "../../const";
+import { PERMIT_FOUR, PERMIT_TWO, ROLSA } from "../../const";
 import { loadAccess } from "../acceso/filter-access.component";
 import { useSelector } from "react-redux";
 import { User } from "../../interfaces/user.interface";
@@ -93,19 +93,47 @@ const RoleList = ({ role }: { role: Role }) => {
         handleClose={handleClose}
       />
       <TableRow>
-        <TableCell component="th" scope="row">
-          {role.name}
-        </TableCell>
-        <TableCell>{role.description}</TableCell>
-        <TableCell>{moment(role.createdAt).format("DD/MM/YYYY")}</TableCell>
-        <TableCell>{moment(role.updatedAt).format("DD/MM/YYYY")}</TableCell>
-        <TableCell align="center">
-          {role.modules &&
-            role.modules.map((module) => (
-              <RoleModuleItem key={module.id} module={module} />
-            ))}
-        </TableCell>
-        {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
+        {auth?.role?.name === ROLSA ? (
+          <>
+            <TableCell component="th" scope="row">
+              {role.name}
+            </TableCell>
+            <TableCell>{role.description}</TableCell>
+            <TableCell>{moment(role.createdAt).format("DD/MM/YYYY")}</TableCell>
+            <TableCell>{moment(role.updatedAt).format("DD/MM/YYYY")}</TableCell>
+            <TableCell align="center">
+              {role.modules &&
+                role.modules.map((module) => (
+                  <RoleModuleItem key={module.id} module={module} />
+                ))}
+            </TableCell>
+            {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
+          </>
+        ) : (
+          <>
+            {role.name === ROLSA || (
+              <>
+                <TableCell component="th" scope="row">
+                  {role.name}
+                </TableCell>
+                <TableCell>{role.description}</TableCell>
+                <TableCell>
+                  {moment(role.createdAt).format("DD/MM/YYYY")}
+                </TableCell>
+                <TableCell>
+                  {moment(role.updatedAt).format("DD/MM/YYYY")}
+                </TableCell>
+                <TableCell align="center">
+                  {role.modules &&
+                    role.modules.map((module) => (
+                      <RoleModuleItem key={module.id} module={module} />
+                    ))}
+                </TableCell>
+                {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
+              </>
+            )}
+          </>
+        )}
       </TableRow>
     </>
   );

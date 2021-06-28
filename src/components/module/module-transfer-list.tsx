@@ -10,6 +10,8 @@ import { Module } from "../../interfaces/module.interface";
 import { useGetModules } from "../../hooks/module/useGetModules";
 import { useUpdateRole } from "../../hooks/role/useUpdateRole";
 import TrasnferList from "../../lib/transfer-list-component";
+import { MODULE_FORBIDDEN, ROLSA } from "../../const";
+import { User } from "../../interfaces/user.interface";
 
 type FormChange = FormEvent<HTMLFormElement>;
 
@@ -28,6 +30,7 @@ const ModuleTransferList = ({
   const optionsUpdateRole = useUpdateRole();
   const alert = useSelector((state: any) => state.message);
   const { type, text } = alert;
+  const auth: User = useSelector((state: any) => state.authReducer.authUser);
 
   const onSubmit = async (e: FormChange) => {
     e.preventDefault();
@@ -64,13 +67,20 @@ const ModuleTransferList = ({
   };
 
   const loadModuleAvailable = useCallback(() => {
-    const res = optionsGetModules.data.getModules.filter(
+    let res: Module[];
+
+    res = optionsGetModules.data.getModules.filter(
       (dispo: Module) =>
         !role.modules?.some((actual) => dispo.name === actual.name)
     );
 
-    setListAvailable(res);
-  }, [role, optionsGetModules.data]);
+    if (auth?.role?.name === ROLSA) {
+      setListAvailable(res);
+    } else {
+      const resNotSA = res.filter((module) => module.name !== MODULE_FORBIDDEN);
+      setListAvailable(resNotSA);
+    }
+  }, [role, optionsGetModules.data, auth.role]);
 
   useEffect(() => {
     if (role && optionsGetModules.data) {
