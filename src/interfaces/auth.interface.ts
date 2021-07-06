@@ -9,3 +9,8 @@ export interface AuthUser {
   newPassword: string;
   confirmNewPassword: string;
 }
+
+export interface Token {
+  refresh_token: string;
+  email: string;
+}

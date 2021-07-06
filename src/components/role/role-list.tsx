@@ -62,24 +62,37 @@ const RoleList = ({ role }: { role: Role }) => {
   };
   const showOptionsForEdit = () => (
     <>
-      <TableCell align="right">
-        <Tooltip
-          title="Asignar modulos"
-          onClick={() => setDialog({ name: "Modulo", active: true })}
-        >
-          <IconButton aria-label="modules" size="small">
-            <ViewModuleRoundedIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip
-          title="Editar rol"
-          onClick={() => setDialog({ name: "Rol", active: true })}
-        >
-          <IconButton aria-label="role" size="small">
-            <EditRoundedIcon />
-          </IconButton>
-        </Tooltip>
-      </TableCell>
+      {role.name === ROLSA ? (
+        <TableCell align="center">
+          <Tooltip
+            title="Asignar modulos"
+            onClick={() => setDialog({ name: "Modulo", active: true })}
+          >
+            <IconButton aria-label="modules" size="small">
+              <ViewModuleRoundedIcon />
+            </IconButton>
+          </Tooltip>
+        </TableCell>
+      ) : (
+        <TableCell align="right">
+          <Tooltip
+            title="Asignar modulos"
+            onClick={() => setDialog({ name: "Modulo", active: true })}
+          >
+            <IconButton aria-label="modules" size="small">
+              <ViewModuleRoundedIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip
+            title="Editar rol"
+            onClick={() => setDialog({ name: "Rol", active: true })}
+          >
+            <IconButton aria-label="role" size="small">
+              <EditRoundedIcon />
+            </IconButton>
+          </Tooltip>
+        </TableCell>
+      )}
     </>
   );
 

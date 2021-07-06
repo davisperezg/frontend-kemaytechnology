@@ -24,6 +24,7 @@ import { PERMIT_ONE, PERMIT_TWO } from "../const";
 import { loadAccess } from "../components/acceso/filter-access.component";
 import { useSelector } from "react-redux";
 import { User } from "../interfaces/user.interface";
+import { findError } from "../helpers/control-errors";
 
 const useStyles = makeStyles({
   table: {
@@ -82,7 +83,7 @@ const RolePage = () => {
   }
 
   if (error) {
-    return <h1>{error.message}</h1>;
+    return <h1>{findError(error)}</h1>;
   }
 
   const showDialog = () => (

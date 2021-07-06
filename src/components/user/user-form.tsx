@@ -15,6 +15,8 @@ import { Role } from "../../interfaces/role.interface";
 import MenuItem from "@material-ui/core/MenuItem";
 import { useCreateUser } from "../../hooks/user/useCreateUser";
 import Progress from "../progress/progress";
+import { ROLSA } from "../../const";
+import { useSelector } from "react-redux";
 
 type InputChange = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 type FormChange = FormEvent<HTMLFormElement>;
@@ -56,6 +58,7 @@ const UserForm = ({
   const optionsUpdateUser = useUpdateUser();
   const { data } = useGetRoles();
   const optionsCreateUser = useCreateUser();
+  const auth: User = useSelector((state: any) => state.authReducer.authUser);
 
   const handleInput = (e: InputChange) => {
     setUserForm({ ...userForm, [e.target.name]: e.target.value });
@@ -173,25 +176,37 @@ const UserForm = ({
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={12}>
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel id="idRole">Rol</InputLabel>
-              <Select
-                labelId="Rol"
-                id="idRole"
-                value={userForm.role?.name}
-                onChange={handleSelect}
-                label="Rol"
-                name="role"
-              >
-                {listRoles.map((role) => (
-                  <MenuItem key={role.id} value={role.name}>
-                    {role.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+          {userForm.role?.name === ROLSA || (
+            <>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                  <InputLabel id="idRole">Rol</InputLabel>
+                  <Select
+                    labelId="Rol"
+                    id="idRole"
+                    value={userForm.role?.name}
+                    onChange={handleSelect}
+                    label="Rol"
+                    name="role"
+                  >
+                    {listRoles.map((role) =>
+                      auth?.role?.name === ROLSA ? (
+                        <MenuItem key={role.id} value={role.name}>
+                          {role.name}
+                        </MenuItem>
+                      ) : (
+                        role.name !== ROLSA && (
+                          <MenuItem key={role.id} value={role.name}>
+                            {role.name}
+                          </MenuItem>
+                        )
+                      )
+                    )}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </>
+          )}
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -202,6 +217,9 @@ const UserForm = ({
               label="Correo"
               value={userForm.email}
               variant="outlined"
+              InputProps={{
+                readOnly: userForm.id ? true : false,
+              }}
             />
           </Grid>
           {userForm.id ? (

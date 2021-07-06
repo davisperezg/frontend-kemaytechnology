@@ -23,6 +23,7 @@ import { setAlert } from "../store/alert/action";
 import { useSelector } from "react-redux";
 import { User } from "../interfaces/user.interface";
 import { ROLSA } from "../const";
+import { findError } from "../helpers/control-errors";
 
 const useStyles = makeStyles({
   table: {
@@ -79,12 +80,12 @@ const ModulePage = () => {
   }
 
   if (error) {
-    return <h1>{error.message}</h1>;
+    return <h1>{findError(error)}</h1>;
   }
 
   return (
     <>
-      {auth?.role?.name === ROLSA && (
+      {auth?.role?.name === ROLSA ? (
         <>
           <DialogForm
             open={dialog.active}
@@ -126,6 +127,10 @@ const ModulePage = () => {
               </TableBody>
             </Table>
           </TableContainer>
+        </>
+      ) : (
+        <>
+          <h1>No tiene permiso para acceder a este recurso.</h1>
         </>
       )}
     </>

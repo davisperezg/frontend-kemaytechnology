@@ -12,6 +12,7 @@ import { useUpdateRole } from "../../hooks/role/useUpdateRole";
 import TrasnferList from "../../lib/transfer-list-component";
 import { MODULE_FORBIDDEN, ROLSA } from "../../const";
 import { User } from "../../interfaces/user.interface";
+import { findError } from "../../helpers/control-errors";
 
 type FormChange = FormEvent<HTMLFormElement>;
 
@@ -53,14 +54,14 @@ const ModuleTransferList = ({
       return dispatch(
         setAlert({
           type: "success",
-          text: "El modulo actualizó sus menu correctamente.",
+          text: "El rol actualizó sus modulos correctamente.",
         })
       );
     } catch (e) {
       dispatch(
         setAlert({
           type: "error",
-          text: e.message,
+          text: findError(e),
         })
       );
     }
@@ -74,17 +75,26 @@ const ModuleTransferList = ({
         !role.modules?.some((actual) => dispo.name === actual.name)
     );
 
-    if (auth?.role?.name === ROLSA) {
-      setListAvailable(res);
-    } else {
-      const resNotSA = res.filter((module) => module.name !== MODULE_FORBIDDEN);
-      setListAvailable(resNotSA);
-    }
-  }, [role, optionsGetModules.data, auth.role]);
+    const listModulesAvailableNoModulo = res.filter(
+      (module) => module.name !== MODULE_FORBIDDEN
+    );
+
+    // if (auth?.role?.name === ROLSA) {
+    //   setListAvailable(res);
+    // } else {
+    //   const resNotSA = res.filter((module) => module.name !== MODULE_FORBIDDEN);
+    //   setListAvailable(resNotSA);
+    // }
+
+    setListAvailable(listModulesAvailableNoModulo);
+  }, [role, optionsGetModules.data]);
 
   useEffect(() => {
     if (role && optionsGetModules.data) {
-      setListCurrent(role.modules || []);
+      const listModulesCurrentNoModulo = role.modules?.filter(
+        (module) => module.name !== MODULE_FORBIDDEN
+      );
+      setListCurrent(listModulesCurrentNoModulo || []);
       loadModuleAvailable();
     }
   }, [role, optionsGetModules.data, loadModuleAvailable]);

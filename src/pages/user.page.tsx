@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import { setAlert } from "../store/alert/action";
 import { PERMIT_ONE, PERMIT_TWO } from "../const";
 import { loadAccess } from "../components/acceso/filter-access.component";
+import { findError } from "../helpers/control-errors";
 
 const useStyles = makeStyles({
   table: {
@@ -77,7 +78,7 @@ const UserPage = () => {
   }
 
   if (error) {
-    return <h1>{error.message}</h1>;
+    return <h1>{findError(error)}</h1>;
   }
 
   const showDialog = () => (

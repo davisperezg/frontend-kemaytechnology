@@ -1,6 +1,7 @@
 import React from "react";
 import { Menu } from "../../interfaces/menu.interface";
 import Chip from "@material-ui/core/Chip";
+import { MENU_FORBIDDEN } from "../../const";
 
 /**
  * @param columns:any
@@ -15,13 +16,22 @@ import Chip from "@material-ui/core/Chip";
 const ItemModuleMenu = ({ menu }: { menu: Menu }) => {
   return (
     <>
-      <Chip
-        style={{ margin: "3px" }}
-        size="small"
-        label={menu.name}
-        onDelete={() => alert("keiner")}
-        color="primary"
-      />
+      {menu.name === MENU_FORBIDDEN ? (
+        <Chip
+          style={{ margin: "3px" }}
+          size="small"
+          label={menu.name}
+          color="primary"
+        />
+      ) : (
+        <Chip
+          style={{ margin: "3px" }}
+          size="small"
+          label={menu.name}
+          onDelete={() => alert("keiner")}
+          color="primary"
+        />
+      )}
       &nbsp;
     </>
   );

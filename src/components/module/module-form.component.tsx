@@ -25,6 +25,7 @@ import {
 import { useCreateModule } from "../../hooks/module/useCreateModule";
 import { useGetAllAccess } from "../../hooks/access/useGetAllAceess";
 import { useGetMenus } from "../../hooks/menu/useGetMenus";
+import { MENU_FORBIDDEN, MODULE_FORBIDDEN } from "../../const";
 
 type InputChange = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 type FormChange = FormEvent<HTMLFormElement>;
@@ -205,26 +206,33 @@ const ModuleForm = ({
 
   useEffect(() => {
     if (optionsGetMenus.data && optionsGetAccess.data) {
-      setListMenus(optionsGetMenus.data.getMenus);
+      const listMenusNoModulos = optionsGetMenus.data.getMenus.filter(
+        (menu: any) => menu.name !== MENU_FORBIDDEN
+      );
+      setListMenus(listMenusNoModulos);
       setListAccess(optionsGetAccess.data.getAccess);
     }
-  }, [optionsGetMenus.data, optionsGetAccess.data]);
+  }, [optionsGetMenus.data, optionsGetAccess.data, moduleForm.name]);
 
   return (
     <>
       <form onSubmit={onSubmit}>
         <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              onChange={handleInput}
-              name="name"
-              id="idName"
-              label="Modulo"
-              variant="outlined"
-              value={moduleForm.name}
-            />
-          </Grid>
+          {moduleForm.id && moduleForm.name === MODULE_FORBIDDEN ? (
+            ""
+          ) : (
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                onChange={handleInput}
+                name="name"
+                id="idName"
+                label="Modulo"
+                variant="outlined"
+                value={moduleForm.name}
+              />
+            </Grid>
+          )}
 
           <Grid item xs={12}>
             <TextField

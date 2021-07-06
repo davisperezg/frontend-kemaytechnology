@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import { useGetAllAccess } from "../../hooks/access/useGetAllAceess";
 import TrasnferList from "../../lib/transfer-list-component";
+import { findError } from "../../helpers/control-errors";
 
 type FormChange = FormEvent<HTMLFormElement>;
 
@@ -57,7 +58,7 @@ const AccesoForm = ({
       dispatch(
         setAlert({
           type: "error",
-          text: e.message,
+          text: findError(e),
         })
       );
     }

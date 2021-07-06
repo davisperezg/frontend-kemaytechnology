@@ -82,7 +82,6 @@ const DialogForm = ({
       user: state.user,
     }));
   */
-
   return (
     <Dialog
       fullScreen={fullScreen}

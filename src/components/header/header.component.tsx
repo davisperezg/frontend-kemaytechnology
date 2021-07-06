@@ -7,6 +7,7 @@ import { whoisme, setLoading, logout } from "../../store/auth/action";
 import { setLink } from "../../store/page/action";
 import { useHistory } from "react-router-dom";
 import "./header.css";
+import { setLocal } from "../../lib/local-storage";
 
 const mapStateToProps = (state: any) => {
   return {
@@ -27,7 +28,12 @@ const Header = ({ authUser, loading, whoisme, setLink, logout }: any) => {
   useEffect(() => {
     me();
     whoisme(data);
+    setLocal("username", data?.me?.email);
   }, [me, whoisme, data]);
+
+  if (data?.me?.status === 2) {
+    logout();
+  }
 
   return (
     <header>

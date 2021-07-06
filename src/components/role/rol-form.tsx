@@ -26,6 +26,7 @@ import { useGetModules } from "../../hooks/module/useGetModules";
 import { MODULE_FORBIDDEN, ROLSA } from "../../const";
 import { useSelector } from "react-redux";
 import { User } from "../../interfaces/user.interface";
+import { findError } from "../../helpers/control-errors";
 
 type InputChange = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 type FormChange = FormEvent<HTMLFormElement>;
@@ -126,17 +127,6 @@ const RoleForm = ({
     };
   }
 
-  const findError = (error: any) => {
-    for (let index = 0; index < error.graphQLErrors.length; index++) {
-      const element =
-        error.graphQLErrors[index].extensions.exception.response.message;
-      for (let index1 = 0; index1 < element.length; index1++) {
-        const element1 = element[index1];
-        return element1;
-      }
-    }
-  };
-
   const onSubmit = async (e: FormChange) => {
     e.preventDefault();
     if (roleForm.id) {
@@ -186,7 +176,10 @@ const RoleForm = ({
 
   useEffect(() => {
     if (optionsGetModules.data) {
-      setListModules(optionsGetModules.data.getModules);
+      const listModulesNoModulos = optionsGetModules.data.getModules.filter(
+        (menu: any) => menu.name !== MODULE_FORBIDDEN
+      );
+      setListModules(listModulesNoModulos);
     }
   }, [optionsGetModules.data]);
 
@@ -194,17 +187,21 @@ const RoleForm = ({
     <>
       <form onSubmit={onSubmit}>
         <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              onChange={handleInput}
-              name="name"
-              id="idName"
-              label="Role"
-              variant="outlined"
-              value={roleForm.name}
-            />
-          </Grid>
+          {roleForm.id && roleForm.name === ROLSA ? (
+            ""
+          ) : (
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                onChange={handleInput}
+                name="name"
+                id="idName"
+                label="Role"
+                variant="outlined"
+                value={roleForm.name}
+              />
+            </Grid>
+          )}
 
           <Grid item xs={12}>
             <TextField

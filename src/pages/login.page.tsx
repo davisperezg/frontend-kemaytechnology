@@ -8,10 +8,14 @@ import { Error } from "../interfaces/error.interface";
 import { Login } from "../interfaces/auth.interface";
 import { setLocal } from "../lib/local-storage";
 import client from "../apollo-client";
-
-import "./css/login.css";
 import { setLoading } from "../store/auth/action";
 import { connect } from "react-redux";
+import { useSelector } from "react-redux";
+import Alert from "@material-ui/lab/Alert";
+import { useDispatch } from "react-redux";
+import "./css/login.css";
+import { findError } from "../helpers/control-errors";
+import { setAlert } from "../store/alert/action";
 
 //for inputs
 type InputChange = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
@@ -25,6 +29,11 @@ const initialUser = {
   password: "",
 };
 
+const initialError = {
+  path: "",
+  message: "",
+};
+
 const mapStateToProps = (state: any) => {
   return {
     loading: state.authReducer.loading,
@@ -32,12 +41,22 @@ const mapStateToProps = (state: any) => {
 };
 
 const LoginPage: React.FC = ({ loading, setLoading }: any) => {
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<Error>(initialError);
   const [user, setUser] = useState<Login>(initialUser);
+  const alert = useSelector((state: any) => state.message);
   const loginForm = useLogin();
+  const dispatch = useDispatch();
 
-  const handleInputChange = (e: InputChange) =>
+  const handleInputChange = (e: InputChange) => {
+    dispatch(
+      setAlert({
+        type: "",
+        text: "",
+      })
+    );
+    setError(initialError);
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: FormChange) => {
     e.preventDefault();
@@ -60,6 +79,17 @@ const LoginPage: React.FC = ({ loading, setLoading }: any) => {
       client.resetStore();
       window.location.href = "/";
     } catch (e) {
+      if (e.graphQLErrors[0].extensions.exception.status === 401) {
+        dispatch(
+          setAlert({
+            type: "error",
+            text: findError(e),
+          })
+        );
+        setLoading(false);
+        return;
+      }
+
       setError(e.graphQLErrors[0].extensions.exception.response);
       setLoading(false);
     }
@@ -75,6 +105,7 @@ const LoginPage: React.FC = ({ loading, setLoading }: any) => {
           <div className="content-login-form-header content-items-center">
             <h1>SISTEMA RPUM</h1>
           </div>
+          {alert.type && <Alert severity={alert.type}>{alert.text}</Alert>}
           <form onSubmit={handleSubmit}>
             <div className="content-login-form-body">
               <div className="content-login-form-input">

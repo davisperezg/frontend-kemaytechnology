@@ -20,6 +20,7 @@ import { loadAccess } from "../acceso/filter-access.component";
 import { PERMIT_FOUR, PERMIT_TWO, ROLSA } from "../../const";
 import LockRoundedIcon from "@material-ui/icons/LockRounded";
 import PasswordForm from "../password/password-form";
+import { findError } from "../../helpers/control-errors";
 
 interface Dialog {
   name: string;
@@ -48,6 +49,27 @@ const UserList = ({ user }: { user: User }) => {
     );
   };
 
+  const desactivateUser = async () => {
+    try {
+      await optionsDesactivate.desactivateUser({
+        variables: { id: user.id },
+      });
+    } catch (e) {
+      setDialog({ name: "error", active: true });
+      dispatch(
+        setAlert({
+          type: "error",
+          text: findError(e),
+        })
+      );
+      <DialogForm
+        open={dialog.active}
+        title={dialog.name}
+        handleClose={handleClose}
+      />;
+    }
+  };
+
   const component = (name: string) => {
     switch (name) {
       case "Usuario":
@@ -64,38 +86,41 @@ const UserList = ({ user }: { user: User }) => {
   const showOptionsForEdit = () => (
     <>
       <TableCell align="right">
-        {user.status === 2 ? (
-          <Tooltip
-            title="Desactivar usuario"
-            onClick={() =>
-              optionsActivate.activateUser({
-                variables: { id: user.id },
-              })
-            }
-          >
-            <IconButton aria-label="desactivate" size="small" color="secondary">
-              <RemoveRoundedIcon style={{ color: "#F44336" }} />
-            </IconButton>
-          </Tooltip>
-        ) : user.status === 1 ? (
-          <Tooltip
-            title="Activar usuario"
-            onClick={() =>
-              optionsDesactivate.desactivateUser({
-                variables: { id: user.id },
-              })
-            }
-          >
-            <IconButton
-              aria-label="activate"
-              size="small"
-              style={{ color: "#4CAF50" }}
-            >
-              <CheckRoundedIcon style={{ color: "#4CAF50" }} />
-            </IconButton>
-          </Tooltip>
-        ) : (
+        {user.role?.name === ROLSA ? (
           ""
+        ) : (
+          <>
+            {user.status === 2 ? (
+              <Tooltip
+                title="Activar usuario"
+                onClick={() =>
+                  optionsActivate.activateUser({
+                    variables: { id: user.id },
+                  })
+                }
+              >
+                <IconButton
+                  aria-label="desactivate"
+                  size="small"
+                  color="secondary"
+                >
+                  <RemoveRoundedIcon style={{ color: "#F44336" }} />
+                </IconButton>
+              </Tooltip>
+            ) : user.status === 1 ? (
+              <Tooltip title="Desactivar usuario" onClick={desactivateUser}>
+                <IconButton
+                  aria-label="activate"
+                  size="small"
+                  style={{ color: "#4CAF50" }}
+                >
+                  <CheckRoundedIcon style={{ color: "#4CAF50" }} />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              ""
+            )}
+          </>
         )}
 
         <Tooltip

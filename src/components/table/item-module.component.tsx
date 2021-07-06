@@ -20,6 +20,8 @@ import AccesoForm from "../acceso/access-form.component";
 import MenuForm from "../menu/menu-form.component";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/alert/action";
+import { MODULE_FORBIDDEN } from "../../const";
+import Chip from "@material-ui/core/Chip";
 
 interface Dialog {
   name: string;
@@ -85,37 +87,62 @@ const ItemModule = ({ module }: { module: Module }) => {
             ))}
         </TableCell>
         <TableCell align="center">
-          {module.access &&
+          {module.name === MODULE_FORBIDDEN ? (
+            <Chip
+              style={{ margin: "3px" }}
+              size="small"
+              label="Todos los permisos"
+              color="primary"
+            />
+          ) : (
+            module.access &&
             module.access.map((access) => (
               <ItemModuleAccess key={access.id} access={access} />
-            ))}
+            ))
+          )}
         </TableCell>
-        <TableCell align="right">
-          <Tooltip
-            title="Asignar menu"
-            onClick={() => setDialog({ name: "Menu", active: true })}
-          >
-            <IconButton aria-label="menu" size="small">
-              <MenuRoundedIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip
-            title="Asignar acceso"
-            onClick={() => setDialog({ name: "Acceso", active: true })}
-          >
-            <IconButton aria-label="acceso" size="small">
-              <VerifiedUserRoundedIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip
-            title="Editar modulo"
-            onClick={() => setDialog({ name: "Modulo", active: true })}
-          >
-            <IconButton aria-label="acceso" size="small">
-              <EditRoundedIcon />
-            </IconButton>
-          </Tooltip>
-        </TableCell>
+
+        {module.name === MODULE_FORBIDDEN ? (
+          <TableCell align="center">
+            <Tooltip
+              title="Asignar menu"
+              onClick={() => setDialog({ name: "Menu", active: true })}
+            >
+              <IconButton aria-label="menu" size="small">
+                <MenuRoundedIcon />
+              </IconButton>
+            </Tooltip>
+          </TableCell>
+        ) : (
+          <>
+            <TableCell align="right">
+              <Tooltip
+                title="Asignar menu"
+                onClick={() => setDialog({ name: "Menu", active: true })}
+              >
+                <IconButton aria-label="menu" size="small">
+                  <MenuRoundedIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip
+                title="Asignar acceso"
+                onClick={() => setDialog({ name: "Acceso", active: true })}
+              >
+                <IconButton aria-label="acceso" size="small">
+                  <VerifiedUserRoundedIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip
+                title="Editar modulo"
+                onClick={() => setDialog({ name: "Modulo", active: true })}
+              >
+                <IconButton aria-label="acceso" size="small">
+                  <EditRoundedIcon />
+                </IconButton>
+              </Tooltip>
+            </TableCell>
+          </>
+        )}
       </TableRow>
     </>
   );

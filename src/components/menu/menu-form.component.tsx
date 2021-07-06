@@ -10,6 +10,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import { useUpdateModule } from "../../hooks/module/useUpdateModule";
 import { useSelector } from "react-redux";
 import TrasnferList from "../../lib/transfer-list-component";
+import { findError } from "../../helpers/control-errors";
+import { MENU_FORBIDDEN } from "../../const";
 
 type FormChange = FormEvent<HTMLFormElement>;
 
@@ -57,7 +59,7 @@ const MenuForm = ({
       dispatch(
         setAlert({
           type: "error",
-          text: e.message,
+          text: findError(e),
         })
       );
     }
@@ -69,12 +71,20 @@ const MenuForm = ({
         !module.menus?.some((actual) => dispo.name === actual.name)
     );
 
-    setListAvailable(res);
+    const listMenusAvailableNoModulos = res.filter(
+      (menu: any) => menu.name !== MENU_FORBIDDEN
+    );
+
+    setListAvailable(listMenusAvailableNoModulos);
   }, [module, optionsGetMenus.data]);
 
   useEffect(() => {
     if (module && optionsGetMenus.data) {
-      setListCurrent(module.menus || []);
+      const listMenusCurrentNoModulos = module.menus?.filter(
+        (module) => module.name !== MENU_FORBIDDEN
+      );
+      setListCurrent(listMenusCurrentNoModulos || []);
+
       loadMenusAvailable();
     }
   }, [module, optionsGetMenus.data, loadMenusAvailable]);

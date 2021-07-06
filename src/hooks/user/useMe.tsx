@@ -1,4 +1,6 @@
 import { gql, useLazyQuery } from "@apollo/client";
+import { logout } from "../../store/auth/action";
+import { useDispatch } from "react-redux";
 
 const ME = gql`
   query me {
@@ -7,6 +9,7 @@ const ME = gql`
       name
       lastName
       email
+      status
       role {
         name
         modules {
@@ -27,9 +30,16 @@ const ME = gql`
 `;
 
 export const useMe = () => {
-  const [me, { data, loading }] = useLazyQuery(ME, {
+  const [me, { data, loading, error }] = useLazyQuery(ME, {
     pollInterval: 500,
   });
+
+  const dispatch = useDispatch();
+
+  if (error && error?.graphQLErrors[0].extensions?.exception.status === 401) {
+    alert(error.graphQLErrors[0].extensions.exception.response.message);
+    dispatch(logout());
+  }
 
   return { me, data, loading };
 };
