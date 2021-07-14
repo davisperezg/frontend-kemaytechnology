@@ -1,5 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import { Module } from "../../interfaces/module.interface";
+import { GET_MODULES } from "./useGetModules";
 
 interface UpdateModuleInput {
   variables: {
@@ -27,33 +28,11 @@ const UDATE_MODULE = gql`
 
 export const useUpdateModule = () => {
   const [updateModule, { error, loading }] = useMutation(UDATE_MODULE, {
-    update(cache, { data: { updateModule } }) {
-      cache.modify({
-        fields: {
-          updateModule(existingModules = []) {
-            const newModulesRef = cache.writeFragment({
-              data: updateModule,
-              fragment: gql`
-                fragment NewModule on Module {
-                  id
-                  name
-                  description
-                  menus {
-                    id
-                    name
-                  }
-                  access {
-                    id
-                    name
-                  }
-                }
-              `,
-            });
-            return [...existingModules, newModulesRef];
-          },
-        },
-      });
-    },
+    refetchQueries: () => [
+      {
+        query: GET_MODULES,
+      },
+    ],
   });
 
   return { updateModule, error, loading };

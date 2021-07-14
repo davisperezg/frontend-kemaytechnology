@@ -2,6 +2,7 @@ import React, { createElement } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, useLocation } from "react-router-dom";
 import NoMatch from "../pages/404.page";
+import CategooryPage from "../pages/category.page";
 import ModulePage from "../pages/module.page";
 import RolePage from "../pages/role.page";
 import UserPage from "../pages/user.page";
@@ -70,6 +71,10 @@ const ItemSwitch = ({ link, page }: any) => {
       case "USUARIOS":
         const Usuarios = () => <UserPage />;
         return Usuarios;
+
+      case "CATEGORIAS":
+        const Categorias = () => <CategooryPage />;
+        return Categorias;
 
       default:
         const ERROR = () => <NoMatch />;

@@ -17,6 +17,7 @@ import { useCreateUser } from "../../hooks/user/useCreateUser";
 import Progress from "../progress/progress";
 import { ROLSA } from "../../const";
 import { useSelector } from "react-redux";
+import { findError } from "../../helpers/control-errors";
 
 type InputChange = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 type FormChange = FormEvent<HTMLFormElement>;
@@ -81,17 +82,6 @@ const UserForm = ({
         text: "",
       })
     );
-  };
-
-  const findError = (error: any) => {
-    for (let index = 0; index < error.graphQLErrors.length; index++) {
-      const element =
-        error.graphQLErrors[index].extensions.exception.response.message;
-      for (let index1 = 0; index1 < element.length; index1++) {
-        const element1 = element[index1];
-        return element1;
-      }
-    }
   };
 
   const onSubmit = async (e: FormChange) => {
