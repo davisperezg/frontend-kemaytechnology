@@ -85,6 +85,13 @@ const UserList = ({ user }: { user: User }) => {
 
   const showOptionsForEdit = () => (
     <>
+      <DialogForm
+        open={dialog.active}
+        dialog={user}
+        title={dialog.name}
+        component={component(dialog.name)}
+        handleClose={handleClose}
+      />
       <TableCell align="right">
         {user.role?.name === ROLSA ? (
           ""
@@ -146,13 +153,6 @@ const UserList = ({ user }: { user: User }) => {
 
   const showData = () => (
     <>
-      <DialogForm
-        open={dialog.active}
-        dialog={user}
-        title={dialog.name}
-        component={component(dialog.name)}
-        handleClose={handleClose}
-      />
       <TableRow>
         {auth?.role?.name === ROLSA ? (
           <>

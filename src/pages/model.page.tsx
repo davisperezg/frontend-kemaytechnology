@@ -19,10 +19,10 @@ import IconButton from "@material-ui/core/IconButton";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import { User } from "../interfaces/user.interface";
 
-import { Category } from "../interfaces/category.interface";
-import CategoryForm from "../components/category/category-form";
-import CategoryList from "../components/category/category-list";
-import { useGetCategorys } from "../hooks/category/useGetCategorys";
+import ModelList from "../components/model/model-list";
+import { Model } from "../interfaces/model.interface";
+import ModelForm from "../components/model/model-form";
+import { useGetModels } from "../hooks/model/useGetModels";
 
 const initialAlert = {
   type: "",
@@ -34,14 +34,14 @@ const initialDialog = {
   active: false,
 };
 
-const CategooryPage = () => {
+const ModelPage = () => {
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
 
-  const { data, loading, error } = useGetCategorys();
-  const [categorys, setCategorys] = useState<Category[]>([]);
+  const { data, loading, error } = useGetModels();
+  const [models, setModels] = useState<Model[]>([]);
 
   const handleClose = () => {
     setDialog(initialDialog);
@@ -51,7 +51,7 @@ const CategooryPage = () => {
   const component = (name: string) => {
     switch (name) {
       case "Crear":
-        return <CategoryForm handleClose={handleClose} />;
+        return <ModelForm handleClose={handleClose} />;
 
       default:
         break;
@@ -60,7 +60,7 @@ const CategooryPage = () => {
 
   useEffect(() => {
     if (data) {
-      setCategorys(data.getCategorys);
+      setModels(data.getModels);
     }
   }, [data]);
 
@@ -76,11 +76,11 @@ const CategooryPage = () => {
     <>
       <DialogForm
         open={dialog.active}
-        title={`${dialog.name} Categoria`}
+        title={`${dialog.name} Modelo`}
         component={component(dialog.name)}
         handleClose={handleClose}
       />
-      <Tooltip title="Crear Categoria">
+      <Tooltip title="Crear Modelo">
         <IconButton
           aria-label="add"
           size="small"
@@ -107,15 +107,16 @@ const CategooryPage = () => {
         >
           <TableHead>
             <TableRow>
-              <TableCell>Categoria</TableCell>
+              <TableCell>Marca</TableCell>
+              <TableCell>Modelo</TableCell>
               <TableCell>Fecha creada</TableCell>
               <TableCell>Fecha modificada</TableCell>
               {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
             </TableRow>
           </TableHead>
           <TableBody>
-            {categorys.map((category) => (
-              <CategoryList key={category.id} category={category} />
+            {models.map((model) => (
+              <ModelList key={model.id} model={model} />
             ))}
           </TableBody>
         </Table>
@@ -124,4 +125,4 @@ const CategooryPage = () => {
   );
 };
 
-export default CategooryPage;
+export default ModelPage;

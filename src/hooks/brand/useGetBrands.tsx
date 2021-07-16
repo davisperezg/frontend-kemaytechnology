@@ -1,35 +1,20 @@
 import { gql, useQuery } from "@apollo/client";
-import { useDispatch } from "react-redux";
-import { setAlert } from "../../store/alert/action";
 
-const GET_BRANDS = gql`
+export const GET_BRANDS = gql`
   query getBrands {
     getBrands {
       id
       name
-      createdAt
-      updatedAt
-      categorys {
+      category {
         id
         name
-        createdAt
-        updatedAt
       }
     }
   }
 `;
 
 export const useGetBrands = () => {
-  const { data, error, loading }: any = useQuery(GET_BRANDS);
-  const dispatch = useDispatch();
+  const { data, error, loading } = useQuery(GET_BRANDS);
 
-  if (error) {
-    dispatch(
-      setAlert({
-        type: "error",
-        text: error.message,
-      })
-    );
-  }
   return { data, error, loading };
 };

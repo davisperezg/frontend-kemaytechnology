@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { Category } from "../../interfaces/category.interface";
-import CategoryForm from "./category-form";
+import { Model } from "../../interfaces/model.interface";
 
+import { useState } from "react";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -16,6 +15,7 @@ import { Dialog } from "../../interfaces/dialog.interface";
 import moment from "moment";
 import { setAlert } from "../../store/alert/action";
 import { loadAccess } from "../acceso/filter-access.component";
+import ModelForm from "./model-form";
 
 const initialAlert = {
   type: "",
@@ -27,7 +27,7 @@ const initialDialog = {
   active: false,
 };
 
-const CategoryList = ({ category }: { category: Category }) => {
+const ModelList = ({ model }: { model: Model }) => {
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
@@ -40,8 +40,8 @@ const CategoryList = ({ category }: { category: Category }) => {
 
   const component = (name: string) => {
     switch (name) {
-      case "Categoria":
-        return <CategoryForm category={category} handleClose={handleClose} />;
+      case "Modelo":
+        return <ModelForm model={model} handleClose={handleClose} />;
 
       default:
         break;
@@ -52,15 +52,15 @@ const CategoryList = ({ category }: { category: Category }) => {
     <>
       <DialogForm
         open={dialog.active}
-        dialog={category}
+        dialog={model}
         title={dialog.name}
         component={component(dialog.name)}
         handleClose={handleClose}
       />
       <TableCell align="right">
         <Tooltip
-          title="Editar categoria"
-          onClick={() => setDialog({ name: "Categoria", active: true })}
+          title="Editar Modelo"
+          onClick={() => setDialog({ name: "Modelo", active: true })}
         >
           <IconButton aria-label="role" size="small">
             <EditRoundedIcon />
@@ -74,10 +74,13 @@ const CategoryList = ({ category }: { category: Category }) => {
     <>
       <TableRow>
         <TableCell component="th" scope="row">
-          {category.name}
+          {model.brand?.name}
         </TableCell>
-        <TableCell>{moment(category.createdAt).format("DD/MM/YYYY")}</TableCell>
-        <TableCell>{moment(category.updatedAt).format("DD/MM/YYYY")}</TableCell>
+        <TableCell component="th" scope="row">
+          {model.name}
+        </TableCell>
+        <TableCell>{moment(model.createdAt).format("DD/MM/YYYY")}</TableCell>
+        <TableCell>{moment(model.updatedAt).format("DD/MM/YYYY")}</TableCell>
         {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
       </TableRow>
     </>
@@ -86,4 +89,4 @@ const CategoryList = ({ category }: { category: Category }) => {
   return <>{loadAccess(PERMIT_FOUR, auth, page, showData)}</>;
 };
 
-export default CategoryList;
+export default ModelList;

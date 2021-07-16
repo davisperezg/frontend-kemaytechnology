@@ -62,6 +62,13 @@ const RoleList = ({ role }: { role: Role }) => {
   };
   const showOptionsForEdit = () => (
     <>
+      <DialogForm
+        open={dialog.active}
+        dialog={role}
+        title={dialog.name}
+        component={component(dialog.name)}
+        handleClose={handleClose}
+      />
       {role.name === ROLSA ? (
         <TableCell align="center">
           <Tooltip
@@ -98,13 +105,6 @@ const RoleList = ({ role }: { role: Role }) => {
 
   const showData = () => (
     <>
-      <DialogForm
-        open={dialog.active}
-        dialog={role}
-        title={dialog.name}
-        component={component(dialog.name)}
-        handleClose={handleClose}
-      />
       <TableRow>
         {auth?.role?.name === ROLSA ? (
           <>

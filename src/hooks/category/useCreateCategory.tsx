@@ -13,8 +13,6 @@ const CREATE_CATEGORY = gql`
     registerCategory(categoryInput: $categoryInput) {
       id
       name
-      createdAt
-      updatedAt
     }
   }
 `;

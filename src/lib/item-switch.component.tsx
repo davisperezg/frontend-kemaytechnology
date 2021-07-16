@@ -2,9 +2,13 @@ import React, { createElement } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, useLocation } from "react-router-dom";
 import NoMatch from "../pages/404.page";
+import BrandPage from "../pages/brand.page";
 import CategooryPage from "../pages/category.page";
+import ModelPage from "../pages/model.page";
 import ModulePage from "../pages/module.page";
+import ProductPage from "../pages/product.page";
 import RolePage from "../pages/role.page";
+import ServicePage from "../pages/service.page";
 import UserPage from "../pages/user.page";
 import { getLocal } from "./local-storage";
 
@@ -75,6 +79,22 @@ const ItemSwitch = ({ link, page }: any) => {
       case "CATEGORIAS":
         const Categorias = () => <CategooryPage />;
         return Categorias;
+
+      case "MARCAS":
+        const Marcas = () => <BrandPage />;
+        return Marcas;
+
+      case "MODELOS":
+        const Modelos = () => <ModelPage />;
+        return Modelos;
+
+      case "PRODUCTOS":
+        const Productos = () => <ProductPage />;
+        return Productos;
+
+      case "SERVICIOS":
+        const Servicios = () => <ServicePage />;
+        return Servicios;
 
       default:
         const ERROR = () => <NoMatch />;

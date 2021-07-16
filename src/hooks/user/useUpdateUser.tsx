@@ -1,5 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import { User } from "../../interfaces/user.interface";
+import { GET_USERS } from "./useGetUsers";
 
 interface UserUpdateInput {
   variables: {
@@ -14,9 +15,8 @@ const UPDATE_USER = gql`
       name
       lastName
       email
-      createdAt
-      updatedAt
       role {
+        id
         name
       }
     }
@@ -24,33 +24,16 @@ const UPDATE_USER = gql`
 `;
 
 export const useUpdateUser = () => {
-  const [updateUser, { error, loading }] = useMutation(UPDATE_USER, {
-    update(cache, { data: { updateUser } }) {
-      cache.modify({
-        fields: {
-          updateUser(existingUsers = []) {
-            const newUserRef = cache.writeFragment({
-              data: updateUser,
-              fragment: gql`
-                fragment NewUser on User {
-                  id
-                  name
-                  lastName
-                  email
-                  createdAt
-                  updatedAt
-                  role {
-                    name
-                  }
-                }
-              `,
-            });
-            return [...existingUsers, newUserRef];
-          },
-        },
-      });
-    },
-  });
+  const [updateUser, { error, loading }] = useMutation(
+    UPDATE_USER
+    //   , {
+    //   refetchQueries: () => [
+    //     {
+    //       query: GET_USERS,
+    //     },
+    //   ],
+    // }
+  );
 
   return { updateUser, error, loading };
 };

@@ -19,10 +19,10 @@ import IconButton from "@material-ui/core/IconButton";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import { User } from "../interfaces/user.interface";
 
-import { Category } from "../interfaces/category.interface";
-import CategoryForm from "../components/category/category-form";
-import CategoryList from "../components/category/category-list";
-import { useGetCategorys } from "../hooks/category/useGetCategorys";
+import { Product } from "../interfaces/product.interface";
+import ProductList from "../components/product/product-list";
+import ProductForm from "../components/product/product-form";
+import { useGetProducts } from "../hooks/product/useGetProducts";
 
 const initialAlert = {
   type: "",
@@ -34,14 +34,14 @@ const initialDialog = {
   active: false,
 };
 
-const CategooryPage = () => {
+const ProductPage = () => {
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
 
-  const { data, loading, error } = useGetCategorys();
-  const [categorys, setCategorys] = useState<Category[]>([]);
+  const { data, loading, error } = useGetProducts();
+  const [products, setProducts] = useState<Product[]>([]);
 
   const handleClose = () => {
     setDialog(initialDialog);
@@ -51,7 +51,7 @@ const CategooryPage = () => {
   const component = (name: string) => {
     switch (name) {
       case "Crear":
-        return <CategoryForm handleClose={handleClose} />;
+        return <ProductForm handleClose={handleClose} />;
 
       default:
         break;
@@ -60,7 +60,7 @@ const CategooryPage = () => {
 
   useEffect(() => {
     if (data) {
-      setCategorys(data.getCategorys);
+      setProducts(data.getProducts);
     }
   }, [data]);
 
@@ -76,11 +76,11 @@ const CategooryPage = () => {
     <>
       <DialogForm
         open={dialog.active}
-        title={`${dialog.name} Categoria`}
+        title={`${dialog.name} Producto`}
         component={component(dialog.name)}
         handleClose={handleClose}
       />
-      <Tooltip title="Crear Categoria">
+      <Tooltip title="Crear Producto">
         <IconButton
           aria-label="add"
           size="small"
@@ -108,14 +108,19 @@ const CategooryPage = () => {
           <TableHead>
             <TableRow>
               <TableCell>Categoria</TableCell>
+              <TableCell>Marca</TableCell>
+              <TableCell>Model</TableCell>
+              <TableCell>Producto</TableCell>
+              <TableCell>Descripción</TableCell>
+              <TableCell>Precio</TableCell>
               <TableCell>Fecha creada</TableCell>
               <TableCell>Fecha modificada</TableCell>
               {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
             </TableRow>
           </TableHead>
           <TableBody>
-            {categorys.map((category) => (
-              <CategoryList key={category.id} category={category} />
+            {products.map((product) => (
+              <ProductList key={product.id} product={product} />
             ))}
           </TableBody>
         </Table>
@@ -124,4 +129,4 @@ const CategooryPage = () => {
   );
 };
 
-export default CategooryPage;
+export default ProductPage;

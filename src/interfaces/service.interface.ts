@@ -1,9 +1,11 @@
 import { Category } from "./category.interface";
 
-export interface Brand {
+export interface Service {
   id?: string;
   name: string;
+  description: string;
+  price: string;
   createdAt?: Date;
   updatedAt?: Date;
-  category: Category | any;
+  category: Category;
 }

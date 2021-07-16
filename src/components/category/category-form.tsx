@@ -92,13 +92,13 @@ const CategoryForm = ({ handleClose, category }: any) => {
   return (
     <form onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <TextField
             fullWidth
             onChange={handleInput}
             name="name"
             autoComplete="off"
-            id="idNAME"
+            id="idName"
             label="Nombre"
             variant="outlined"
             value={categoryForm.name}

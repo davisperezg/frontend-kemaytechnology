@@ -60,7 +60,7 @@ const BrandPage = () => {
 
   useEffect(() => {
     if (data) {
-      setBrands(data.getUsers);
+      setBrands(data.getBrands);
     }
   }, [data]);
 

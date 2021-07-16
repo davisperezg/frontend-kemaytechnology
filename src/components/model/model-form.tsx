@@ -1,6 +1,6 @@
-import { Brand } from "../../interfaces/brand.interface";
 import { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
+import { Model } from "../../interfaces/model.interface";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/alert/action";
 import { findError } from "../../helpers/control-errors";
@@ -9,17 +9,18 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import Progress from "../progress/progress";
+import { useUpdateModel } from "../../hooks/model/useUpdateModel";
+import { useCreateModel } from "../../hooks/model/useCreateModel";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
-import { useGetCategorys } from "../../hooks/category/useGetCategorys";
-import { useUpdateBrand } from "../../hooks/brand/useUpdateBrand";
-import { useCreateBrand } from "../../hooks/brand/useCreateBrand";
+import { Brand } from "../../interfaces/brand.interface";
+import { useGetBrands } from "../../hooks/brand/useGetBrands";
 
 interface Options {
   handleClose: () => void;
-  brand?: Brand;
+  model?: Model;
 }
 
 const initialAlert = {
@@ -27,36 +28,36 @@ const initialAlert = {
   text: "",
 };
 
-const BrandForm = ({ handleClose, brand }: Options) => {
-  const initialValueCreate: Brand = {
+const ModelForm = ({ handleClose, model }: Options) => {
+  const initialValueCreate: Model = {
     name: "",
-    category: "",
+    brand: "",
   };
 
-  const initialValueUpdate: Brand = {
-    id: brand?.id || "",
-    name: brand?.name || "",
-    category: brand?.category?.name || "",
+  const initialValueUpdate: Model = {
+    id: model?.id || "",
+    name: model?.name || "",
+    brand: model?.brand?.name || "",
   };
 
-  const [brandForm, setBrandForm] = useState<Brand>(
+  const [modelForm, setModelForm] = useState<Model>(
     initialValueUpdate.id ? initialValueUpdate : initialValueCreate
   );
 
-  const [categorys, setCategorys] = useState<Brand[]>([]);
-  const { data } = useGetCategorys();
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const { data } = useGetBrands();
   const dispatch = useDispatch();
-  const optionsUpdateBrand = useUpdateBrand();
-  const optionsCreateBrand = useCreateBrand();
+  const optionsUpdateModel = useUpdateModel();
+  const optionsCreateModel = useCreateModel();
 
   const handleInput = (e: InputChange) => {
-    setBrandForm({ ...brandForm, [e.target.name]: e.target.value });
+    setModelForm({ ...modelForm, [e.target.name]: e.target.value });
     dispatch(setAlert(initialAlert));
   };
 
   const handleSelect = (e: SelectChange) => {
-    setBrandForm({
-      ...brandForm,
+    setModelForm({
+      ...modelForm,
       [e.target.name]: e.target.value,
     });
     dispatch(setAlert(initialAlert));
@@ -65,17 +66,17 @@ const BrandForm = ({ handleClose, brand }: Options) => {
   const onSubmit = async (e: FormChange) => {
     e.preventDefault();
 
-    if (brandForm.id) {
+    if (modelForm.id) {
       try {
-        await optionsUpdateBrand.updateBrand({
+        await optionsUpdateModel.updateModel({
           variables: {
-            brandInput: brandForm,
+            modelInput: modelForm,
           },
         });
         dispatch(
           setAlert({
             type: "success",
-            text: "La marca se actualizó correctamente.",
+            text: "El modelo se actualizó correctamente.",
           })
         );
       } catch (e) {
@@ -88,15 +89,15 @@ const BrandForm = ({ handleClose, brand }: Options) => {
       }
     } else {
       try {
-        await optionsCreateBrand.registerBrand({
+        await optionsCreateModel.registerModel({
           variables: {
-            brandInput: brandForm,
+            modelInput: modelForm,
           },
         });
         dispatch(
           setAlert({
             type: "success",
-            text: "La marca ha sido registrada correctamente.",
+            text: "El modelo ha sido registrado correctamente.",
           })
         );
       } catch (e) {
@@ -112,7 +113,7 @@ const BrandForm = ({ handleClose, brand }: Options) => {
 
   useEffect(() => {
     if (data) {
-      setCategorys(data.getCategorys);
+      setBrands(data.getBrands);
     }
   }, [data]);
 
@@ -121,18 +122,18 @@ const BrandForm = ({ handleClose, brand }: Options) => {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
-            <InputLabel id="idCategory">Categoria</InputLabel>
+            <InputLabel id="idMarca">Marca</InputLabel>
             <Select
-              labelId="Categoria"
-              id="idCategory"
-              value={brandForm.category}
+              labelId="Marca"
+              id="idMarca"
+              value={modelForm.brand}
               onChange={handleSelect}
-              label="Categoria"
-              name="category"
+              label="Marca"
+              name="brand"
             >
-              {categorys.map((category) => (
-                <MenuItem key={category.id} value={category.name}>
-                  {category.name}
+              {brands.map((brand) => (
+                <MenuItem key={brand.id} value={brand.name}>
+                  {brand.name}
                 </MenuItem>
               ))}
             </Select>
@@ -146,9 +147,9 @@ const BrandForm = ({ handleClose, brand }: Options) => {
             name="name"
             autoComplete="off"
             id="idName"
-            label="Marca"
+            label="Modelo"
             variant="outlined"
-            value={brandForm.name}
+            value={modelForm.name}
           />
         </Grid>
 
@@ -156,8 +157,8 @@ const BrandForm = ({ handleClose, brand }: Options) => {
           <Button onClick={() => handleClose()} color="primary">
             Cancelar
           </Button>
-          {brandForm.id ? (
-            optionsUpdateBrand.loading ? (
+          {modelForm.id ? (
+            optionsUpdateModel.loading ? (
               <Progress />
             ) : (
               <Button
@@ -169,7 +170,7 @@ const BrandForm = ({ handleClose, brand }: Options) => {
                 Actualizar
               </Button>
             )
-          ) : optionsCreateBrand.loading ? (
+          ) : optionsCreateModel.loading ? (
             <Progress />
           ) : (
             <Button type="submit" color="primary" autoFocus variant="contained">
@@ -182,4 +183,4 @@ const BrandForm = ({ handleClose, brand }: Options) => {
   );
 };
 
-export default BrandForm;
+export default ModelForm;
