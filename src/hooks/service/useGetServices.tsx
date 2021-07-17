@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 
-const GET_SERVICES = gql`
+export const GET_SERVICES = gql`
   query getServices {
     getServices {
       id

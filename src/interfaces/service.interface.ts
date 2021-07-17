@@ -4,8 +4,8 @@ export interface Service {
   id?: string;
   name: string;
   description: string;
-  price: string;
+  price: number;
   createdAt?: Date;
   updatedAt?: Date;
-  category: Category;
+  category: Category | any;
 }

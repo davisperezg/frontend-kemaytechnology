@@ -16,6 +16,7 @@ import Select from "@material-ui/core/Select";
 import { useGetCategorys } from "../../hooks/category/useGetCategorys";
 import { useUpdateBrand } from "../../hooks/brand/useUpdateBrand";
 import { useCreateBrand } from "../../hooks/brand/useCreateBrand";
+import { Category } from "../../interfaces/category.interface";
 
 interface Options {
   handleClose: () => void;
@@ -43,7 +44,7 @@ const BrandForm = ({ handleClose, brand }: Options) => {
     initialValueUpdate.id ? initialValueUpdate : initialValueCreate
   );
 
-  const [categorys, setCategorys] = useState<Brand[]>([]);
+  const [categorys, setCategorys] = useState<Category[]>([]);
   const { data } = useGetCategorys();
   const dispatch = useDispatch();
   const optionsUpdateBrand = useUpdateBrand();
