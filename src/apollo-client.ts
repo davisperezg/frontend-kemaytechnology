@@ -81,9 +81,9 @@ const errorLink = onError(
     if (networkError) console.log(`[Network error]: ${networkError}`);
   }
 );
-
+//http://localhost:3000/graphql
 const httpLink = createHttpLink({
-  uri: "http://localhost:3000/graphql",
+  uri: "https://app.kemaytechnology.com/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
