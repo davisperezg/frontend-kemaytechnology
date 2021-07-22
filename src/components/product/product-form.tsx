@@ -135,8 +135,6 @@ const ProductForm = ({ handleClose, product }: Options) => {
   };
 
   const handleKeyUpModel = (e: any) => {
-    console.log(`tager ${e.target.value.length}`);
-    console.log(`tager ${productForm.model.length}`);
     if (
       e.target.value.length < productForm.model.length ||
       e.target.value.length === 0
@@ -156,10 +154,7 @@ const ProductForm = ({ handleClose, product }: Options) => {
       try {
         await optionsUpdateProduct.updateProduct({
           variables: {
-            productInput: {
-              ...productForm,
-              price: Number(productForm.price),
-            },
+            productInput: productForm,
           },
         });
         dispatch(
@@ -180,10 +175,7 @@ const ProductForm = ({ handleClose, product }: Options) => {
       try {
         await optionsCreateProduct.registerProduct({
           variables: {
-            productInput: {
-              ...productForm,
-              price: Number(productForm.price),
-            },
+            productInput: productForm,
           },
         });
         dispatch(

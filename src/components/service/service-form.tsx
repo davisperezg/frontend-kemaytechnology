@@ -75,10 +75,7 @@ const ServiceForm = ({ handleClose, service }: Options) => {
       try {
         await optionsUpdateService.updateService({
           variables: {
-            serviceInput: {
-              ...serviceForm,
-              price: Number(serviceForm.price),
-            },
+            serviceInput: serviceForm
           },
         });
         dispatch(
@@ -99,10 +96,7 @@ const ServiceForm = ({ handleClose, service }: Options) => {
       try {
         await optionsCreateService.registerService({
           variables: {
-            serviceInput: {
-              ...serviceForm,
-              price: Number(serviceForm.price),
-            },
+            serviceInput: serviceForm
           },
         });
         dispatch(
