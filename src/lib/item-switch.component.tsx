@@ -4,6 +4,8 @@ import { Redirect, Route, useLocation } from "react-router-dom";
 import NoMatch from "../pages/404.page";
 import BrandPage from "../pages/brand.page";
 import CategooryPage from "../pages/category.page";
+import EgressPage from "../pages/egress.page";
+import IngressPage from "../pages/ingress.page";
 import ModelPage from "../pages/model.page";
 import ModulePage from "../pages/module.page";
 import ProductPage from "../pages/product.page";
@@ -95,6 +97,14 @@ const ItemSwitch = ({ link, page }: any) => {
       case "SERVICIOS":
         const Servicios = () => <ServicePage />;
         return Servicios;
+
+      case "INGRESOS":
+        const Ingresos = () => <IngressPage />;
+        return Ingresos;
+
+      case "EGRESOS":
+        const Egresos = () => <EgressPage />;
+        return Egresos;
 
       default:
         const ERROR = () => <NoMatch />;

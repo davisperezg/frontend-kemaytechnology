@@ -50,23 +50,14 @@ const ProductList = ({ product }: { product: Product }) => {
 
   const showOptionsForEdit = () => (
     <>
-      <DialogForm
-        open={dialog.active}
-        dialog={product}
-        title={dialog.name}
-        component={component(dialog.name)}
-        handleClose={handleClose}
-      />
-      <TableCell align="right">
-        <Tooltip
-          title="Editar Producto"
-          onClick={() => setDialog({ name: "Producto", active: true })}
-        >
-          <IconButton aria-label="product" size="small">
-            <EditRoundedIcon />
-          </IconButton>
-        </Tooltip>
-      </TableCell>
+      <Tooltip
+        title="Editar Producto"
+        onClick={() => setDialog({ name: "Producto", active: true })}
+      >
+        <IconButton aria-label="product" size="small">
+          <EditRoundedIcon />
+        </IconButton>
+      </Tooltip>
     </>
   );
 
@@ -93,12 +84,25 @@ const ProductList = ({ product }: { product: Product }) => {
         </TableCell>
         <TableCell>{moment(product.createdAt).format("DD/MM/YYYY")}</TableCell>
         <TableCell>{moment(product.updatedAt).format("DD/MM/YYYY")}</TableCell>
-        {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
+        <TableCell align="right">
+          {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
+        </TableCell>
       </TableRow>
     </>
   );
 
-  return <>{loadAccess(PERMIT_FOUR, auth, page, showData)}</>;
+  return (
+    <>
+      <DialogForm
+        open={dialog.active}
+        dialog={product}
+        title={dialog.name}
+        component={component(dialog.name)}
+        handleClose={handleClose}
+      />
+      {loadAccess(PERMIT_FOUR, auth, page, showData)}
+    </>
+  );
 };
 
 export default ProductList;

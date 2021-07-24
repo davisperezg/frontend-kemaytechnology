@@ -1,28 +1,26 @@
-import { useState, useEffect } from "react";
-import { findError } from "../helpers/control-errors";
-import { loadAccess } from "../components/acceso/filter-access.component";
-import { PERMIT_ONE } from "../const";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { setAlert } from "../store/alert/action";
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
+import { useState, useEffect } from "react";
 import Paper from "@material-ui/core/Paper";
-import Tooltip from "@material-ui/core/Tooltip";
-import DialogForm from "../components/dialog/dialog.component";
-import { Dialog } from "../interfaces/dialog.interface";
+import { Egress } from "../interfaces/egress.interface";
+import EgressList from "../components/egress/EgressList";
+import { useGetEgress } from "../hooks/egress/useGetEgress";
 import IconButton from "@material-ui/core/IconButton";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
+import { findError } from "../helpers/control-errors";
+import DialogForm from "../components/dialog/dialog.component";
+import Tooltip from "@material-ui/core/Tooltip";
+import { Dialog } from "../interfaces/dialog.interface";
+import { setAlert } from "../store/alert/action";
+import { useDispatch, useSelector } from "react-redux";
+import EgressForm from "../components/egress/EgressForm";
+import { loadAccess } from "../components/acceso/filter-access.component";
+import { PERMIT_ONE } from "../const";
 import { User } from "../interfaces/user.interface";
-
-import { Product } from "../interfaces/product.interface";
-import ProductList from "../components/product/product-list";
-import ProductForm from "../components/product/product-form";
-import { useGetProducts } from "../hooks/product/useGetProducts";
 
 const initialAlert = {
   type: "",
@@ -34,14 +32,13 @@ const initialDialog = {
   active: false,
 };
 
-const ProductPage = () => {
+const EgressPage = () => {
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const page = useSelector((state: any) => state.page.user.module);
+  const [egress, setEgress] = useState<Egress[]>([]);
+  const { data, loading, error } = useGetEgress();
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
-
-  const { data, loading, error } = useGetProducts();
-  const [products, setProducts] = useState<Product[]>([]);
 
   const handleClose = () => {
     setDialog(initialDialog);
@@ -51,7 +48,7 @@ const ProductPage = () => {
   const component = (name: string) => {
     switch (name) {
       case "Crear":
-        return <ProductForm handleClose={handleClose} />;
+        return <EgressForm handleClose={handleClose} />;
 
       default:
         break;
@@ -60,7 +57,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     if (data) {
-      setProducts(data.getProducts);
+      setEgress(data.getEgress);
     }
   }, [data]);
 
@@ -72,9 +69,9 @@ const ProductPage = () => {
     return <h1>{findError(error)}</h1>;
   }
 
-  const showDialogToCreate = () => (
+  const showOptionsToCreate = () => (
     <>
-      <Tooltip title="Crear Producto">
+      <Tooltip title="Crear Egreso">
         <IconButton
           aria-label="add"
           size="small"
@@ -90,33 +87,30 @@ const ProductPage = () => {
     <>
       <DialogForm
         open={dialog.active}
-        title={`${dialog.name} Producto`}
+        title={`${dialog.name} Egreso`}
         component={component(dialog.name)}
         handleClose={handleClose}
       />
-      {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)}
+      {loadAccess(PERMIT_ONE, auth, page, showOptionsToCreate)}
+
       <TableContainer component={Paper} style={{ marginTop: 10 }}>
-        <Table
-          //className={classes.table}
-          size="small"
-          aria-label="a dense table"
-        >
+        <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell>Categoria</TableCell>
-              <TableCell>Marca</TableCell>
-              <TableCell>Model</TableCell>
-              <TableCell>Producto</TableCell>
-              <TableCell>Descripción</TableCell>
-              <TableCell>Precio</TableCell>
+              <TableCell>Detalle</TableCell>
+              <TableCell>Observación</TableCell>
+              <TableCell>Unidades</TableCell>
+              <TableCell>Monto</TableCell>
+              <TableCell>Total</TableCell>
               <TableCell>Fecha creada</TableCell>
               <TableCell>Fecha modificada</TableCell>
-              <TableCell align="right">Opciones</TableCell>{" "}
+              <TableCell>Opciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((product) => (
-              <ProductList key={product.id} product={product} />
+            {egress.map((egres) => (
+              <EgressList key={egres.id} egres={egres} />
             ))}
           </TableBody>
         </Table>
@@ -125,4 +119,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default EgressPage;
