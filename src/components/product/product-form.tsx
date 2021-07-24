@@ -19,16 +19,11 @@ import { Brand } from "../../interfaces/brand.interface";
 import { useGetBrandsByCategory } from "../../hooks/brand/useBrandsByCategory";
 import { useGetModelsByBrand } from "../../hooks/model/useGetModelsByBrand";
 import { Model } from "../../interfaces/model.interface";
+import { AutoCompleteInput } from "../../interfaces/autocompleteinput.interface";
 
 interface Options {
   handleClose: () => void;
   product?: Product;
-}
-
-interface AutoCompleteInput {
-  category: string;
-  brand: string;
-  model: string;
 }
 
 const initialAlert = {
@@ -45,7 +40,6 @@ const initialAutoCompleteInput = {
 const ProductForm = ({ handleClose, product }: Options) => {
   const initialValueCreate: Product = {
     name: "",
-    description: "",
     price: 0,
     category: "",
     brand: "",
@@ -82,7 +76,10 @@ const ProductForm = ({ handleClose, product }: Options) => {
   const optionsGetModelsByBrand = useGetModelsByBrand(productForm.brand || "");
 
   const handleInput = (e: InputChange) => {
-    setProductForm({ ...productForm, [e.target.name]: e.target.value });
+    setProductForm({
+      ...productForm,
+      [e.target.name]: e.target.value,
+    });
     dispatch(setAlert(initialAlert));
   };
 
@@ -154,7 +151,7 @@ const ProductForm = ({ handleClose, product }: Options) => {
       try {
         await optionsUpdateProduct.updateProduct({
           variables: {
-            productInput: productForm,
+            productInput: { ...productForm, price: Number(productForm.price) },
           },
         });
         dispatch(
@@ -175,7 +172,7 @@ const ProductForm = ({ handleClose, product }: Options) => {
       try {
         await optionsCreateProduct.registerProduct({
           variables: {
-            productInput: productForm,
+            productInput: { ...productForm, price: Number(productForm.price) },
           },
         });
         dispatch(

@@ -32,7 +32,6 @@ const initialAlert = {
 const ServiceForm = ({ handleClose, service }: Options) => {
   const initialValueCreate: Service = {
     name: "",
-    description: "",
     price: 0,
     category: "",
   };
@@ -56,7 +55,10 @@ const ServiceForm = ({ handleClose, service }: Options) => {
   const optionsCreateService = useCreateService();
 
   const handleInput = (e: InputChange) => {
-    setServiceForm({ ...serviceForm, [e.target.name]: e.target.value });
+    setServiceForm({
+      ...serviceForm,
+      [e.target.name]: e.target.value,
+    });
     dispatch(setAlert(initialAlert));
   };
 
@@ -75,7 +77,7 @@ const ServiceForm = ({ handleClose, service }: Options) => {
       try {
         await optionsUpdateService.updateService({
           variables: {
-            serviceInput: serviceForm
+            serviceInput: { ...serviceForm, price: Number(serviceForm.price) },
           },
         });
         dispatch(
@@ -96,7 +98,7 @@ const ServiceForm = ({ handleClose, service }: Options) => {
       try {
         await optionsCreateService.registerService({
           variables: {
-            serviceInput: serviceForm
+            serviceInput: { ...serviceForm, price: Number(serviceForm.price) },
           },
         });
         dispatch(
