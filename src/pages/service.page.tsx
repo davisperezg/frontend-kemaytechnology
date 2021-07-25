@@ -92,10 +92,6 @@ const ServicePage = () => {
     </>
   );
 
-  const showOptionsForEdit = () => (
-    <TableCell align="right">Opciones</TableCell>
-  );
-
   return (
     <>
       {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)}
@@ -113,7 +109,7 @@ const ServicePage = () => {
               <TableCell>Precio</TableCell>
               <TableCell>Fecha creada</TableCell>
               <TableCell>Fecha modificada</TableCell>
-              {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
+              <TableCell align="right">Opciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

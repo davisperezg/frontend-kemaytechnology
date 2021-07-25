@@ -110,17 +110,18 @@ const EgressList = ({ egres }: { egres: Egress }) => {
         <TableCell component="th" scope="row">
           {egres.observation}
         </TableCell>
+
+        <TableCell>{moment(egres.createdAt).format("DD/MM/YYYY")}</TableCell>
+        <TableCell>{moment(egres.updatedAt).format("DD/MM/YYYY")}</TableCell>
         <TableCell component="th" scope="row" align="center">
           {egres.units}
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row" align="right">
           {formatMoney(egres.amount)}
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row" align="right">
           {formatMoney(egres.units * egres.amount)}
         </TableCell>
-        <TableCell>{moment(egres.createdAt).format("DD/MM/YYYY")}</TableCell>
-        <TableCell>{moment(egres.updatedAt).format("DD/MM/YYYY")}</TableCell>
         <TableCell component="th" scope="row" align="right">
           {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
           {loadAccess(PERMIT_TREE, auth, page, showOptionsForDelete)}

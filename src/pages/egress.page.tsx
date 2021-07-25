@@ -21,6 +21,7 @@ import EgressForm from "../components/egress/EgressForm";
 import { loadAccess } from "../components/acceso/filter-access.component";
 import { PERMIT_ONE } from "../const";
 import { User } from "../interfaces/user.interface";
+import { formatMoney } from "../lib/currency/money";
 
 const initialAlert = {
   type: "",
@@ -44,6 +45,14 @@ const EgressPage = () => {
     setDialog(initialDialog);
     dispatch(setAlert(initialAlert));
   };
+
+  const calTotalHoy = (items: Egress[]) => {
+    return items
+      .map((item) => item.units * item.amount)
+      .reduce((sum, i) => sum + i, 0);
+  };
+
+  const totalHoy = calTotalHoy(egress);
 
   const component = (name: string) => {
     switch (name) {
@@ -97,14 +106,23 @@ const EgressPage = () => {
         <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
+              <TableCell align="center" colSpan={6}>
+                Egreso de hoy
+              </TableCell>
+              <TableCell align="center" colSpan={3}>
+                Costo
+              </TableCell>
+            </TableRow>
+            <TableRow>
               <TableCell>Categoria</TableCell>
               <TableCell>Detalle</TableCell>
               <TableCell>Observación</TableCell>
-              <TableCell>Unidades</TableCell>
-              <TableCell>Monto</TableCell>
-              <TableCell>Total</TableCell>
+
               <TableCell>Fecha creada</TableCell>
               <TableCell>Fecha modificada</TableCell>
+              <TableCell align="right">Unidades</TableCell>
+              <TableCell align="right">Monto</TableCell>
+              <TableCell align="right">Total</TableCell>
               <TableCell>Opciones</TableCell>
             </TableRow>
           </TableHead>
@@ -112,6 +130,18 @@ const EgressPage = () => {
             {egress.map((egres) => (
               <EgressList key={egres.id} egres={egres} />
             ))}
+            <TableRow>
+              <TableCell colSpan={6} />
+              <TableCell>
+                <strong>Total</strong>
+              </TableCell>
+              <TableCell align="right">
+                <strong style={{ color: "red" }}>
+                  {formatMoney(totalHoy)}
+                </strong>
+              </TableCell>
+              <TableCell colSpan={3} />
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>

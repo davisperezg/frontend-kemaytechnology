@@ -7,7 +7,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import DialogForm from "../dialog/dialog.component";
-import { PERMIT_FOUR, PERMIT_TWO } from "../../const";
+import { PERMIT_FOUR, PERMIT_TREE, PERMIT_TWO } from "../../const";
 import IconButton from "@material-ui/core/IconButton";
 import EditRoundedIcon from "@material-ui/icons/EditRounded";
 import { User } from "../../interfaces/user.interface";
@@ -17,6 +17,9 @@ import { setAlert } from "../../store/alert/action";
 import { loadAccess } from "../acceso/filter-access.component";
 import ServiceForm from "./service-form";
 import { formatMoney } from "../../lib/currency/money";
+import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
+import { findError } from "../../helpers/control-errors";
+import { useDeleteService } from "../../hooks/service/useDeleteService";
 
 const initialAlert = {
   type: "",
@@ -33,6 +36,30 @@ const ServiceList = ({ service }: { service: Service }) => {
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
+  const optionsService = useDeleteService();
+
+  const deleteService = async (id: string | undefined) => {
+    try {
+      await optionsService.deleteService({
+        variables: {
+          id,
+        },
+      });
+    } catch (e) {
+      setDialog({ name: "error", active: true });
+      dispatch(
+        setAlert({
+          type: "error",
+          text: findError(e),
+        })
+      );
+      <DialogForm
+        open={dialog.active}
+        title={dialog.name}
+        handleClose={handleClose}
+      />;
+    }
+  };
 
   const handleClose = () => {
     setDialog(initialDialog);
@@ -51,23 +78,27 @@ const ServiceList = ({ service }: { service: Service }) => {
 
   const showOptionsForEdit = () => (
     <>
-      <DialogForm
-        open={dialog.active}
-        dialog={service}
-        title={dialog.name}
-        component={component(dialog.name)}
-        handleClose={handleClose}
-      />
-      <TableCell align="right">
-        <Tooltip
-          title="Editar Servicio"
-          onClick={() => setDialog({ name: "Servicio", active: true })}
-        >
-          <IconButton aria-label="service" size="small">
-            <EditRoundedIcon />
-          </IconButton>
-        </Tooltip>
-      </TableCell>
+      <Tooltip
+        title="Editar Servicio"
+        onClick={() => setDialog({ name: "Servicio", active: true })}
+      >
+        <IconButton aria-label="service" size="small">
+          <EditRoundedIcon />
+        </IconButton>
+      </Tooltip>
+    </>
+  );
+
+  const showOptionsForDelete = () => (
+    <>
+      <Tooltip
+        title="Eliminar egreso"
+        onClick={() => deleteService(service.id)}
+      >
+        <IconButton aria-label="egress" size="small">
+          <HighlightOffRoundedIcon />
+        </IconButton>
+      </Tooltip>
     </>
   );
 
@@ -88,12 +119,27 @@ const ServiceList = ({ service }: { service: Service }) => {
         </TableCell>
         <TableCell>{moment(service.createdAt).format("DD/MM/YYYY")}</TableCell>
         <TableCell>{moment(service.updatedAt).format("DD/MM/YYYY")}</TableCell>
-        {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
+
+        <TableCell align="right">
+          {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
+          {loadAccess(PERMIT_TREE, auth, page, showOptionsForDelete)}
+        </TableCell>
       </TableRow>
     </>
   );
 
-  return <>{loadAccess(PERMIT_FOUR, auth, page, showData)}</>;
+  return (
+    <>
+      <DialogForm
+        open={dialog.active}
+        dialog={service}
+        title={dialog.name}
+        component={component(dialog.name)}
+        handleClose={handleClose}
+      />
+      {loadAccess(PERMIT_FOUR, auth, page, showData)}
+    </>
+  );
 };
 
 export default ServiceList;
