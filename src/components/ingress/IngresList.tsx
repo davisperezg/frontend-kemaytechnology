@@ -113,8 +113,8 @@ const IngressList = ({ ingres }: { ingres: Ingress }) => {
         <TableCell component="th" scope="row">
           {ingres.observation}
         </TableCell>
-        <TableCell>{moment(ingres.createdAt).format("DD/MM/YYYY")}</TableCell>
-        <TableCell>{moment(ingres.updatedAt).format("DD/MM/YYYY")}</TableCell>
+        <TableCell>{ingres.createdAt}</TableCell>
+        <TableCell>{ingres.updatedAt}</TableCell>
 
         <TableCell component="th" scope="row" align="center">
           {ingres.units}

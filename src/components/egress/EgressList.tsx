@@ -111,8 +111,8 @@ const EgressList = ({ egres }: { egres: Egress }) => {
           {egres.observation}
         </TableCell>
 
-        <TableCell>{moment(egres.createdAt).format("DD/MM/YYYY")}</TableCell>
-        <TableCell>{moment(egres.updatedAt).format("DD/MM/YYYY")}</TableCell>
+        <TableCell>{egres.createdAt}</TableCell>
+        <TableCell>{egres.updatedAt}</TableCell>
         <TableCell component="th" scope="row" align="center">
           {egres.units}
         </TableCell>
