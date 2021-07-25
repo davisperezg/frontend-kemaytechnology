@@ -5,13 +5,14 @@ export const GET_EGRESS = gql`
     getEgress {
       id
       category {
-        id
         name
       }
       detail
       observation
       units
       amount
+      createdAt
+      updatedAt
     }
   }
 `;

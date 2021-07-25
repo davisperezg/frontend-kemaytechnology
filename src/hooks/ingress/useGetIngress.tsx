@@ -5,13 +5,14 @@ export const GET_INGRESS = gql`
     getIngress {
       id
       category {
-        id
         name
       }
       detail
       observation
       units
       amount
+      createdAt
+      updatedAt
     }
   }
 `;
