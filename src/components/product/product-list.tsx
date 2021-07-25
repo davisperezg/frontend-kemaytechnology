@@ -7,7 +7,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import DialogForm from "../dialog/dialog.component";
-import { PERMIT_FOUR, PERMIT_TWO } from "../../const";
+import { PERMIT_FOUR, PERMIT_TREE, PERMIT_TWO } from "../../const";
 import IconButton from "@material-ui/core/IconButton";
 import EditRoundedIcon from "@material-ui/icons/EditRounded";
 import { Dialog } from "../../interfaces/dialog.interface";
@@ -16,6 +16,9 @@ import { setAlert } from "../../store/alert/action";
 import { loadAccess } from "../acceso/filter-access.component";
 import { formatMoney } from "../../lib/currency/money";
 import { User } from "../../interfaces/user.interface";
+import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
+import { useDeleteProduct } from "../../hooks/product/useDeleteProduct";
+import { findError } from "../../helpers/control-errors";
 
 const initialAlert = {
   type: "",
@@ -32,6 +35,30 @@ const ProductList = ({ product }: { product: Product }) => {
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
+  const optionsProduct = useDeleteProduct();
+
+  const deleteProduct = async (id: string | undefined) => {
+    try {
+      await optionsProduct.deleteProduct({
+        variables: {
+          id,
+        },
+      });
+    } catch (e) {
+      setDialog({ name: "error", active: true });
+      dispatch(
+        setAlert({
+          type: "error",
+          text: findError(e),
+        })
+      );
+      <DialogForm
+        open={dialog.active}
+        title={dialog.name}
+        handleClose={handleClose}
+      />;
+    }
+  };
 
   const handleClose = () => {
     setDialog(initialDialog);
@@ -56,6 +83,19 @@ const ProductList = ({ product }: { product: Product }) => {
       >
         <IconButton aria-label="product" size="small">
           <EditRoundedIcon />
+        </IconButton>
+      </Tooltip>
+    </>
+  );
+
+  const showOptionsForDelete = () => (
+    <>
+      <Tooltip
+        title="Eliminar egreso"
+        onClick={() => deleteProduct(product.id)}
+      >
+        <IconButton aria-label="egress" size="small">
+          <HighlightOffRoundedIcon />
         </IconButton>
       </Tooltip>
     </>
@@ -86,6 +126,7 @@ const ProductList = ({ product }: { product: Product }) => {
         <TableCell>{moment(product.updatedAt).format("DD/MM/YYYY")}</TableCell>
         <TableCell align="right">
           {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
+          {loadAccess(PERMIT_TREE, auth, page, showOptionsForDelete)}
         </TableCell>
       </TableRow>
     </>

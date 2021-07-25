@@ -79,7 +79,7 @@ const IngressList = ({ ingres }: { ingres: Ingress }) => {
     <>
       <Tooltip
         title="Editar ingreso"
-        onClick={() => setDialog({ name: "Egreso", active: true })}
+        onClick={() => setDialog({ name: "Ingreso", active: true })}
       >
         <IconButton aria-label="egress" size="small">
           <EditRoundedIcon />
@@ -113,17 +113,19 @@ const IngressList = ({ ingres }: { ingres: Ingress }) => {
         <TableCell component="th" scope="row">
           {ingres.observation}
         </TableCell>
+        <TableCell>{moment(ingres.createdAt).format("DD/MM/YYYY")}</TableCell>
+        <TableCell>{moment(ingres.updatedAt).format("DD/MM/YYYY")}</TableCell>
+
         <TableCell component="th" scope="row" align="center">
           {ingres.units}
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row" align="right">
           {formatMoney(ingres.amount)}
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row" align="right">
           {formatMoney(ingres.units * ingres.amount)}
         </TableCell>
-        <TableCell>{moment(ingres.createdAt).format("DD/MM/YYYY")}</TableCell>
-        <TableCell>{moment(ingres.updatedAt).format("DD/MM/YYYY")}</TableCell>
+
         <TableCell component="th" scope="row" align="right">
           {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
           {loadAccess(PERMIT_TREE, auth, page, showOptionsForDelete)}
