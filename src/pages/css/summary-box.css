@@ -1,0 +1,15 @@
+.content-tables-i-e {
+  /* align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: row;
+  display: flex; */
+  display: float;
+  width: 100%;
+  height: auto;
+  overflow: auto;
+}
+
+.card-table {
+  float: left;
+  width: 48%;
+}
