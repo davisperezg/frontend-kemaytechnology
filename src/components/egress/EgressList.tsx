@@ -32,7 +32,9 @@ const initialDialog = {
 
 const EgressList = ({ egres }: { egres: Egress }) => {
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
-  const page = useSelector((state: any) => state.page.user.module);
+  const { module, page } = useSelector((state: any) => {
+    return state.page.user;
+  });
   const dispatch = useDispatch();
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const optionsEgress = useDeleteEgress();
@@ -101,18 +103,36 @@ const EgressList = ({ egres }: { egres: Egress }) => {
   const showData = () => (
     <>
       <TableRow>
-        <TableCell component="th" scope="row">
+        <TableCell
+          component="th"
+          scope="row"
+          style={{
+            wordBreak: "break-all",
+          }}
+        >
           {egres.category.name}
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell
+          component="th"
+          scope="row"
+          style={{ width: "30%", wordBreak: "break-all" }}
+        >
           {egres.detail}
         </TableCell>
-        <TableCell component="th" scope="row">
-          {egres.observation}
-        </TableCell>
+        {page === "RESUMEN-CAJA" || (
+          <>
+            <TableCell
+              component="th"
+              scope="row"
+              style={{ width: "30%", wordBreak: "break-all" }}
+            >
+              {egres.observation}
+            </TableCell>
 
-        <TableCell>{egres.createdAt}</TableCell>
-        <TableCell>{egres.updatedAt}</TableCell>
+            <TableCell>{egres.createdAt}</TableCell>
+            <TableCell>{egres.updatedAt}</TableCell>
+          </>
+        )}
         <TableCell component="th" scope="row" align="center">
           {egres.units}
         </TableCell>
@@ -122,10 +142,14 @@ const EgressList = ({ egres }: { egres: Egress }) => {
         <TableCell component="th" scope="row" align="right">
           {formatMoney(egres.units * egres.amount)}
         </TableCell>
-        <TableCell component="th" scope="row" align="right">
-          {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
-          {loadAccess(PERMIT_TREE, auth, page, showOptionsForDelete)}
-        </TableCell>
+        {page === "RESUMEN-CAJA" || (
+          <TableCell component="th" scope="row" align="right">
+            <>
+              {loadAccess(PERMIT_TWO, auth, module, showOptionsForEdit)}
+              {loadAccess(PERMIT_TREE, auth, module, showOptionsForDelete)}
+            </>
+          </TableCell>
+        )}
       </TableRow>
     </>
   );
@@ -139,7 +163,7 @@ const EgressList = ({ egres }: { egres: Egress }) => {
         component={component(dialog.name)}
         handleClose={handleClose}
       />
-      {loadAccess(PERMIT_FOUR, auth, page, showData)}
+      {loadAccess(PERMIT_FOUR, auth, module, showData)}
     </>
   );
 };

@@ -19,6 +19,7 @@ import { User } from "../../interfaces/user.interface";
 import { useSelector } from "react-redux";
 import { loadAccess } from "../acceso/filter-access.component";
 import { PERMIT_FOUR, PERMIT_TREE, PERMIT_TWO } from "../../const";
+import { makeStyles } from "@material-ui/core/styles";
 
 const initialAlert = {
   type: "",
@@ -30,9 +31,36 @@ const initialDialog = {
   active: false,
 };
 
+const useStyles = makeStyles((theme) => ({
+  row: {
+    width: 700,
+    backgroundColor: "grey",
+  },
+  cell_long: {
+    fontSize: "10px",
+    width: 150,
+    minWidth: 1,
+    backgroundColor: "#ee82ee",
+  },
+  cell_default: {
+    fontSize: "10px",
+    width: 200,
+    minWidth: 1,
+    backgroundColor: "#ee82ee",
+  },
+  cell_short: {
+    fontSize: "10px",
+    width: 80,
+    backgroundColor: "yellow",
+  },
+}));
+
 const IngressList = ({ ingres }: { ingres: Ingress }) => {
+  const classes = useStyles();
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
-  const page = useSelector((state: any) => state.page.user.module);
+  const { module, page } = useSelector((state: any) => {
+    return state.page.user;
+  });
   const dispatch = useDispatch();
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const optionsIngress = useDeleteIngress();
@@ -104,17 +132,36 @@ const IngressList = ({ ingres }: { ingres: Ingress }) => {
   const showData = () => (
     <>
       <TableRow>
-        <TableCell component="th" scope="row">
+        <TableCell
+          component="th"
+          scope="row"
+          style={{
+            wordBreak: "break-all",
+          }}
+        >
           {ingres.category.name}
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell
+          component="th"
+          scope="row"
+          style={{ width: "30%", wordBreak: "break-all" }}
+        >
           {ingres.detail}
         </TableCell>
-        <TableCell component="th" scope="row">
-          {ingres.observation}
-        </TableCell>
-        <TableCell>{ingres.createdAt}</TableCell>
-        <TableCell>{ingres.updatedAt}</TableCell>
+        {page === "RESUMEN-CAJA" || (
+          <>
+            <TableCell
+              component="th"
+              scope="row"
+              style={{ width: "30%", wordBreak: "break-all" }}
+            >
+              {ingres.observation}
+            </TableCell>
+
+            <TableCell>{ingres.createdAt}</TableCell>
+            <TableCell>{ingres.updatedAt}</TableCell>
+          </>
+        )}
 
         <TableCell component="th" scope="row" align="center">
           {ingres.units}
@@ -126,10 +173,14 @@ const IngressList = ({ ingres }: { ingres: Ingress }) => {
           {formatMoney(ingres.units * ingres.amount)}
         </TableCell>
 
-        <TableCell component="th" scope="row" align="right">
-          {loadAccess(PERMIT_TWO, auth, page, showOptionsForEdit)}
-          {loadAccess(PERMIT_TREE, auth, page, showOptionsForDelete)}
-        </TableCell>
+        {page === "RESUMEN-CAJA" || (
+          <TableCell component="th" scope="row" align="right">
+            <>
+              {loadAccess(PERMIT_TWO, auth, module, showOptionsForEdit)}
+              {loadAccess(PERMIT_TREE, auth, module, showOptionsForDelete)}
+            </>
+          </TableCell>
+        )}
       </TableRow>
     </>
   );
@@ -143,7 +194,7 @@ const IngressList = ({ ingres }: { ingres: Ingress }) => {
         component={component(dialog.name)}
         handleClose={handleClose}
       />
-      {loadAccess(PERMIT_FOUR, auth, page, showData)}
+      {loadAccess(PERMIT_FOUR, auth, module, showData)}
     </>
   );
 };

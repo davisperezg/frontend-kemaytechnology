@@ -4,6 +4,7 @@ import { Redirect, Route, useLocation } from "react-router-dom";
 import NoMatch from "../pages/404.page";
 import BrandPage from "../pages/brand.page";
 import CategooryPage from "../pages/category.page";
+import CheckMoneyPage from "../pages/check-money.page";
 import EgressPage from "../pages/egress.page";
 import IngressPage from "../pages/ingress.page";
 import ModelPage from "../pages/model.page";
@@ -11,6 +12,7 @@ import ModulePage from "../pages/module.page";
 import ProductPage from "../pages/product.page";
 import RolePage from "../pages/role.page";
 import ServicePage from "../pages/service.page";
+import SummaryBoxPage from "../pages/summary-box.page";
 import UserPage from "../pages/user.page";
 import { getLocal } from "./local-storage";
 
@@ -105,6 +107,14 @@ const ItemSwitch = ({ link, page }: any) => {
       case "EGRESOS":
         const Egresos = () => <EgressPage />;
         return Egresos;
+
+      case "RESUMEN-CAJA":
+        const ResumenCaja = () => <SummaryBoxPage />;
+        return ResumenCaja;
+
+      case "CONSULTAR-PRECIOS":
+        const ConsultarPrecios = () => <CheckMoneyPage />;
+        return ConsultarPrecios;
 
       default:
         const ERROR = () => <NoMatch />;
