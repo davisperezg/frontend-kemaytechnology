@@ -63,7 +63,7 @@ const ItemSwitch = ({ link, page }: any) => {
 
   const PAGES = (page: string) => {
     switch (page) {
-      case "HOME":
+      case "DASHBOARD":
         const Home = () => {
           return <h1>Hola Home</h1>;
         };

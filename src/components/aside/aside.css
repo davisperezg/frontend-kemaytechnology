@@ -1,0 +1,17 @@
+aside {
+  background-color: #252546;
+  position: fixed;
+  width: 200px;
+  height: 100%;
+}
+
+.logo {
+  cursor: pointer;
+  padding: 20px;
+}
+
+.content-logo {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}

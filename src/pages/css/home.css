@@ -1,0 +1,21 @@
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #eff3f6;
+}
+
+.body {
+  flex: 1 0 auto;
+}
+
+.menu {
+  flex: 0 0 200px;
+}
+
+/*side {
+   width: 240px; */
+/*bottom: 0;
+  left: 0;
+  top: 0; 
+}*/

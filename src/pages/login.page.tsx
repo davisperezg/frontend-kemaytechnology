@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import logo from "../assets/logo.png";
+import logo from "../assets/B_logo_kemay.png";
 import { useLogin } from "../hooks/login/useLogin";
 import { Error } from "../interfaces/error.interface";
 import { Login } from "../interfaces/auth.interface";
@@ -94,16 +94,15 @@ const LoginPage: React.FC = ({ loading, setLoading }: any) => {
       setLoading(false);
     }
   };
-
   return (
     <div className="login">
       <div className="content-login-logo content-items-center">
-        <img width="250" height="250" src={logo} alt="Logo" />
+        <img width="450" height="400" src={logo} alt="Logo" />
       </div>
       <div className="content-login-form content-items-center">
         <div className="content-login-form-main">
           <div className="content-login-form-header content-items-center">
-            <h1>SISTEMA RPUM</h1>
+            <h1>ACCESO AL SISTEMA</h1>
           </div>
           {alert.type && <Alert severity={alert.type}>{alert.text}</Alert>}
           <form onSubmit={handleSubmit}>
