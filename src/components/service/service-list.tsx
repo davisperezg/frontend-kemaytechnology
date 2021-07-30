@@ -112,9 +112,6 @@ const ServiceList = ({ service }: { service: Service }) => {
           {service.name}
         </TableCell>
         <TableCell component="th" scope="row">
-          {service.description}
-        </TableCell>
-        <TableCell component="th" scope="row">
           {formatMoney(service.price)}
         </TableCell>
         <TableCell>{moment(service.createdAt).format("DD/MM/YYYY")}</TableCell>

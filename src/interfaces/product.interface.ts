@@ -9,7 +9,7 @@ export interface Product {
   price: number;
   createdAt?: Date;
   updatedAt?: Date;
-  category: Category | any;
-  brand: Brand | any;
-  model: Model | any;
+  category?: Category | any;
+  brand?: Brand | any;
+  model?: Model | any;
 }

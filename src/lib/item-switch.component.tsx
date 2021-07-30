@@ -5,6 +5,7 @@ import NoMatch from "../pages/404.page";
 import BrandPage from "../pages/brand.page";
 import CategooryPage from "../pages/category.page";
 import CheckMoneyPage from "../pages/check-money.page";
+import CheckProducts from "../pages/check-products";
 import EgressPage from "../pages/egress.page";
 import IngressPage from "../pages/ingress.page";
 import ModelPage from "../pages/model.page";
@@ -112,8 +113,12 @@ const ItemSwitch = ({ link, page }: any) => {
         const ResumenCaja = () => <SummaryBoxPage />;
         return ResumenCaja;
 
+      case "CONSULTAR-CAJA":
+        const ConsultarCaja = () => <CheckMoneyPage />;
+        return ConsultarCaja;
+
       case "CONSULTAR-PRECIOS":
-        const ConsultarPrecios = () => <CheckMoneyPage />;
+        const ConsultarPrecios = () => <CheckProducts />;
         return ConsultarPrecios;
 
       default:

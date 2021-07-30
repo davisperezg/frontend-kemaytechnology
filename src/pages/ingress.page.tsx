@@ -35,7 +35,13 @@ const initialDialog = {
   active: false,
 };
 
-const IngressPage = () => {
+interface Option {
+  checkMoney?: any;
+  resultIngress?: any;
+  resultEgress?: any;
+}
+
+const IngressPage = ({ checkMoney, resultIngress }: Option) => {
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const { module, page } = useSelector((state: any) => {
     return state.page.user;
@@ -70,9 +76,14 @@ const IngressPage = () => {
   const totalHoy = calTotalHoy(ingress);
 
   useEffect(() => {
-    if (data) {
-      setIngress(data.getIngress);
+    if (checkMoney === undefined) {
+      if (data) {
+        setIngress(data.getIngress);
+      }
+    } else {
+      setIngress(resultIngress);
     }
+
     setSummaryIngress({ ...summaryIngress, ingress: totalHoy });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, setSummaryIngress, totalHoy]);
@@ -108,13 +119,13 @@ const IngressPage = () => {
         handleClose={handleClose}
       />
 
-      {page === "RESUMEN-CAJA"
+      {page === "RESUMEN-CAJA" || page === "CONSULTAR-CAJA"
         ? ""
         : loadAccess(PERMIT_ONE, auth, module, showOptionsToCreate)}
 
       <TableContainer
         component={Paper}
-        // style={{ marginTop: 10, width: 700, height: 600 }}
+        style={{ marginTop: page === "CONSULTAR-CAJA" ? 20 : 0 }}
       >
         <Table size="small" aria-label="a dense table">
           <TableHead>
@@ -124,7 +135,7 @@ const IngressPage = () => {
                 align="center"
                 colSpan={page === "RESUMEN-CAJA" ? 4 : 6}
               >
-                Ingreso de hoy
+                {page === "CONSULTAR-CAJA" ? `Ingreso Total` : `Ingreso de hoy`}
               </TableCell>
               <TableCell
                 style={{ color: "#fff" }}
@@ -147,7 +158,11 @@ const IngressPage = () => {
               <TableCell align="center">Unidades</TableCell>
               <TableCell align="right">Monto</TableCell>
               <TableCell align="right">Monto total</TableCell>
-              {page === "RESUMEN-CAJA" ? "" : <TableCell>Opciones</TableCell>}
+              {page === "RESUMEN-CAJA" || page === "CONSULTAR-CAJA" ? (
+                ""
+              ) : (
+                <TableCell>Opciones</TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -155,7 +170,15 @@ const IngressPage = () => {
               <IngressList key={ingres.id} ingres={ingres} />
             ))}
             <TableRow>
-              <TableCell colSpan={page === "RESUMEN-CAJA" ? 3 : 6} />
+              <TableCell
+                colSpan={
+                  page === "RESUMEN-CAJA"
+                    ? 3
+                    : page === "CONSULTAR-CAJA"
+                    ? 6
+                    : 6
+                }
+              />
               <TableCell>
                 <strong>Total</strong>
               </TableCell>
@@ -164,7 +187,11 @@ const IngressPage = () => {
                   {formatMoney(totalHoy)}
                 </strong>
               </TableCell>
-              {page === "RESUMEN-CAJA" ? "" : <TableCell colSpan={3} />}
+              {page === "RESUMEN-CAJA" || page === "CONSULTAR-CAJA" ? (
+                ""
+              ) : (
+                <TableCell colSpan={3} />
+              )}
             </TableRow>
           </TableBody>
         </Table>
