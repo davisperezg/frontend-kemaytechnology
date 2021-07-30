@@ -5,14 +5,16 @@ interface RootState {
     link: string;
     module: string;
     page: string;
+    name: string;
   };
 }
 
 const initialState = {
   user: {
     link: "/",
-    module: "",
-    page: "HOME",
+    module: "Inicio",
+    page: "DASHBOARD",
+    name: "Dashboard",
   },
 };
 

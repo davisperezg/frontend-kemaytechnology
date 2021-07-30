@@ -37,7 +37,7 @@ const ListItemMenus = ({
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
 
   const goToPage = () => {
-    setLink(module.name, menu.link);
+    setLink(module.name, menu.link, menu.name);
     document.title = `RPUM - ${menu.link.toUpperCase()}`;
     history.push(`/${menu.link}`);
   };
