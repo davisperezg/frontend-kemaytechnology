@@ -158,8 +158,12 @@ const IngressList = ({ ingres }: { ingres: Ingress }) => {
               {ingres.observation}
             </TableCell>
 
-            <TableCell>{ingres.createdAt}</TableCell>
-            <TableCell>{ingres.updatedAt}</TableCell>
+            <TableCell>
+              {moment(ingres.createdAt).format("DD/MM/YYYY")}
+            </TableCell>
+            <TableCell>
+              {moment(ingres.updatedAt).format("DD/MM/YYYY")}
+            </TableCell>
           </>
         )}
 
@@ -173,7 +177,9 @@ const IngressList = ({ ingres }: { ingres: Ingress }) => {
           {formatMoney(ingres.units * ingres.amount)}
         </TableCell>
 
-        {page === "RESUMEN-CAJA" || (
+        {page === "RESUMEN-CAJA" || page === "CONSULTAR-CAJA" ? (
+          ""
+        ) : (
           <TableCell component="th" scope="row" align="right">
             <>
               {loadAccess(PERMIT_TWO, auth, module, showOptionsForEdit)}

@@ -42,7 +42,7 @@ const Header = ({ authUser, loading, whoisme, setLink, logout }: any) => {
           <img width="60" height="60" src={logo} alt="Logo" />
         </div>
         <div onClick={() => gotToHome()} className="title-logo">
-          <p>RPUM</p>
+          <p>KTECH</p>
         </div>
       </div>
       <div className="content-options">

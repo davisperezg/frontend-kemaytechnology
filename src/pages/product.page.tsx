@@ -107,7 +107,6 @@ const ProductPage = () => {
               <TableCell>Marca</TableCell>
               <TableCell>Model</TableCell>
               <TableCell>Producto</TableCell>
-              <TableCell>Descripción</TableCell>
               <TableCell>Precio</TableCell>
               <TableCell>Fecha creada</TableCell>
               <TableCell>Fecha modificada</TableCell>

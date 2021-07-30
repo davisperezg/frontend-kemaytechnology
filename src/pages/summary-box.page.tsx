@@ -11,7 +11,17 @@ import { PagoProvider } from "../context/caja-context";
 import { useState } from "react";
 import { formatMoney } from "../lib/currency/money";
 
-const SummaryBoxPage = () => {
+interface Option {
+  checkMoney?: any;
+  resultIngress?: any;
+  resultEgress?: any;
+}
+
+const SummaryBoxPage = ({
+  checkMoney,
+  resultIngress,
+  resultEgress,
+}: Option) => {
   const [summaryIngress, setSummaryIngress] = useState({
     ingress: 0,
   });
@@ -32,10 +42,18 @@ const SummaryBoxPage = () => {
       >
         <div className="content-tables-i-e">
           <div className="card-table" style={{ marginRight: "4%" }}>
-            <IngressPage />
+            <IngressPage
+              checkMoney={checkMoney}
+              resultIngress={resultIngress}
+              resultEgress={resultEgress}
+            />
           </div>
           <div className="card-table">
-            <EgressPage />
+            <EgressPage
+              checkMoney={checkMoney}
+              resultIngress={resultIngress}
+              resultEgress={resultEgress}
+            />
           </div>
         </div>
         <div style={{ marginTop: 20 }}>
