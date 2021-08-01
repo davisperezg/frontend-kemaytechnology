@@ -83,7 +83,7 @@ const errorLink = onError(
 );
 //http://localhost:3000/graphql
 const httpLink = createHttpLink({
-  uri: "http://localhost:3000/graphql",
+  uri: "https://web.kemaytechnology.com",
 });
 
 const authLink = setContext((_, { headers }) => {
