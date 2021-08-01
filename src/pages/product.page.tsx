@@ -108,6 +108,7 @@ const ProductPage = () => {
               <TableCell>Model</TableCell>
               <TableCell>Producto</TableCell>
               <TableCell>Precio</TableCell>
+              <TableCell>Cantidad</TableCell>
               <TableCell>Fecha creada</TableCell>
               <TableCell>Fecha modificada</TableCell>
               <TableCell align="right">Opciones</TableCell>{" "}
