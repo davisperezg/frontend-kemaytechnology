@@ -119,6 +119,9 @@ const ProductList = ({ product }: { product: Product }) => {
         <TableCell component="th" scope="row">
           {formatMoney(product.price)}
         </TableCell>
+        <TableCell component="th" scope="row" align="center">
+          {product.cant}
+        </TableCell>
         <TableCell>{moment(product.createdAt).format("DD/MM/YYYY")}</TableCell>
         <TableCell>{moment(product.updatedAt).format("DD/MM/YYYY")}</TableCell>
         <TableCell align="right">

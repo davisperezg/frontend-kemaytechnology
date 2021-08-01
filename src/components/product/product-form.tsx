@@ -44,6 +44,7 @@ const ProductForm = ({ handleClose, product }: Options) => {
     category: "",
     brand: "",
     model: "",
+    cant: 0,
   };
 
   const initialValueUpdate: Product = {
@@ -51,6 +52,7 @@ const ProductForm = ({ handleClose, product }: Options) => {
     name: product?.name || "",
     description: product?.description || "",
     price: product?.price || 0,
+    cant: product?.cant || 0,
     category: product?.category?.name || "",
     brand: product?.brand?.name || "",
     model: product?.model?.name || "",
@@ -151,7 +153,11 @@ const ProductForm = ({ handleClose, product }: Options) => {
       try {
         await optionsUpdateProduct.updateProduct({
           variables: {
-            productInput: { ...productForm, price: Number(productForm.price) },
+            productInput: {
+              ...productForm,
+              price: Number(productForm.price),
+              cant: Number(productForm.cant),
+            },
           },
         });
         dispatch(
@@ -172,7 +178,11 @@ const ProductForm = ({ handleClose, product }: Options) => {
       try {
         await optionsCreateProduct.registerProduct({
           variables: {
-            productInput: { ...productForm, price: Number(productForm.price) },
+            productInput: {
+              ...productForm,
+              price: Number(productForm.price),
+              cant: Number(productForm.cant),
+            },
           },
         });
         dispatch(
@@ -349,6 +359,19 @@ const ProductForm = ({ handleClose, product }: Options) => {
                 <InputAdornment position="start">S/</InputAdornment>
               ),
             }}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            onChange={handleInput}
+            name="cant"
+            autoComplete="off"
+            id="idCant"
+            label="Cantidad"
+            variant="outlined"
+            value={productForm.cant}
           />
         </Grid>
 
