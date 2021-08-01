@@ -1,21 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.cea64a76.chunk.css",
-    "main.js": "/static/js/main.e99ad4ec.chunk.js",
-    "main.js.map": "/static/js/main.e99ad4ec.chunk.js.map",
+    "main.css": "/static/css/main.936b7bfa.chunk.css",
+    "main.js": "/static/js/main.d83b8e39.chunk.js",
+    "main.js.map": "/static/js/main.d83b8e39.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.28ba43c3.js",
     "runtime-main.js.map": "/static/js/runtime-main.28ba43c3.js.map",
-    "static/js/2.a50e9c09.chunk.js": "/static/js/2.a50e9c09.chunk.js",
-    "static/js/2.a50e9c09.chunk.js.map": "/static/js/2.a50e9c09.chunk.js.map",
+    "static/js/2.6a420d3b.chunk.js": "/static/js/2.6a420d3b.chunk.js",
+    "static/js/2.6a420d3b.chunk.js.map": "/static/js/2.6a420d3b.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.cea64a76.chunk.css.map": "/static/css/main.cea64a76.chunk.css.map",
-    "static/js/2.a50e9c09.chunk.js.LICENSE.txt": "/static/js/2.a50e9c09.chunk.js.LICENSE.txt",
-    "static/media/logo.8da9e76e.png": "/static/media/logo.8da9e76e.png"
+    "static/css/main.936b7bfa.chunk.css.map": "/static/css/main.936b7bfa.chunk.css.map",
+    "static/js/2.6a420d3b.chunk.js.LICENSE.txt": "/static/js/2.6a420d3b.chunk.js.LICENSE.txt",
+    "static/media/B_logo_kemay.bec2fe6e.png": "/static/media/B_logo_kemay.bec2fe6e.png",
+    "static/media/logo_kemay_antena.16ba1da3.png": "/static/media/logo_kemay_antena.16ba1da3.png"
   },
   "entrypoints": [
     "static/js/runtime-main.28ba43c3.js",
-    "static/js/2.a50e9c09.chunk.js",
-    "static/css/main.cea64a76.chunk.css",
-    "static/js/main.e99ad4ec.chunk.js"
+    "static/js/2.6a420d3b.chunk.js",
+    "static/css/main.936b7bfa.chunk.css",
+    "static/js/main.d83b8e39.chunk.js"
   ]
 }
