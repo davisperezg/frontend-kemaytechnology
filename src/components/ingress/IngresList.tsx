@@ -166,7 +166,9 @@ const IngressList = ({ ingres }: { ingres: Ingress }) => {
             </TableCell>
           </>
         )}
-
+        <TableCell component="th" scope="row">
+          {ingres?.user?.name}
+        </TableCell>
         <TableCell component="th" scope="row" align="center">
           {ingres.units}
         </TableCell>

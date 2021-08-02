@@ -137,6 +137,9 @@ const EgressList = ({ egres }: { egres: Egress }) => {
             </TableCell>
           </>
         )}
+        <TableCell component="th" scope="row">
+          {egres?.user?.name}
+        </TableCell>
         <TableCell component="th" scope="row" align="center">
           {egres.units}
         </TableCell>

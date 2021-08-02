@@ -1,4 +1,5 @@
 import { Category } from "./category.interface";
+import { User } from "./user.interface";
 
 export interface Egress {
   id?: string;
@@ -6,6 +7,7 @@ export interface Egress {
   observation?: string;
   units: number;
   category: Category | any;
+  user?: User | any;
   amount: number;
   createdAt?: Date;
   updatedAt?: Date;

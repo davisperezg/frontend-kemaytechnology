@@ -132,7 +132,7 @@ const EgressPage = ({ checkMoney, resultEgress }: Option) => {
               <TableCell
                 style={{ color: "#fff" }}
                 align="center"
-                colSpan={page === "RESUMEN-CAJA" ? 4 : 6}
+                colSpan={page === "RESUMEN-CAJA" ? 4 : 7}
               >
                 {page === "CONSULTAR-CAJA" ? `Egreso Total` : `Ingreso de hoy`}
               </TableCell>
@@ -154,6 +154,7 @@ const EgressPage = ({ checkMoney, resultEgress }: Option) => {
                   <TableCell>Fecha modificada</TableCell>
                 </>
               )}
+              <TableCell>Usuario</TableCell>
               <TableCell align="center">Unidades</TableCell>
               <TableCell align="right">Monto</TableCell>
               <TableCell align="right">Monto total</TableCell>
@@ -173,10 +174,10 @@ const EgressPage = ({ checkMoney, resultEgress }: Option) => {
               <TableCell
                 colSpan={
                   page === "RESUMEN-CAJA"
-                    ? 3
+                    ? 4
                     : page === "CONSULTAR-CAJA"
-                    ? 6
-                    : 6
+                    ? 7
+                    : 7
                 }
               />
               <TableCell>
