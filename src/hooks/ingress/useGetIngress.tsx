@@ -7,6 +7,9 @@ export const GET_INGRESS = gql`
       category {
         name
       }
+      user {
+        name
+      }
       detail
       observation
       units

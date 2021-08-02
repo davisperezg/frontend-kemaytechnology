@@ -13,9 +13,10 @@ import { useUpdateEgress } from "../../hooks/egress/useUpdateEgress";
 import { useCreateEgress } from "../../hooks/egress/useCreateEgress";
 import { findError } from "../../helpers/control-errors";
 import { setAlert } from "../../store/alert/action";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { AutoCompleteInput } from "../../interfaces/autocompleteinput.interface";
+import { User } from "../../interfaces/user.interface";
 
 interface Options {
   handleClose: () => void;
@@ -32,11 +33,14 @@ const initialAutoCompleteInput = {
 };
 
 const EgressForm = ({ handleClose, egress }: Options) => {
+  const auth: User = useSelector((state: any) => state.authReducer.authUser);
+
   const initialValueCreate: Egress = {
     detail: "",
     amount: 0,
     units: 0,
     category: "",
+    user: auth.name,
   };
 
   const initialValueUpdate: Egress = {
@@ -46,6 +50,7 @@ const EgressForm = ({ handleClose, egress }: Options) => {
     units: egress?.units || 0,
     category: egress?.category?.name || "",
     observation: egress?.observation || "",
+    //user: auth.name
   };
 
   const [egressForm, setEgressForm] = useState<Egress>(

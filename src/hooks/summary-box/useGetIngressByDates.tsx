@@ -13,6 +13,9 @@ const GET_DATE = gql`
       category {
         name
       }
+      user {
+        name
+      }
     }
   }
 `;

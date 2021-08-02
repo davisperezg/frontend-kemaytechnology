@@ -9,13 +9,14 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { findError } from "../../helpers/control-errors";
 import { setAlert } from "../../store/alert/action";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { useUpdateIngress } from "../../hooks/ingress/useUpdateIngress";
 import { useCreateIngress } from "../../hooks/ingress/useCreateIngress";
 import { useGetCategorys } from "../../hooks/category/useGetCategorys";
 import { Category } from "../../interfaces/category.interface";
 import { AutoCompleteInput } from "../../interfaces/autocompleteinput.interface";
+import { User } from "../../interfaces/user.interface";
 
 interface Options {
   handleClose: () => void;
@@ -32,11 +33,13 @@ const initialAutoCompleteInput = {
 };
 
 const IngressForm = ({ handleClose, ingres }: Options) => {
+  const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const initialValueCreate: Ingress = {
     detail: "",
     amount: 0,
     units: 0,
     category: "",
+    user: auth.name,
   };
 
   const initialValueUpdate: Ingress = {
@@ -46,6 +49,7 @@ const IngressForm = ({ handleClose, ingres }: Options) => {
     units: ingres?.units || 0,
     category: ingres?.category?.name || "",
     observation: ingres?.observation || "",
+    //user:auth.name
   };
 
   const [ingressForm, setIngressForm] = useState<Ingress>(

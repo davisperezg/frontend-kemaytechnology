@@ -133,7 +133,7 @@ const IngressPage = ({ checkMoney, resultIngress }: Option) => {
               <TableCell
                 style={{ color: "#fff" }}
                 align="center"
-                colSpan={page === "RESUMEN-CAJA" ? 4 : 6}
+                colSpan={page === "RESUMEN-CAJA" ? 4 : 7}
               >
                 {page === "CONSULTAR-CAJA" ? `Ingreso Total` : `Ingreso de hoy`}
               </TableCell>
@@ -155,6 +155,7 @@ const IngressPage = ({ checkMoney, resultIngress }: Option) => {
                   <TableCell>Fecha modificada</TableCell>
                 </>
               )}
+              <TableCell>Usuario</TableCell>
               <TableCell align="center">Unidades</TableCell>
               <TableCell align="right">Monto</TableCell>
               <TableCell align="right">Monto total</TableCell>
@@ -173,10 +174,10 @@ const IngressPage = ({ checkMoney, resultIngress }: Option) => {
               <TableCell
                 colSpan={
                   page === "RESUMEN-CAJA"
-                    ? 3
+                    ? 4
                     : page === "CONSULTAR-CAJA"
-                    ? 6
-                    : 6
+                    ? 7
+                    : 7
                 }
               />
               <TableCell>
