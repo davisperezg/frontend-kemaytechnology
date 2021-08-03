@@ -144,7 +144,7 @@ const IngressList = ({ ingres }: { ingres: Ingress }) => {
         <TableCell
           component="th"
           scope="row"
-          style={{ width: "30%", wordBreak: "break-all" }}
+          style={{ wordBreak: "break-all" }}
         >
           {ingres.detail}
         </TableCell>
@@ -153,17 +153,17 @@ const IngressList = ({ ingres }: { ingres: Ingress }) => {
             <TableCell
               component="th"
               scope="row"
-              style={{ width: "30%", wordBreak: "break-all" }}
+              style={{ wordBreak: "break-all" }}
             >
               {ingres.observation}
             </TableCell>
 
-            <TableCell>
+            {/* <TableCell>
               {moment(ingres.createdAt).format("DD/MM/YYYY")}
             </TableCell>
             <TableCell>
               {moment(ingres.updatedAt).format("DD/MM/YYYY")}
-            </TableCell>
+            </TableCell> */}
           </>
         )}
         <TableCell component="th" scope="row">

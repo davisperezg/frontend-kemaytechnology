@@ -115,7 +115,7 @@ const EgressList = ({ egres }: { egres: Egress }) => {
         <TableCell
           component="th"
           scope="row"
-          style={{ width: "30%", wordBreak: "break-all" }}
+          style={{ wordBreak: "break-all" }}
         >
           {egres.detail}
         </TableCell>
@@ -124,17 +124,17 @@ const EgressList = ({ egres }: { egres: Egress }) => {
             <TableCell
               component="th"
               scope="row"
-              style={{ width: "30%", wordBreak: "break-all" }}
+              style={{ wordBreak: "break-all" }}
             >
               {egres.observation}
             </TableCell>
 
-            <TableCell>
+            {/* <TableCell>
               {moment(egres.createdAt).format("DD/MM/YYYY")}
             </TableCell>
             <TableCell>
               {moment(egres.updatedAt).format("DD/MM/YYYY")}
-            </TableCell>
+            </TableCell> */}
           </>
         )}
         <TableCell component="th" scope="row">
