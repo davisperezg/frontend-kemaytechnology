@@ -2,10 +2,13 @@ import React, { createElement } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, useLocation } from "react-router-dom";
 import NoMatch from "../pages/404.page";
+import BillingPage from "../pages/billing.page";
 import BrandPage from "../pages/brand.page";
 import CategooryPage from "../pages/category.page";
 import CheckMoneyPage from "../pages/check-money.page";
 import CheckProducts from "../pages/check-products";
+import CustomerPage from "../pages/customer.page";
+import DevicePage from "../pages/device.page";
 import EgressPage from "../pages/egress.page";
 import IngressPage from "../pages/ingress.page";
 import ModelPage from "../pages/model.page";
@@ -15,6 +18,7 @@ import RolePage from "../pages/role.page";
 import ServicePage from "../pages/service.page";
 import SummaryBoxPage from "../pages/summary-box.page";
 import UserPage from "../pages/user.page";
+import VehiclesPage from "../pages/vehicles.page";
 import { getLocal } from "./local-storage";
 
 interface RootState {
@@ -120,6 +124,22 @@ const ItemSwitch = ({ link, page }: any) => {
       case "CONSULTAR-PRECIOS":
         const ConsultarPrecios = () => <CheckProducts />;
         return ConsultarPrecios;
+
+      case "CLIENTES":
+        const Clientes = () => <CustomerPage />;
+        return Clientes;
+
+      case "VEHICULOS":
+        const Vehiculos = () => <VehiclesPage />;
+        return Vehiculos;
+
+      case "DISPOSITIVOS":
+        const Dispositivos = () => <DevicePage />;
+        return Dispositivos;
+
+      case "PLAN-DE-FACTURACION":
+        const Billing = () => <BillingPage />;
+        return Billing;
 
       default:
         const ERROR = () => <NoMatch />;

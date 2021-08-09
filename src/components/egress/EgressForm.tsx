@@ -160,9 +160,7 @@ const EgressForm = ({ handleClose, egress }: Options) => {
             }}
             options={categorys}
             getOptionLabel={(category) => (category.name ? category.name : "")}
-            getOptionSelected={(option, value) =>
-              option.name !== value.name ? false : true
-            }
+            getOptionSelected={(option, value) => option.name === value}
             renderInput={(params) => (
               <TextField
                 {...params}

@@ -10,6 +10,7 @@ import { setContext } from "@apollo/client/link/context";
 import { getLocal, setLocal } from "./lib/local-storage";
 import { onError } from "@apollo/client/link/error";
 import { POST_REFRESH } from "./hooks/login/useRefreshToken";
+import { URLC } from "./config/config";
 
 let isRefreshing = false;
 let pendingRequests: any = [];
@@ -83,7 +84,7 @@ const errorLink = onError(
 );
 //http://localhost:3000/graphql
 const httpLink = createHttpLink({
-  uri: "https://web.kemaytechnology.com/graphql",
+  uri: URLC,
 });
 
 const authLink = setContext((_, { headers }) => {

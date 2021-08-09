@@ -99,7 +99,10 @@ const BrandPage = () => {
   return (
     <>
       {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)}
-      <TableContainer component={Paper} style={{ marginTop: 10 }}>
+      <TableContainer
+        component={Paper}
+        style={{ whiteSpace: "nowrap", marginTop: 10 }}
+      >
         <Table
           //className={classes.table}
           size="small"

@@ -13,10 +13,41 @@ aside {
   display: flex;
   justify-content: center;
   flex-direction: row;
+  height: 20%;
 }
 
 .sidebar {
-  /* margin-top: 10px; */
+  height: 80%;
+  overflow-y: auto;
+  scrollbar-color: rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0);
+  scrollbar-width: thin;
+}
+
+.sidebar::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.sidebar::-webkit-scrollbar:vertical {
+  width: 10px;
+}
+
+.sidebar::-webkit-scrollbar-button:increment,
+.sidebar::-webkit-scrollbar-button {
+  display: none;
+}
+
+.sidebar::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #67677e;
+  border-radius: 20px;
+  border: 2px solid #252546;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  border-radius: 10px;
 }
 
 .sidebar ul {

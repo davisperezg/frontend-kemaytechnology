@@ -103,7 +103,7 @@ const ModulePage = () => {
               <AddRoundedIcon />
             </IconButton>
           </Tooltip>
-          <TableContainer component={Paper}>
+          <TableContainer style={{ whiteSpace: "nowrap" }} component={Paper}>
             <Table
               className={classes.table}
               size="small"

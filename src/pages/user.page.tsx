@@ -108,7 +108,10 @@ const UserPage = () => {
   return (
     <>
       {loadAccess(PERMIT_ONE, auth, page, showDialog)}
-      <TableContainer component={Paper} style={{ marginTop: 10 }}>
+      <TableContainer
+        component={Paper}
+        style={{ marginTop: 10, whiteSpace: "nowrap" }}
+      >
         <Table
           className={classes.table}
           size="small"
