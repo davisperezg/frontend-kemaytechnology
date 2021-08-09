@@ -123,6 +123,7 @@ const EgressPage = ({ checkMoney, resultEgress }: Option) => {
       <TableContainer
         component={Paper}
         style={{
+          whiteSpace: "nowrap",
           marginTop: page === "CONSULTAR-CAJA" ? 20 : 0,
         }}
       >

@@ -91,7 +91,7 @@ const ProductList = ({ product }: { product: Product }) => {
   const showOptionsForDelete = () => (
     <>
       <Tooltip
-        title="Eliminar egreso"
+        title="Eliminar Producto"
         onClick={() => deleteProduct(product.id)}
       >
         <IconButton aria-label="egress" size="small">

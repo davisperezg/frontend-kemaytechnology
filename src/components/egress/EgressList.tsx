@@ -1,7 +1,6 @@
 import { Egress } from "../../interfaces/egress.interface";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import moment from "moment";
 import { formatMoney } from "../../lib/currency/money";
 import Tooltip from "@material-ui/core/Tooltip";
 import EditRoundedIcon from "@material-ui/icons/EditRounded";

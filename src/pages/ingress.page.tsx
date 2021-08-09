@@ -125,7 +125,10 @@ const IngressPage = ({ checkMoney, resultIngress }: Option) => {
 
       <TableContainer
         component={Paper}
-        style={{ marginTop: page === "CONSULTAR-CAJA" ? 20 : 0 }}
+        style={{
+          whiteSpace: "nowrap",
+          marginTop: page === "CONSULTAR-CAJA" ? 20 : 0,
+        }}
       >
         <Table size="small" aria-label="a dense table">
           <TableHead>
