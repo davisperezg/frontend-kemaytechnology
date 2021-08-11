@@ -9,6 +9,8 @@ export interface Vehicle {
   billing: Billing | any;
   plate: string;
   nroGPS: string;
+  platform: string;
+  sim: string;
   billigStart: string | Date;
   billigEnd?: string | Date;
   createdAt?: Date;

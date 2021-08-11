@@ -114,10 +114,16 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
           {vehicle.device.name}
         </TableCell>
         <TableCell component="th" scope="row">
+          {vehicle.platform}
+        </TableCell>
+        <TableCell component="th" scope="row">
           {vehicle.billing.name}
         </TableCell>
         <TableCell component="th" scope="row">
           {vehicle.plate}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {vehicle.sim}
         </TableCell>
         <TableCell component="th" scope="row">
           {vehicle.nroGPS}

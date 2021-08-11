@@ -15,6 +15,17 @@ const UPDATE_DEVICE = gql`
       customer {
         id
         name
+        lastName
+        document
+        numDocument
+      }
+      createdBy {
+        id
+        name
+      }
+      updatedBy {
+        id
+        name
       }
       device {
         id
@@ -24,6 +35,8 @@ const UPDATE_DEVICE = gql`
         id
         name
       }
+      sim
+      platform
       plate
       nroGPS
       billigStart

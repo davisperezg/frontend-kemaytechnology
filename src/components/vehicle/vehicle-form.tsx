@@ -21,6 +21,7 @@ import { Billing } from "../../interfaces/billing.interface";
 import { useGetDevices } from "../../hooks/device/useGetDevice";
 import { useGetBilling } from "../../hooks/billing/useGetBilling";
 import RedditTextField from "../textfield/reddit";
+import { MenuItem } from "@material-ui/core";
 
 interface Option {
   handleClose?: () => void;
@@ -36,6 +37,8 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     billing: "",
     plate: "",
     nroGPS: "",
+    platform: "",
+    sim: "",
     billigStart: now,
   };
 
@@ -46,6 +49,8 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     billing: vehicle?.billing?.name || "",
     plate: vehicle?.plate || "",
     nroGPS: vehicle?.nroGPS || "",
+    platform: vehicle?.platform || "",
+    sim: vehicle?.sim || "",
     billigStart: moment(vehicle?.billigStart).format("YYYY-MM-DD") || now,
   };
 
@@ -85,6 +90,10 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
       ...vehicleForm,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleChange = (e: SelectChange) => {
+    setVehicleForm({ ...vehicleForm, [e.target.name]: e.target.value });
   };
 
   const onSubmit = async (e: FormChange) => {
@@ -166,6 +175,8 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
         customer: vehicleForm.id ? vehicle?.customer.id : customers[0]?.id,
         device: vehicleForm.id ? vehicle?.device.name : devices[0]?.name,
         billing: vehicleForm.id ? vehicle?.billing.name : billings[0]?.name,
+        platform: vehicleForm.id ? vehicle!.platform : "PREMIUM",
+        sim: vehicleForm.id ? vehicle!.sim : "MOVISTAR",
       });
     }
   }, [
@@ -323,7 +334,24 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
               )}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
+            <TextField
+              id="idPlatform"
+              select
+              label="Plataforma"
+              fullWidth
+              value={vehicleForm.platform}
+              onChange={handleChange}
+              name="platform"
+              //helperText="Please select your currency"
+              variant="outlined"
+            >
+              <MenuItem value="PREMIUM">PREMIUM</MenuItem>
+              <MenuItem value="STANDAR">STANDAR</MenuItem>
+              <MenuItem value="SIN PLATAFORMA">SIN PLATAFORMA</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item xs={12}>
             <RedditTextField
               fullWidth
               type="text"
@@ -335,6 +363,23 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
               variant="filled"
               value={vehicleForm.plate}
             />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              id="idChip"
+              select
+              label="Chip"
+              fullWidth
+              name="sim"
+              value={vehicleForm.sim}
+              onChange={handleChange}
+              variant="outlined"
+            >
+              <MenuItem value="CLARO">CLARO</MenuItem>
+              <MenuItem value="MOVISTAR">MOVISTAR</MenuItem>
+              <MenuItem value="INKACEL">INKACEL</MenuItem>
+              <MenuItem value="MULTIOPERADOR">MULTIOPERADOR</MenuItem>
+            </TextField>
           </Grid>
           <Grid item xs={6}>
             <RedditTextField

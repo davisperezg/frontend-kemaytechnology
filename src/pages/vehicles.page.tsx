@@ -101,8 +101,10 @@ const VehiclesPage = () => {
             <TableRow>
               <TableCell>Cliente</TableCell>
               <TableCell>Dispositivo</TableCell>
+              <TableCell>Plataforma</TableCell>
               <TableCell>Plan</TableCell>
               <TableCell>Placa</TableCell>
+              <TableCell>Chip</TableCell>
               <TableCell>Nro GPS</TableCell>
               <TableCell>Fecha de instalación</TableCell>
               <TableCell>Fecha de termino</TableCell>

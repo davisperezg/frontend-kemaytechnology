@@ -82,7 +82,8 @@ const errorLink = onError(
     if (networkError) console.log(`[Network error]: ${networkError}`);
   }
 );
-//http://localhost:3000/graphql
+
+console.log(URLC);
 const httpLink = createHttpLink({
   uri: URLC,
 });
