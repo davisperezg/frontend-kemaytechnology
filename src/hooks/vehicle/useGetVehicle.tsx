@@ -11,6 +11,14 @@ export const GET_VEHICLES = gql`
         document
         numDocument
       }
+      createdBy {
+        id
+        name
+      }
+      updatedBy {
+        id
+        name
+      }
       device {
         id
         name
@@ -20,6 +28,8 @@ export const GET_VEHICLES = gql`
         name
         day
       }
+      sim
+      platform
       plate
       nroGPS
       billigStart
