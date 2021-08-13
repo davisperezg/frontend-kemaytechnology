@@ -103,7 +103,9 @@ const CustomerList = ({ customer }: { customer: Customer }) => {
     <>
       <TableRow>
         <TableCell component="th" scope="row">
-          {`${customer.name} ${customer.lastName}`}
+          {`${customer.name} ${
+            customer.document === "RUC" ? "" : customer.lastName
+          }`}
         </TableCell>
         <TableCell component="th" scope="row">
           {customer.document}

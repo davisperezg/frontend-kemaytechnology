@@ -1,7 +1,7 @@
 export interface Customer {
   id?: string;
   name: string;
-  lastName: string;
+  lastName?: string;
   document: string;
   numDocument: string;
   cellphone_1: string;
