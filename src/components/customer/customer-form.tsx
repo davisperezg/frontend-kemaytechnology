@@ -1,5 +1,10 @@
 import { Customer } from "../../interfaces/customer.interface";
-import { FormChange, InputChange, SelectChange } from "../../lib/types";
+import {
+  FormChange,
+  InputChange,
+  OnKeyUp,
+  SelectChange,
+} from "../../lib/types";
 import Grid from "@material-ui/core/Grid";
 import { useState } from "react";
 import RedditTextField from "../textfield/reddit";
@@ -15,6 +20,11 @@ import Progress from "../progress/progress";
 import { useUpdateCustomer } from "../../hooks/customer/useUpdateCustomer";
 import { useCreateCustomer } from "../../hooks/customer/useCreateCustomer";
 import { findError } from "../../helpers/control-errors";
+import { Person } from "../../interfaces/person.interface";
+import { Company } from "../../interfaces/company.interface";
+import { getPerson } from "../../services/api-reniec";
+import { getCompany } from "../../services/api-sunat";
+import BackDrop from "../backdrop/backdrop";
 
 interface Option {
   handleClose?: () => void;
@@ -30,7 +40,7 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
   const initialStateCreate: Customer = {
     name: "",
     lastName: "",
-    document: "",
+    document: "DNI",
     numDocument: "",
     cellphone_1: "",
     username: "",
@@ -44,8 +54,8 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
     document: customer?.document || "",
     numDocument: customer?.numDocument || "",
     cellphone_1: customer?.cellphone_1 || "",
-    cellphone_2: customer?.cellphone_2 || "",
-    direction: customer?.direction || "",
+    cellphone_2: customer?.cellphone_2 || undefined,
+    direction: customer?.direction || undefined,
     username: customer?.username || "",
     password: customer?.password || "",
   };
@@ -53,21 +63,34 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
   const [customerForm, setCustomerForm] = useState<Customer>(
     initialStateUpdate.id ? initialStateUpdate : initialStateCreate
   );
+  const [isActive, setActive] = useState<boolean>(false);
   const dispatch = useDispatch();
   const optionsUpdate = useUpdateCustomer();
   const optionsCreate = useCreateCustomer();
 
   const handleInput = (e: InputChange) => {
-    setCustomerForm({
-      ...customerForm,
-      [e.target.name]: e.target.value,
-    });
+    if (e.target.name === "direction" || e.target.name === "cellphone_2") {
+      setCustomerForm({
+        ...customerForm,
+        [e.target.name]: e.target.value === "" ? undefined : e.target.value,
+      });
+    } else {
+      setCustomerForm({
+        ...customerForm,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   const handleSelect = (e: SelectChange) => {
     setCustomerForm({
       ...customerForm,
       [e.target.name]: e.target.value,
+      name: "",
+      lastName: "",
+      numDocument: "",
+      direction:
+        customerForm.document === "RUC" ? undefined : customerForm.direction,
     });
     dispatch(setAlert(initialAlert));
   };
@@ -120,8 +143,121 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
     }
   };
 
+  const findRucbyType = (e: any) => {
+    const str = e.target.value.substr(0, 2);
+    if (str === "10") {
+      dispatch(setAlert(initialAlert));
+      return "PERSONA NATURAL";
+    }
+    if (str === "20") {
+      dispatch(setAlert(initialAlert));
+      return "PERSONA JURIDICA";
+    }
+  };
+
+  const valiadateRUC = (e: any): boolean => {
+    let result = false;
+    const str = e.target.value.substr(0, 2);
+    if (str === "10" || str === "20") {
+      result = false;
+    } else {
+      dispatch(
+        setAlert({
+          type: "error",
+          text: "Solo existe dos tipos de RUC. Persona natural(10) y Persona Juridica(20).",
+        })
+      );
+      setActive(false);
+    }
+    return result;
+  };
+
+  const handleKeyUp = async (e: OnKeyUp) => {
+    if (customerForm.document === "DNI") {
+      if (e.target.value.length > 7 && e.target.value.length < 9) {
+        setActive(true);
+        try {
+          const dataPerson: any = await getPerson(e.target.value);
+          const person: Person = dataPerson.data.result;
+
+          if (!person!.Nombre && !person!.Paterno && !person!.Materno) {
+            dispatch(
+              setAlert({
+                type: "error",
+                text: "No se ha encontrado a la persona. Verifique el nro de documento.",
+              })
+            );
+            setActive(false);
+            return;
+          } else {
+            dispatch(setAlert(initialAlert));
+          }
+
+          setCustomerForm({
+            ...customerForm,
+            name: person!.Nombre || "",
+            lastName: person!.Paterno + " " + person!.Materno || "",
+          });
+
+          setActive(false);
+        } catch (e) {
+          alert(e);
+          setActive(false);
+        }
+      }
+    } else if (customerForm.document === "RUC") {
+      if (e.target.value.length > 10 && e.target.value.length < 12) {
+        setActive(true);
+
+        if (valiadateRUC(e)) {
+          return;
+        }
+        try {
+          const dataCompany: any = await getCompany(e.target.value);
+          const company: Company = dataCompany.data.result;
+
+          if (!company!.RazonSocial) {
+            dispatch(
+              setAlert({
+                type: "error",
+                text: "No se ha encontrado Razon social. Verifique el nro de documento",
+              })
+            );
+            setActive(false);
+            return;
+          } else {
+            dispatch(setAlert(initialAlert));
+          }
+
+          setCustomerForm({
+            ...customerForm,
+            name: company!.RazonSocial || "",
+            lastName: findRucbyType(e),
+            direction:
+              company!.Direccion === "-"
+                ? "SIN DIRECCION"
+                : company!.Direccion || "",
+          });
+
+          setActive(false);
+        } catch (e) {
+          alert(e);
+          setActive(false);
+        }
+      }
+    } else {
+      dispatch(
+        setAlert({
+          type: "error",
+          text: "Seleccione un documento válido.",
+        })
+      );
+    }
+  };
+
   return (
     <>
+      {isActive && <BackDrop state={isActive} />}
       <form onSubmit={onSubmit}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -143,6 +279,7 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
           <Grid item xs={12}>
             <RedditTextField
               fullWidth
+              onKeyUp={handleKeyUp}
               type="text"
               onChange={handleInput}
               name="numDocument"
@@ -153,32 +290,55 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
               value={customerForm.numDocument}
             />
           </Grid>
-          <Grid item xs={6}>
-            <RedditTextField
-              fullWidth
-              type="text"
-              onChange={handleInput}
-              name="name"
-              autoComplete="off"
-              id="idName"
-              label="Nombres"
-              variant="filled"
-              value={customerForm.name}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <RedditTextField
-              fullWidth
-              type="text"
-              onChange={handleInput}
-              name="lastName"
-              autoComplete="off"
-              id="idLastName"
-              label="Apellidos"
-              variant="filled"
-              value={customerForm.lastName}
-            />
-          </Grid>
+          {customerForm.document === "RUC" ? (
+            <>
+              <Grid item xs={12}>
+                <RedditTextField
+                  fullWidth
+                  type="text"
+                  onChange={handleInput}
+                  name="name"
+                  autoComplete="off"
+                  id="idName"
+                  label={
+                    customerForm.document === "RUC" ? "Razon social" : "Nombres"
+                  }
+                  variant="filled"
+                  value={customerForm.name}
+                />
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid item xs={6}>
+                <RedditTextField
+                  fullWidth
+                  type="text"
+                  onChange={handleInput}
+                  name="name"
+                  autoComplete="off"
+                  id="idName"
+                  label="Nombres"
+                  variant="filled"
+                  value={customerForm.name}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <RedditTextField
+                  fullWidth
+                  type="text"
+                  onChange={handleInput}
+                  name="lastName"
+                  autoComplete="off"
+                  id="idLastName"
+                  label="Apellidos"
+                  variant="filled"
+                  value={customerForm.lastName}
+                />
+              </Grid>
+            </>
+          )}
+
           <Grid item xs={6}>
             <RedditTextField
               fullWidth
@@ -213,9 +373,9 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
               name="direction"
               autoComplete="off"
               id="idDirection"
-              label="Dirección"
+              label="Direccion (opcional)"
               variant="filled"
-              value={customerForm.direction}
+              value={customerForm.direction || ""}
             />
           </Grid>
           <Grid item xs={6}>

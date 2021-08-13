@@ -5,3 +5,5 @@ export const PERMIT_FOUR = "Ver";
 export const ROLSA = "SuperAdmin";
 export const MODULE_FORBIDDEN = "Administración de modulos";
 export const MENU_FORBIDDEN = "Modulos";
+export const API_RENIEC = process.env.REACT_APP_API_RENIEC;
+export const API_SUNAT = process.env.REACT_APP_API_SUNAT;
