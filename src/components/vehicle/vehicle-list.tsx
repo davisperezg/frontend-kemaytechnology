@@ -104,9 +104,16 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
     </>
   );
 
+  const today = new Date().getTime();
+  const end = vehicle.billigEnd ? new Date(vehicle.billigEnd).getTime() : "";
+
   const showData = () => (
     <>
-      <TableRow>
+      <TableRow
+        style={{
+          background: end > today ? "#28A745" : "#DC3545",
+        }}
+      >
         <TableCell component="th" scope="row">
           {vehicle.customer.name} {vehicle.customer.lastName}
         </TableCell>
