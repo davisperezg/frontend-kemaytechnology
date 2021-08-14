@@ -12,8 +12,7 @@ import { useGetVehicles } from "../hooks/vehicle/useGetVehicle";
 import VehicleForm from "../components/vehicle/vehicle-form";
 import { findError } from "../helpers/control-errors";
 import { loadAccess } from "../components/acceso/filter-access.component";
-import { useState, useEffect } from "react";
-import IconButton from "@material-ui/core/IconButton";
+import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import Tooltip from "@material-ui/core/Tooltip";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,6 +20,9 @@ import { setAlert } from "../store/alert/action";
 import { Dialog } from "../interfaces/dialog.interface";
 import { PERMIT_ONE } from "../const";
 import DialogForm from "../components/dialog/dialog.component";
+import TablePagination from "@material-ui/core/TablePagination";
+import IconButton from "@material-ui/core/IconButton";
+import { TablePaginationActions } from "../components/table/table-pagination";
 
 const initialDialog = {
   name: "",
@@ -39,7 +41,27 @@ const VehiclesPage = () => {
   const dispatch = useDispatch();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const { data, loading, error } = useGetVehicles();
+  //TABLE OPTIONS
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [pagex, setPage] = useState(0);
 
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, vehicles.length - pagex * rowsPerPage);
+
+  const handleChangePage = (
+    event: MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  //TABLE FIN
   const handleClose = () => {
     setDialog(initialDialog);
     dispatch(setAlert(initialAlert));
@@ -57,7 +79,19 @@ const VehiclesPage = () => {
 
   useEffect(() => {
     if (data) {
-      setVehicles(data.getVehicles);
+      const allVehicles = data.getVehicles
+        .map((vehicle: any) => {
+          return {
+            ...vehicle,
+            billigStart: vehicle.billigStart
+              ? new Date(vehicle.billigStart)
+              : new Date(),
+          };
+        })
+        .sort(
+          (a: any, b: any) => b.billigStart.getTime() - a.billigStart.getTime()
+        );
+      setVehicles(allVehicles);
     }
   }, [data]);
 
@@ -96,7 +130,7 @@ const VehiclesPage = () => {
         component={Paper}
         style={{ whiteSpace: "nowrap", marginTop: 10 }}
       >
-        <Table size="small" aria-label="a dense table">
+        <Table stickyHeader size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell>Cliente</TableCell>
@@ -114,12 +148,44 @@ const VehiclesPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {vehicles.map((vehicle) => (
+            {(rowsPerPage > 0
+              ? vehicles.slice(
+                  pagex * rowsPerPage,
+                  pagex * rowsPerPage + rowsPerPage
+                )
+              : vehicles
+            ).map((vehicle) => (
               <VehicleList key={vehicle.id} vehicle={vehicle} />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <div>
+        <TablePagination
+          rowsPerPageOptions={[
+            5,
+            10,
+            25,
+            { label: "Todos los registros", value: -1 },
+          ]}
+          //colSpan={3}
+          style={{ borderBottom: "none" }}
+          count={vehicles.length}
+          rowsPerPage={rowsPerPage}
+          page={pagex}
+          SelectProps={{
+            inputProps: { "aria-label": "filas por página" },
+            native: true,
+          }}
+          labelRowsPerPage="filas por página"
+          labelDisplayedRows={({ from, to, count }) =>
+            `${from}-${to} de ${count}`
+          }
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          ActionsComponent={TablePaginationActions}
+        />
+      </div>
     </>
   );
 };
