@@ -1,6 +1,7 @@
 import { Billing } from "./billing.interface";
 import { Customer } from "./customer.interface";
 import { Device } from "./device.interface";
+import { User } from "./user.interface";
 
 export interface Vehicle {
   id?: string;
@@ -13,6 +14,8 @@ export interface Vehicle {
   sim: string;
   billigStart: string | Date;
   billigEnd?: string | Date;
+  createdBy?: User | any;
+  updatedBy?: User | any;
   createdAt?: Date;
   updatedAt?: Date;
 }
