@@ -141,6 +141,12 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
         <TableCell component="th" scope="row" align="center">
           {moment(vehicle.billigEnd).format("DD/MM/YYYY")}
         </TableCell>
+        <TableCell component="th" scope="row">
+          {vehicle.createdBy?.name}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {vehicle.updatedBy?.name}
+        </TableCell>
         <TableCell>{moment(vehicle.createdAt).format("DD/MM/YYYY")}</TableCell>
         <TableCell>{moment(vehicle.updatedAt).format("DD/MM/YYYY")}</TableCell>
         <TableCell align="right">
