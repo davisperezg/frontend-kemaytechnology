@@ -153,6 +153,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     const CambioNombre = `Cambiar nombre a "GPS" y Añadir`;
     const IrAtuPantalla = `Listo. Ir a tu pantalla de inicio`;
     const Comandos = `Comandos para ${device.name}`;
+    
 
     doc.setFontSize(24);
     doc.text(title, left + 35, top);
@@ -225,8 +226,66 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
         );
       }
     } else {
+      doc.addImage(wialon_login, "PNG", left, top + 85, 190, 100);
+      doc.text(MenuPablo, left, top + 195);
+      doc.addImage(menu_pablo, "PNG", left, top + 200, 190, 80);
+      doc.addPage();
+      doc.text(ReportePablo, left, top);
+      doc.addImage(reporte_pablo, "PNG", left , top + 10, 190, 100);
+      doc.text(CEL_pablo, left, top + 120);
+      doc.addImage(inicio_pagina_cel, "PNG", left, top + 130, 80, 100);
+      doc.addPage();
+      doc.text(SeleccionIncio, left, top);
+      doc.addImage(lista_pagina_cel, "PNG", left, top + 10, 80, 100);
+      doc.text(CambioNombre, left, top + 120);
+      doc.addImage(nombre_pagina_cel, "PNG", left, top + 130, 80, 100);
+      doc.addPage();
+      doc.text(IrAtuPantalla, left, top);
+      doc.addImage(
+        mostrar_accesso_directo_inicio,
+        "PNG",
+        left,
+        top + 10,
+        80,
+        100
+      );
+
+      doc.text(IrAtuPantalla, left, top);
+      doc.text(Comandos, left, top + 120);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(12);
+
+      if (device.name === "SUNTECH ST340LC") {
+        doc.text("Apagado", left, top + 130);
+        doc.text("Encendido", left, top + 140);
+      } else if (device.name === "TELTONIKA FMB920") {
+        doc.text(
+          "Apagado: (espacio)(espacio)setdigout(espacio)1",
+          left,
+          top + 130
+        );
+        doc.text(
+          "Encendido (espacio)(espacio)setdigout(espacio)0",
+          left,
+          top + 140
+        );
+      } else {
+        doc.text("Apagado: stopelec123456", left, top + 130);
+        doc.text("Encendido: supplyelect123456", left, top + 140);
+      }
+      if (vehicleForm!.sim === "MULTIOPERADOR") {
+        //imagenes pltaforma cecsar
+      } else {
+        //fin
+        doc.text(
+          `Enviar comandos via SMS al ${vehicleForm!.nroGPS}`,
+          left,
+          top + 150
+        );
+      }
       //imagenes wialon
-      doc.addImage(wialon_login, "PNG", left, top + 85, 150, 100);
+      // doc.addImage(wialon_login, "PNG", left, top + 85, 150, 100);
+      // doc.addImage(wialon_login, "PNG", left, top + 100, 150, 100);
     }
 
     doc.save("a4.pdf");
