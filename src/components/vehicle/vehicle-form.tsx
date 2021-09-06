@@ -32,6 +32,11 @@ import {
   pablo_login,
   reporte_pablo,
   wialon_login,
+  wialon_unidades,
+  wialon_menu,
+  wialon_cel1,
+  wialon_cel2,
+  wialon_cel3,
 } from "../../helpers/images_data64/data64";
 
 interface Option {
@@ -153,7 +158,6 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     const CambioNombre = `Cambiar nombre a "GPS" y Añadir`;
     const IrAtuPantalla = `Listo. Ir a tu pantalla de inicio`;
     const Comandos = `Comandos para ${device.name}`;
-    
 
     doc.setFontSize(24);
     doc.text(title, left + 35, top);
@@ -228,17 +232,17 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     } else {
       doc.addImage(wialon_login, "PNG", left, top + 85, 190, 100);
       doc.text(MenuPablo, left, top + 195);
-      doc.addImage(menu_pablo, "PNG", left, top + 200, 190, 80);
+      doc.addImage(wialon_menu, "PNG", left, top + 200, 190, 80);
       doc.addPage();
       doc.text(ReportePablo, left, top);
-      doc.addImage(reporte_pablo, "PNG", left , top + 10, 190, 100);
+      doc.addImage(wialon_unidades, "PNG", left , top + 10, 190, 100);
       doc.text(CEL_pablo, left, top + 120);
-      doc.addImage(inicio_pagina_cel, "PNG", left, top + 130, 80, 100);
+      doc.addImage(wialon_cel1, "PNG", left, top + 130, 80, 100);
       doc.addPage();
       doc.text(SeleccionIncio, left, top);
-      doc.addImage(lista_pagina_cel, "PNG", left, top + 10, 80, 100);
+      doc.addImage(wialon_cel2, "PNG", left, top + 10, 80, 100);
       doc.text(CambioNombre, left, top + 120);
-      doc.addImage(nombre_pagina_cel, "PNG", left, top + 130, 80, 100);
+      doc.addImage(wialon_cel3, "PNG", left, top + 130, 80, 100);
       doc.addPage();
       doc.text(IrAtuPantalla, left, top);
       doc.addImage(
@@ -283,9 +287,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
           top + 150
         );
       }
-      //imagenes wialon
-      // doc.addImage(wialon_login, "PNG", left, top + 85, 150, 100);
-      // doc.addImage(wialon_login, "PNG", left, top + 100, 150, 100);
+      
     }
 
     doc.save("a4.pdf");
