@@ -19,6 +19,8 @@ import { useDeleteVehicle } from "../../hooks/vehicle/useDeleteVehicle";
 import VehicleForm from "./vehicle-form";
 import AutorenewRoundedIcon from "@material-ui/icons/AutorenewRounded";
 import RenewForm from "../renew/renew-form";
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
+import { GenerarGuiaUSua } from "../../helpers/pdf/guia_usuario";
 
 const initialAlert = {
   type: "",
@@ -77,6 +79,7 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
       />;
     }
   };
+ 
 
   const showOptionsForDelete = () => (
     <>
@@ -158,6 +161,15 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
           >
             <IconButton aria-label="renew" size="small">
               <AutorenewRoundedIcon />
+            </IconButton>
+          </Tooltip>
+          {/* boton para pdf guia de usuario */}
+          <Tooltip
+            title="Generar guia de Usuario"
+            onClick={()=>GenerarGuiaUSua(vehicle)}
+          >
+            <IconButton aria-label="user" size="small">
+              <PictureAsPdfIcon />
             </IconButton>
           </Tooltip>
         </TableCell>

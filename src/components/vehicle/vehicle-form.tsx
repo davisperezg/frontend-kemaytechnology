@@ -22,22 +22,7 @@ import { useGetDevices } from "../../hooks/device/useGetDevice";
 import { useGetBilling } from "../../hooks/billing/useGetBilling";
 import RedditTextField from "../textfield/reddit";
 import { MenuItem } from "@material-ui/core";
-import { jsPDF } from "jspdf";
-import {
-  inicio_pagina_cel,
-  lista_pagina_cel,
-  menu_pablo,
-  mostrar_accesso_directo_inicio,
-  nombre_pagina_cel,
-  pablo_login,
-  reporte_pablo,
-  wialon_login,
-  wialon_unidades,
-  wialon_menu,
-  wialon_cel1,
-  wialon_cel2,
-  wialon_cel3,
-} from "../../helpers/images_data64/data64";
+import { GenerarGuiaUSua } from "../../helpers/pdf/guia_usuario";
 
 interface Option {
   handleClose?: () => void;
@@ -111,237 +96,64 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     setVehicleForm({ ...vehicleForm, [e.target.name]: e.target.value });
   };
 
-  const checkPlatform = () => {
-    let message = "";
-    if (vehicleForm!.platform === "STANDAR") {
-      message = "kemay/" + customer.username + "/" + customer.password;
-    } else if (vehicleForm!.platform === "PREMIUM") {
-      message = customer.username + "/" + customer.password;
-    } else {
-      message = "SIN PLATAFORMA";
-    }
-    return message;
-  };
-
-  const checkPage = () => {
-    let message = "";
-    if (vehicleForm!.platform === "STANDAR") {
-      message = "http://45.77.202.56:8056/track/Track";
-    } else if (vehicleForm!.platform === "PREMIUM") {
-      message = `https://hosting.wialon.com/ o descarguelo desde la Play Store o App Store como "Wialon"`;
-    } else {
-      message = "SIN PLATAFORMA";
-    }
-    return message;
-  };
-
   const onSubmit = async (e: FormChange) => {
     e.preventDefault();
-    // const getUserById = getUser
-    if (vehicleForm!.platform === "SIN PLATAFORMA") return;
-    const doc = new jsPDF();
-    const top = 10;
-    const left = 10;
-    const title = "MANUAL DE INSTRUCCIONES";
-    const messageCustomer =
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique aspernatur veritatis, corporis eligendi, perferendis tempore fuga perspiciatis architecto odit quia porro, ab cupiditate obcaecati? Quam omnis modi error ut vel!";
 
-      
-    const nameCustomer = customer.name + " " + customer.lastName;
-    const plan = billing.name + " - " + vehicleForm!.platform;
-    const account = `Credenciales: ${checkPlatform()}`;
-    const linkPage = `Link: ${checkPage()}`;
-    const PC = `Guia desde PC - Ingresar credenciales`;
-    const MenuPablo = `Menu principal`;
-    const ReportePablo = `Vehiculo reportando`;
-    const CEL_pablo = `Guia desde celular - colocar como acceso directo`;
-    const SeleccionIncio = `Seleccionar añadir a pantalla de inicio`;
-    const CambioNombre = `Cambiar nombre a "GPS" y Añadir`;
-    const IrAtuPantalla = `Listo. Ir a tu pantalla de inicio`;
-    const Comandos = `Comandos para ${device.name}`;
-    const Reporte= `Usar este Paso si el Vehiculo no se ve en el Menu (OPCIONAL)`;
-    const Guia_Cell = `Guia desde Celular`;
-    const Paso1 = `Paso 1 : 
-                        Instalar la aplicacion  desde Play Store o APP`;
-    const Paso2 = `Paso 2 : 
-                        Permitir las notificaciones de la aplicacion`;
-    const Paso3 = `Paso 3 : 
-                        Como ultimo paso Iniciamos la APP`
-    doc.setFontSize(24);
-    doc.text(title, left + 35, top);
-
-    doc.setFontSize(12);
-    const message = doc.splitTextToSize(messageCustomer, 192);
-
-    doc.text(message, left, top + 10);
-    doc.text(nameCustomer, left, top + 35);
-    doc.text(plan, left, top + 45);
-    doc.text(account, left, top + 55);
-    doc.text(linkPage, left, top + 65);
-    doc.setFontSize(16);
-    doc.setFont("helvetica", "bold");
-    doc.text(PC, left, top + 75);
-    if (vehicleForm!.platform === "STANDAR") {
-      doc.addImage(pablo_login, "PNG", left, top + 85, 190, 100);
-      doc.text(MenuPablo, left, top + 195);
-      doc.addImage(menu_pablo, "PNG", left, top + 200, 190, 80);
-      doc.addPage();
-      doc.text(ReportePablo, left, top);
-      doc.addImage(reporte_pablo, "PNG", left, top + 10, 190, 100);
-      doc.text(CEL_pablo, left, top + 120);
-      doc.addImage(inicio_pagina_cel, "PNG", left, top + 130, 80, 100);
-      doc.addPage();
-      doc.text(SeleccionIncio, left, top);
-      doc.addImage(lista_pagina_cel, "PNG", left, top + 10, 80, 100);
-      doc.text(CambioNombre, left, top + 120);
-      doc.addImage(nombre_pagina_cel, "PNG", left, top + 130, 80, 100);
-      doc.addPage();
-      doc.text(IrAtuPantalla, left, top);
-      doc.addImage(
-        mostrar_accesso_directo_inicio,
-        "PNG",
-        left,
-        top + 10,
-        80,
-        100
-      );
-      doc.text(IrAtuPantalla, left, top);
-      doc.text(Comandos, left, top + 120);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(12);
-      if (device.name === "SUNTECH ST340LC") {
-        doc.text("Apagado", left, top + 130);
-        doc.text("Encendido", left, top + 140);
-      } else if (device.name === "TELTONIKA FMB920") {
-        doc.text(
-          "Apagado: (espacio)(espacio)setdigout(espacio)1",
-          left,
-          top + 130
+    if (vehicleForm.id) {
+      try {
+        await optionsUpdate.updateVehicle({
+          variables: {
+            vehicleInput: vehicleForm,
+          },
+        });
+        dispatch(
+          setAlert({
+            type: "success",
+            text: "El vehiculo se actualizó correctamente.",
+          })
         );
-        doc.text(
-          "Encendido (espacio)(espacio)setdigout(espacio)0",
-          left,
-          top + 140
-        );
-      } else {
-        doc.text("Apagado: stopelec123456", left, top + 130);
-        doc.text("Encendido: supplyelect123456", left, top + 140);
-      }
-      if (vehicleForm!.sim === "MULTIOPERADOR") {
-        //imagenes pltaforma cecsar
-      } else {
-        //fin
-        doc.text(
-          `Enviar comandos via SMS al ${vehicleForm!.nroGPS}`,
-          left,
-          top + 150
+      } catch (e) {
+        dispatch(
+          setAlert({
+            type: "error",
+            text: findError(e),
+          })
         );
       }
     } else {
-      doc.addImage(wialon_login, "PNG", left, top + 85, 190, 100);
-      doc.text(MenuPablo, left, top + 195);
-      doc.addImage(wialon_menu, "PNG", left, top + 200, 190, 80);
-      doc.addPage();
-      doc.text(Reporte, left, top +10);
-      doc.addImage(wialon_unidades, "PNG", left , top + 30, 130, 80);
-      doc.text(Guia_Cell, left, top + 140);
-      
-      doc.text(Paso1, left, top + 160);
-      doc.text(Paso2, left, top + 180);
-      doc.text(Paso3, left, top + 200);
-      doc.addPage();
-      doc.addImage(wialon_cel1, "PNG", left, top , 150, 110);
-      doc.addImage(wialon_cel2, "PNG", left, top + 120, 150, 130);
-      doc.addPage();
-      doc.addImage(wialon_cel3, "PNG", left, top + 10, 150,  130);
-      
-     
-      doc.text(Comandos, left, top +150 );
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(12);
-      if (device.name === "SUNTECH ST340LC") {
-        doc.text("Apagado", left, top + 170);
-        doc.text("Encendido", left, top + 190);
-      } else if (device.name === "TELTONIKA FMB920") {
-        doc.text(
-          "Apagado: (espacio)(espacio)setdigout(espacio)1",
-          left,
-          top + 170
+      try {
+        await optionsCreate.registerVehicle({
+          variables: {
+            vehicleInput: vehicleForm,
+          },
+        });
+        dispatch(
+          setAlert({
+            type: "success",
+            text: "El vehiculo ha sido registrado correctamente.",
+          })
         );
-        doc.text(
-          "Encendido (espacio)(espacio)setdigout(espacio)0",
-          left,
-          top + 190
+
+        //Alerta para el registro automatico hacia la caja y marcar como ingreso
+        const resAlert = window.confirm(
+          "¿ Deseas registrarlo como ingreso ? 🤔"
         );
-      } else {
-        doc.text("Apagado: stopelec123456", left, top + 130);
-        doc.text("Encendido: supplyelect123456", left, top + 140);
-      }
-      if (vehicleForm!.sim === "MULTIOPERADOR") {
-        //imagenes pltaforma cecsar
-      } else {
-        //fin
-        doc.text(
-          `Enviar comandos via SMS al ${vehicleForm!.nroGPS}`,
-          left,
-          top + 210
+
+        if (resAlert) {
+        } else {
+        }
+
+        //Generacion de pdf
+        GenerarGuiaUSua(vehicleForm);
+      } catch (e) {
+        dispatch(
+          setAlert({
+            type: "error",
+            text: findError(e),
+          })
         );
       }
-      //
     }
-
-    doc.save("a4.pdf");
-
-    const resAlert = window.confirm("¿ Deseas registrarlo como ingreso ? 🤔");
-
-    if (resAlert) {
-    } else {
-      alert("is not");
-    }
-
-    // if (vehicleForm.id) {
-    //   try {
-    //     await optionsUpdate.updateVehicle({
-    //       variables: {
-    //         vehicleInput: vehicleForm,
-    //       },
-    //     });
-    //     dispatch(
-    //       setAlert({
-    //         type: "success",
-    //         text: "El vehiculo se actualizó correctamente.",
-    //       })
-    //     );
-    //   } catch (e) {
-    //     dispatch(
-    //       setAlert({
-    //         type: "error",
-    //         text: findError(e),
-    //       })
-    //     );
-    //   }
-    // } else {
-    //   try {
-    //     await optionsCreate.registerVehicle({
-    //       variables: {
-    //         vehicleInput: vehicleForm,
-    //       },
-    //     });
-    //     dispatch(
-    //       setAlert({
-    //         type: "success",
-    //         text: "El vehiculo ha sido registrado correctamente.",
-    //       })
-    //     );
-    //   } catch (e) {
-    //     dispatch(
-    //       setAlert({
-    //         type: "error",
-    //         text: findError(e),
-    //       })
-    //     );
-    //   }
-    // }
   };
 
   useEffect(() => {
