@@ -146,6 +146,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     const messageCustomer =
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique aspernatur veritatis, corporis eligendi, perferendis tempore fuga perspiciatis architecto odit quia porro, ab cupiditate obcaecati? Quam omnis modi error ut vel!";
 
+      
     const nameCustomer = customer.name + " " + customer.lastName;
     const plan = billing.name + " - " + vehicleForm!.platform;
     const account = `Credenciales: ${checkPlatform()}`;
@@ -158,7 +159,14 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     const CambioNombre = `Cambiar nombre a "GPS" y Añadir`;
     const IrAtuPantalla = `Listo. Ir a tu pantalla de inicio`;
     const Comandos = `Comandos para ${device.name}`;
-
+    const Reporte= `Usar este Paso si el Vehiculo no se ve en el Menu (OPCIONAL)`;
+    const Guia_Cell = `Guia desde Celular`;
+    const Paso1 = `Paso 1 : 
+                        Instalar la aplicacion  desde Play Store o APP`;
+    const Paso2 = `Paso 2 : 
+                        Permitir las notificaciones de la aplicacion`;
+    const Paso3 = `Paso 3 : 
+                        Como ultimo paso Iniciamos la APP`
     doc.setFontSize(24);
     doc.text(title, left + 35, top);
 
@@ -234,44 +242,36 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
       doc.text(MenuPablo, left, top + 195);
       doc.addImage(wialon_menu, "PNG", left, top + 200, 190, 80);
       doc.addPage();
-      doc.text(ReportePablo, left, top);
-      doc.addImage(wialon_unidades, "PNG", left , top + 10, 190, 100);
-      doc.text(CEL_pablo, left, top + 120);
-      doc.addImage(wialon_cel1, "PNG", left, top + 130, 80, 100);
+      doc.text(Reporte, left, top +10);
+      doc.addImage(wialon_unidades, "PNG", left , top + 30, 130, 80);
+      doc.text(Guia_Cell, left, top + 140);
+      
+      doc.text(Paso1, left, top + 160);
+      doc.text(Paso2, left, top + 180);
+      doc.text(Paso3, left, top + 200);
       doc.addPage();
-      doc.text(SeleccionIncio, left, top);
-      doc.addImage(wialon_cel2, "PNG", left, top + 10, 80, 100);
-      doc.text(CambioNombre, left, top + 120);
-      doc.addImage(wialon_cel3, "PNG", left, top + 130, 80, 100);
+      doc.addImage(wialon_cel1, "PNG", left, top , 150, 110);
+      doc.addImage(wialon_cel2, "PNG", left, top + 120, 150, 130);
       doc.addPage();
-      doc.text(IrAtuPantalla, left, top);
-      doc.addImage(
-        mostrar_accesso_directo_inicio,
-        "PNG",
-        left,
-        top + 10,
-        80,
-        100
-      );
-
-      doc.text(IrAtuPantalla, left, top);
-      doc.text(Comandos, left, top + 120);
+      doc.addImage(wialon_cel3, "PNG", left, top + 10, 150,  130);
+      
+     
+      doc.text(Comandos, left, top +150 );
       doc.setFont("helvetica", "normal");
       doc.setFontSize(12);
-
       if (device.name === "SUNTECH ST340LC") {
-        doc.text("Apagado", left, top + 130);
-        doc.text("Encendido", left, top + 140);
+        doc.text("Apagado", left, top + 170);
+        doc.text("Encendido", left, top + 190);
       } else if (device.name === "TELTONIKA FMB920") {
         doc.text(
           "Apagado: (espacio)(espacio)setdigout(espacio)1",
           left,
-          top + 130
+          top + 170
         );
         doc.text(
           "Encendido (espacio)(espacio)setdigout(espacio)0",
           left,
-          top + 140
+          top + 190
         );
       } else {
         doc.text("Apagado: stopelec123456", left, top + 130);
@@ -284,10 +284,10 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
         doc.text(
           `Enviar comandos via SMS al ${vehicleForm!.nroGPS}`,
           left,
-          top + 150
+          top + 210
         );
       }
-      
+      //
     }
 
     doc.save("a4.pdf");
