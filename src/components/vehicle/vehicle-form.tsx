@@ -235,7 +235,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
       doc.addImage(wialon_menu, "PNG", left, top + 200, 190, 80);
       doc.addPage();
       doc.text(ReportePablo, left, top);
-      doc.addImage(wialon_unidades, "PNG", left , top + 10, 190, 100);
+      doc.addImage(wialon_unidades, "PNG", left, top + 10, 190, 100);
       doc.text(CEL_pablo, left, top + 120);
       doc.addImage(wialon_cel1, "PNG", left, top + 130, 80, 100);
       doc.addPage();
@@ -287,7 +287,6 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
           top + 150
         );
       }
-      
     }
 
     doc.save("a4.pdf");

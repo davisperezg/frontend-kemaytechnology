@@ -23,6 +23,7 @@ import DialogForm from "../components/dialog/dialog.component";
 import TablePagination from "@material-ui/core/TablePagination";
 import IconButton from "@material-ui/core/IconButton";
 import { TablePaginationActions } from "../components/table/table-pagination";
+import { Button, Icon } from "@material-ui/core";
 
 const initialDialog = {
   name: "",
@@ -40,6 +41,9 @@ const VehiclesPage = () => {
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [contVencidos, setContVencidos] = useState<Number>(0);
+  const [contActivos, setContActivos] = useState<Number>(0);
+  const [contPorVencer, setContXVencer] = useState<Number>(0);
   const { data, loading, error } = useGetVehicles();
   //TABLE OPTIONS
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -91,8 +95,39 @@ const VehiclesPage = () => {
         .sort(
           (a: any, b: any) => b.billigStart.getTime() - a.billigStart.getTime()
         );
+
+      const today = new Date().getTime();
+      //vencidos
+      const getVencidos = data.getVehicles.filter((vehicle: any) => {
+        const end = vehicle.billigEnd
+          ? new Date(vehicle.billigEnd).getTime()
+          : "";
+        if (end < today) return { ...vehicle };
+      });
+      //activos
+      const getActivos = data.getVehicles.filter((vehicle: any) => {
+        const end = vehicle.billigEnd
+          ? new Date(vehicle.billigEnd).getTime()
+          : "";
+        if (end > today) return { ...vehicle };
+      });
+      //por vencer
+      const getXVencer = data.getVehicles.filter((vehicle: any) => {
+        let contDias = 0;
+        const fechaInicio = new Date().getTime();
+        const fechaFin = new Date(vehicle.billigEnd).getTime();
+        const diff = fechaFin - fechaInicio;
+        const calcDiff = diff / (1000 * 60 * 60 * 24);
+        console.log(calcDiff);
+        if (calcDiff <= 3) {
+          contDias++;
+          console.log(contDias);
+        }
+        setContXVencer(contDias);
+      });
       setVehicles(allVehicles);
     }
+    //calc cant vehiculos
   }, [data]);
 
   if (loading) {
@@ -105,7 +140,16 @@ const VehiclesPage = () => {
 
   const showDialogToCreate = () => (
     <>
-      <Tooltip title="Crear vehiculo">
+      <Button
+        onClick={() => setDialog({ name: "Crear", active: true })}
+        variant="contained"
+        color="primary"
+        endIcon={<AddRoundedIcon />}
+      >
+        Crear vehiculo
+      </Button>
+
+      {/* <Tooltip title="Crear vehiculo">
         <IconButton
           aria-label="add"
           size="small"
@@ -113,7 +157,7 @@ const VehiclesPage = () => {
         >
           <AddRoundedIcon />
         </IconButton>
-      </Tooltip>
+      </Tooltip> */}
     </>
   );
 
@@ -125,12 +169,57 @@ const VehiclesPage = () => {
         component={component(dialog.name)}
         handleClose={handleClose}
       />
-      {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)}
+
+      <div style={{ width: "100%", display: "flex" }}>
+        <div style={{ width: "200px" }}>
+          {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)}
+          {/* {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)} */}
+        </div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <label>Vehiculos activos</label>
+          <div
+            style={{
+              width: "10px",
+              height: "10px",
+              background: "green",
+              marginLeft: 3,
+              marginRight: 3,
+            }}
+          />
+          <strong>15</strong>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", marginLeft: 20 }}>
+          <label>Vehiculos por vencer</label>
+          <div
+            style={{
+              width: "10px",
+              height: "10px",
+              background: "yellow",
+              marginLeft: 3,
+              marginRight: 3,
+            }}
+          />
+          <strong>{contPorVencer}</strong>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", marginLeft: 20 }}>
+          <label>Vehiculos vencidos</label>
+          <div
+            style={{
+              width: "10px",
+              height: "10px",
+              background: "red",
+              marginLeft: 3,
+              marginRight: 3,
+            }}
+          />
+          <strong>15</strong>
+        </div>
+      </div>
       <TableContainer
         component={Paper}
         style={{ whiteSpace: "nowrap", marginTop: 10 }}
       >
-        <Table stickyHeader size="small" aria-label="a dense table">
+        <Table stickyHeader aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell>Cliente</TableCell>
