@@ -69,7 +69,8 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
   const Paso2 = `Paso 2 : `;
   const com2 = `Permitir las notificaciones de la Aplicación`;
   const Paso3 = `Paso 3 : `;
-  const com3 = `Explicación de cada componente de la Aplicación`;
+  const com3 = `Ejecutar la aplicación e Ingresar a la Interfaz`;
+  const com4 = `Explicación de cada componente de la Aplicación`;
   doc.setFontSize(24);
   doc.text(title, left + 35, top);
 
@@ -141,6 +142,7 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
       );
     }
   } else {
+    //imagenes y comentarios del pdf guia
     doc.addImage(wialon_login, "PNG", left, top + 85, 190, 100);
     doc.text(MenuPablo, left, top + 195);
     doc.addImage(wialon_menu, "PNG", left, top + 200, 190, 80);
@@ -162,8 +164,11 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
     doc.text(com3, left + 20, top + 210);
     doc.setFont("helvetica", "bold");
     doc.addPage();
-    doc.addImage(wialon_cel1, "PNG", left, top, 150, 110);
-    doc.addImage(wialon_cel2, "PNG", left, top + 120, 150, 130);
+    //Celular controles
+
+    doc.text(com4, left + 20, top + 10);
+    doc.addImage(wialon_cel1, "PNG", left, top + 20, 150, 110);
+    doc.addImage(wialon_cel2, "PNG", left, top + 140, 150, 120);
     doc.addPage();
     doc.addImage(wialon_cel3, "PNG", left, top + 10, 150, 130);
 
@@ -185,8 +190,8 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
         top + 190
       );
     } else {
-      doc.text("Apagado: stopelec123456", left, top + 130);
-      doc.text("Encendido: supplyelect123456", left, top + 140);
+      doc.text("Apagado: stopelec123456", left, top + 170);
+      doc.text("Encendido: supplyelect123456", left, top + 190);
     }
     if (vehicle!.sim === "MULTIOPERADOR") {
       //imagenes pltaforma cecsar
