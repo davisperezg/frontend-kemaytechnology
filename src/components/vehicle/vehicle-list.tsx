@@ -19,6 +19,8 @@ import { useDeleteVehicle } from "../../hooks/vehicle/useDeleteVehicle";
 import VehicleForm from "./vehicle-form";
 import AutorenewRoundedIcon from "@material-ui/icons/AutorenewRounded";
 import RenewForm from "../renew/renew-form";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import { GenerarGuiaUSua } from "../../helpers/pdf/guia_usuario";
 
 const initialAlert = {
   type: "",
@@ -104,18 +106,28 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
     </>
   );
 
-  const today = new Date().getTime();
-  const end = vehicle.billigEnd ? new Date(vehicle.billigEnd).getTime() : "";
+  const hoy = new Date().getTime();
+  const fechaFin = vehicle.billigEnd
+    ? new Date(vehicle.billigEnd).getTime()
+    : new Date().getTime();
+  const diff = fechaFin - hoy;
+  const calcDiff = diff / (1000 * 60 * 60 * 24);
 
   const showData = () => (
     <>
       <TableRow
         style={{
-          background: end > today ? "#28A745" : "#DC3545",
+          background:
+            hoy > fechaFin ? "#fc553f" : calcDiff <= 1 ? "#f7e160" : "#5bc959",
         }}
       >
         <TableCell component="th" scope="row">
           {vehicle.customer.name} {vehicle.customer.lastName}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {vehicle.customer.cellphone_2
+            ? vehicle.customer.cellphone_1 + ", " + vehicle.customer.cellphone_2
+            : vehicle.customer.cellphone_1}
         </TableCell>
         <TableCell component="th" scope="row">
           {vehicle.device.name}
@@ -158,6 +170,15 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
           >
             <IconButton aria-label="renew" size="small">
               <AutorenewRoundedIcon />
+            </IconButton>
+          </Tooltip>
+          {/* boton para pdf guia de usuario */}
+          <Tooltip
+            title="Generar guia de Usuario"
+            onClick={() => GenerarGuiaUSua(vehicle)}
+          >
+            <IconButton aria-label="user" size="small">
+              <PictureAsPdfIcon />
             </IconButton>
           </Tooltip>
         </TableCell>

@@ -14,16 +14,15 @@ import { findError } from "../helpers/control-errors";
 import { loadAccess } from "../components/acceso/filter-access.component";
 import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
-import Tooltip from "@material-ui/core/Tooltip";
 import { useSelector, useDispatch } from "react-redux";
 import { setAlert } from "../store/alert/action";
 import { Dialog } from "../interfaces/dialog.interface";
 import { PERMIT_ONE } from "../const";
 import DialogForm from "../components/dialog/dialog.component";
 import TablePagination from "@material-ui/core/TablePagination";
-import IconButton from "@material-ui/core/IconButton";
 import { TablePaginationActions } from "../components/table/table-pagination";
-import { Button, Icon } from "@material-ui/core";
+import { Button } from "@material-ui/core";
+import SearchBar from "material-ui-search-bar";
 
 const initialDialog = {
   name: "",
@@ -35,19 +34,24 @@ const initialAlert = {
   text: "",
 };
 
+let contVencidosGlobal = 0;
+let contXVencerGlobal = 0;
+let contActivosGlobal = 0;
+
 const VehiclesPage = () => {
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [contVencidos, setContVencidos] = useState<Number>(0);
-  const [contActivos, setContActivos] = useState<Number>(0);
-  const [contPorVencer, setContXVencer] = useState<Number>(0);
+  const [contVencidos, setContVencidos] = useState<number>(0);
+  const [contActivos, setContActivos] = useState<number>(0);
+  const [contPorVencer, setContXVencer] = useState<number>(0);
   const { data, loading, error } = useGetVehicles();
   //TABLE OPTIONS
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [pagex, setPage] = useState(0);
+  const [searched, setSearched] = useState<string>("");
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, vehicles.length - pagex * rowsPerPage);
@@ -81,6 +85,61 @@ const VehiclesPage = () => {
     }
   };
 
+  const buscarCantVehiculosXtipo = (array: Vehicle[]) => {
+    setContVencidos(0);
+    setContXVencer(0);
+    setContActivos(0);
+    contVencidosGlobal = 0;
+    contXVencerGlobal = 0;
+    contActivosGlobal = 0;
+
+    const hoy = new Date().getTime();
+    for (let index = 0; index < array.length; index++) {
+      const vehicle = array[index];
+      const fechaFin = vehicle.billigEnd
+        ? new Date(vehicle.billigEnd).getTime()
+        : new Date().getTime();
+      const diff = fechaFin - hoy;
+      const calcDiff = diff / (1000 * 60 * 60 * 24);
+      if (hoy > fechaFin) {
+        contVencidosGlobal++;
+        setContVencidos(contVencidosGlobal);
+      } else if (calcDiff <= 1) {
+        contXVencerGlobal++;
+        setContXVencer(contXVencerGlobal);
+      } else {
+        contActivosGlobal++;
+        setContActivos(contActivosGlobal);
+      }
+    }
+  };
+
+  const requestSearch = (searchedVal: string) => {
+    const filteredRows = data.getVehicles.filter((row: any) => {
+      return (
+        row.customer.name
+          .toLowerCase()
+          .includes(searchedVal.trim().toLowerCase()) ||
+        row.customer.lastName
+          .toLowerCase()
+          .includes(searchedVal.trim().toLowerCase()) ||
+        row.plate.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
+        row.billing.name
+          .toLowerCase()
+          .includes(searchedVal.trim().toLowerCase()) ||
+        row.nroGPS.toLowerCase().includes(searchedVal.trim().toLowerCase())
+      );
+    });
+    setVehicles(filteredRows);
+    buscarCantVehiculosXtipo(filteredRows);
+  };
+
+  const cancelSearch = () => {
+    setSearched("");
+    requestSearch(searched);
+    buscarCantVehiculosXtipo(data.getVehicles);
+  };
+
   useEffect(() => {
     if (data) {
       const allVehicles = data.getVehicles
@@ -95,37 +154,8 @@ const VehiclesPage = () => {
         .sort(
           (a: any, b: any) => b.billigStart.getTime() - a.billigStart.getTime()
         );
-
-      const today = new Date().getTime();
-      //vencidos
-      const getVencidos = data.getVehicles.filter((vehicle: any) => {
-        const end = vehicle.billigEnd
-          ? new Date(vehicle.billigEnd).getTime()
-          : "";
-        if (end < today) return { ...vehicle };
-      });
-      //activos
-      const getActivos = data.getVehicles.filter((vehicle: any) => {
-        const end = vehicle.billigEnd
-          ? new Date(vehicle.billigEnd).getTime()
-          : "";
-        if (end > today) return { ...vehicle };
-      });
-      //por vencer
-      const getXVencer = data.getVehicles.filter((vehicle: any) => {
-        let contDias = 0;
-        const fechaInicio = new Date().getTime();
-        const fechaFin = new Date(vehicle.billigEnd).getTime();
-        const diff = fechaFin - fechaInicio;
-        const calcDiff = diff / (1000 * 60 * 60 * 24);
-        console.log(calcDiff);
-        if (calcDiff <= 3) {
-          contDias++;
-          console.log(contDias);
-        }
-        setContXVencer(contDias);
-      });
       setVehicles(allVehicles);
+      buscarCantVehiculosXtipo(data.getVehicles);
     }
     //calc cant vehiculos
   }, [data]);
@@ -181,12 +211,12 @@ const VehiclesPage = () => {
             style={{
               width: "10px",
               height: "10px",
-              background: "green",
+              background: "#5bc959",
               marginLeft: 3,
               marginRight: 3,
             }}
           />
-          <strong>15</strong>
+          <strong>{contActivos}</strong>
         </div>
         <div style={{ display: "flex", alignItems: "center", marginLeft: 20 }}>
           <label>Vehiculos por vencer</label>
@@ -194,7 +224,7 @@ const VehiclesPage = () => {
             style={{
               width: "10px",
               height: "10px",
-              background: "yellow",
+              background: "#f7e160",
               marginLeft: 3,
               marginRight: 3,
             }}
@@ -207,22 +237,40 @@ const VehiclesPage = () => {
             style={{
               width: "10px",
               height: "10px",
-              background: "red",
+              background: "#fc553f",
               marginLeft: 3,
               marginRight: 3,
             }}
           />
-          <strong>15</strong>
+          <strong>{contVencidos}</strong>
         </div>
+      </div>
+      <div
+        style={{
+          marginTop: 10,
+          marginBottom: 10,
+          width: "100%",
+          display: "flex",
+        }}
+      >
+        {/* documentacion https://www.npmjs.com/package/material-ui-search-bar */}
+        <SearchBar
+          style={{ width: "100%" }}
+          placeholder="Puede buscar por nombres, apellidos, placa, plan de facturación o nro de gps"
+          value={searched}
+          onChange={(searchVal) => requestSearch(searchVal)}
+          onCancelSearch={() => cancelSearch()}
+        />
       </div>
       <TableContainer
         component={Paper}
         style={{ whiteSpace: "nowrap", marginTop: 10 }}
       >
-        <Table stickyHeader aria-label="a dense table">
+        <Table stickyHeader size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell>Cliente</TableCell>
+              <TableCell>Contacto</TableCell>
               <TableCell>Dispositivo</TableCell>
               <TableCell>Plataforma</TableCell>
               <TableCell>Plan</TableCell>
