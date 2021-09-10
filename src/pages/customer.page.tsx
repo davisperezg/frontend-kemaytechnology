@@ -23,6 +23,8 @@ import { findError } from "../helpers/control-errors";
 import { useGetCustomers } from "../hooks/customer/useGetCustomer";
 import { TablePaginationActions } from "../components/table/table-pagination";
 import TablePagination from "@material-ui/core/TablePagination";
+import SearchBar from "material-ui-search-bar";
+import { Button } from "@material-ui/core";
 
 const initialDialog = {
   name: "",
@@ -47,6 +49,29 @@ const CustomerPage = () => {
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, customers.length - pagex * rowsPerPage);
+
+  const [searched, setSearched] = useState<string>("");
+
+  const requestSearch = (searchedVal: string) => {
+    const filteredRows = data.getCustomer.filter((row: any) => {
+      return (
+        row.name.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
+        row.lastName.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
+        row.numDocument
+          .toLowerCase()
+          .includes(searchedVal.trim().toLowerCase()) ||
+        row.username.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
+        row.password.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
+        row.document.toLowerCase().includes(searchedVal.trim().toLowerCase())
+      );
+    });
+    setCustomers(filteredRows);
+  };
+
+  const cancelSearch = () => {
+    setSearched("");
+    requestSearch(searched);
+  };
 
   const handleChangePage = (
     event: MouseEvent<HTMLButtonElement> | null,
@@ -108,15 +133,14 @@ const CustomerPage = () => {
 
   const showDialogToCreate = () => (
     <>
-      <Tooltip title="Crear Cliente">
-        <IconButton
-          aria-label="add"
-          size="small"
-          onClick={() => setDialog({ name: "Crear", active: true })}
-        >
-          <AddRoundedIcon />
-        </IconButton>
-      </Tooltip>
+      <Button
+        onClick={() => setDialog({ name: "Crear", active: true })}
+        variant="contained"
+        color="primary"
+        endIcon={<AddRoundedIcon />}
+      >
+        Crear Cliente
+      </Button>
     </>
   );
 
@@ -128,7 +152,28 @@ const CustomerPage = () => {
         component={component(dialog.name)}
         handleClose={handleClose}
       />
-      {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)}
+      <div style={{ width: "100%", display: "flex" }}>
+        <div style={{ width: "200px" }}>
+          {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)}
+        </div>
+      </div>
+      <div
+        style={{
+          marginTop: 10,
+          marginBottom: 10,
+          width: "100%",
+          display: "flex",
+        }}
+      >
+        {/* documentacion https://www.npmjs.com/package/material-ui-search-bar */}
+        <SearchBar
+          style={{ width: "100%" }}
+          placeholder="Puede buscar por nombres, apellidos, documento, nro de documento, usuario o contraseña"
+          value={searched}
+          onChange={(searchVal) => requestSearch(searchVal)}
+          onCancelSearch={() => cancelSearch()}
+        />
+      </div>
       <TableContainer
         component={Paper}
         style={{ whiteSpace: "nowrap", marginTop: 10 }}
