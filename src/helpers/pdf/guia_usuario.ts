@@ -1,6 +1,8 @@
+import { sms_cesar } from "./../images_data64/data64";
 import jsPDF from "jspdf";
 import { Vehicle } from "../../interfaces/vehicle.interface";
 import {
+  dashboard_cesar,
   inicio_pagina_cel,
   lista_pagina_cel,
   logo,
@@ -9,6 +11,7 @@ import {
   nombre_pagina_cel,
   pablo_login,
   reporte_pablo,
+  sim_cesar,
   wialon_cel1,
   wialon_cel2,
   wialon_cel3,
@@ -171,8 +174,9 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
     doc.setFontSize(12);
 
     if (vehicle.device.name === "SUNTECH ST340LC") {
-      doc.text("Apagado", left, top + 100);
-      doc.text("Encendido", left, top + 110);
+      doc.text("ID:", left, top + 100);
+      doc.text("Apagado: ST300CMD;(ID);02;Disable1", left, top + 110);
+      doc.text("Encendido: ST300CMD;(ID);02;Enable1", left, top + 120);
     } else if (vehicle.device.name === "TELTONIKA FMB920") {
       doc.text(
         "Apagado: (espacio)(espacio)setdigout(espacio)1",
@@ -180,7 +184,7 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
         top + 100
       );
       doc.text(
-        "Encendido (espacio)(espacio)setdigout(espacio)0",
+        "Encendido: (espacio)(espacio)setdigout(espacio)0",
         left,
         top + 110
       );
@@ -240,8 +244,9 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
     doc.setFont("helvetica", "normal");
 
     if (vehicle.device.name === "SUNTECH ST340LC") {
-      doc.text("Apagado", left, top + 180);
-      doc.text("Encendido", left, top + 190);
+      doc.text("ID:", left, top + 200);
+      doc.text("Apagado: ST300CMD;(ID);02;Disable1", left, top + 210);
+      doc.text("Encendido: ST300CMD;(ID);02;Enable1", left, top + 220);
     } else if (vehicle.device.name === "TELTONIKA FMB920") {
       doc.text(
         "Apagado: (espacio)(espacio)setdigout(espacio)1",
@@ -249,7 +254,7 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
         top + 180
       );
       doc.text(
-        "Encendido (espacio)(espacio)setdigout(espacio)0",
+        "Encendido: (espacio)(espacio)setdigout(espacio)0",
         left,
         top + 190
       );
@@ -259,12 +264,48 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
     }
     if (vehicle!.sim === "MULTIOPERADOR") {
       //imagenes pltaforma cecsar
+      doc.addPage();
+      doc.setFont("helvetica", "bold");
+      doc.text(
+        "GUIA PARA EL APAGADO Y ENCENDIDO DEL VEHICULO",
+        left + 45,
+        top - 30
+      );
+
+      doc.text(
+        "Link para los comandos: http://dcsm2m.net/login",
+        left,
+        top - 20
+      );
+
+      doc.text(
+        `Cuenta: ${vehicle.customer.username}@ktech.com`,
+        left,
+        top - 10
+      );
+      doc.text(`Contraseña: ${vehicle.customer.password}`, left, top);
+      doc.setFont("helvetica", "normal");
+      doc.text(`1. Selecciona la pestaña SIMS`, left, top + 10);
+      doc.addImage(dashboard_cesar, "PNG", left, top + 20, 180, 100);
+      doc.text(
+        `2.  Seleccionar el icono de mensajes al vehículo que desea apagar.`,
+        left,
+        top + 130
+      );
+      doc.addImage(sim_cesar, "PNG", left, top + 140, 180, 60);
+      doc.addPage();
+      doc.text(
+        `3. Escribir el comando y seleccionar en "Enviar SMS"`,
+        left,
+        top - 30
+      );
+      doc.addImage(sms_cesar, "PNG", left, top - 20, 180, 100);
     } else {
       //fin
       doc.text(
         `Enviar comandos via SMS al ${vehicle!.nroGPS}`,
         left,
-        top + 230
+        top + 240
       );
     }
   }
