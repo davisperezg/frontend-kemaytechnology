@@ -21,6 +21,7 @@ import AutorenewRoundedIcon from "@material-ui/icons/AutorenewRounded";
 import RenewForm from "../renew/renew-form";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import { GenerarGuiaUSua } from "../../helpers/pdf/guia_usuario";
+import BackDrop from "../backdrop/backdrop";
 
 const initialAlert = {
   type: "",
@@ -38,6 +39,7 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const optionsVehicle = useDeleteVehicle();
+  const [isActive, setActive] = useState<boolean>(false);
 
   const handleClose = () => {
     setDialog(initialDialog);
@@ -115,6 +117,7 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
 
   const showData = () => (
     <>
+      {isActive && <BackDrop state={isActive} />}
       <TableRow
         style={{
           background:
@@ -175,7 +178,9 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
           {/* boton para pdf guia de usuario */}
           <Tooltip
             title="Generar guia de Usuario"
-            onClick={() => GenerarGuiaUSua(vehicle)}
+            onClick={() => {
+              GenerarGuiaUSua(vehicle);
+            }}
           >
             <IconButton aria-label="user" size="small">
               <PictureAsPdfIcon />

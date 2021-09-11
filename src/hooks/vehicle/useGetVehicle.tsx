@@ -12,6 +12,8 @@ export const GET_VEHICLES = gql`
         numDocument
         cellphone_1
         cellphone_2
+        username
+        password
       }
       createdBy {
         id

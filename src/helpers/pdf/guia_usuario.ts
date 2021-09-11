@@ -99,15 +99,6 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
   const CambioNombre = `Cambiar nombre a "GPS" y Añadir`;
   const IrAtuPantalla = `Listo. Ir a tu pantalla de inicio`;
   const Comandos = `Comandos para ${vehicle.device.name}`;
-  const Reporte = `Usar este Paso si el Vehiculo no se ve en el Menu (OPCIONAL)`;
-  const Guia_Cell = `Guia desde Celular`;
-  const Paso1 = `Paso 1 : `;
-  const com1 = `Instalar la Aplicación  desde Play Store o App Store`;
-  const Paso2 = `Paso 2 : `;
-  const com2 = `Permitir las notificaciones de la Aplicación`;
-  const Paso3 = `Paso 3 : `;
-  const com3 = `Ejecutar la aplicación e Ingresar a la Interfaz`;
-  const com4 = `Explicación de cada componente de la Aplicación`;
 
   //logo
   doc.addImage(logo, "JPG", left + 153, 5, 35, 30);
@@ -251,12 +242,12 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
       doc.text(
         "Apagado: (espacio)(espacio)setdigout(espacio)1",
         left,
-        top + 180
+        top + 200
       );
       doc.text(
         "Encendido: (espacio)(espacio)setdigout(espacio)0",
         left,
-        top + 190
+        top + 210
       );
     } else {
       doc.text("Apagado: stopelec123456", left, top + 200);
@@ -309,5 +300,7 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
       );
     }
   }
-  doc.save("a4.pdf");
+  doc.save(
+    `MANUA DE ${vehicle.customer.name} ${vehicle.customer.lastName}.pdf`
+  );
 };
