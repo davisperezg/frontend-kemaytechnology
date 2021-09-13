@@ -127,7 +127,8 @@ const VehiclesPage = () => {
         row.billing.name
           .toLowerCase()
           .includes(searchedVal.trim().toLowerCase()) ||
-        row.nroGPS.toLowerCase().includes(searchedVal.trim().toLowerCase())
+        row.nroGPS.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
+        row.platform.toLowerCase().includes(searchedVal.trim().toLowerCase())
       );
     });
     setVehicles(filteredRows);
@@ -256,7 +257,7 @@ const VehiclesPage = () => {
         {/* documentacion https://www.npmjs.com/package/material-ui-search-bar */}
         <SearchBar
           style={{ width: "100%" }}
-          placeholder="Puede buscar por nombres, apellidos, placa, plan de facturación o nro de gps"
+          placeholder="Puede buscar por nombres, apellidos, placa, plan de facturación, tipo de plataforma o nro de gps"
           value={searched}
           onChange={(searchVal) => requestSearch(searchVal)}
           onCancelSearch={() => cancelSearch()}
