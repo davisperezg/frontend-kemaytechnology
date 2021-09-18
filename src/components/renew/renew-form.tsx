@@ -22,6 +22,11 @@ import { setAlert } from "../../store/alert/action";
 import { findError } from "../../helpers/control-errors";
 import Progress from "../progress/progress";
 
+import { logo } from "../../helpers/images_data64/data64";
+import { ArrowLeft } from "@material-ui/icons";
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+
 interface Options {
   handleClose: () => void;
   vehicle: Vehicle;
@@ -69,26 +74,65 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
   };
 
   const registerRenew = async () => {
-    try {
-      await optionsCreate.registerRenew({
-        variables: {
-          renewInput: renew,
-        },
-      });
-      dispatch(
-        setAlert({
-          type: "success",
-          text: "Se ha renovado correctamente.",
-        })
-      );
-    } catch (e) {
-      dispatch(
-        setAlert({
-          type: "error",
-          text: findError(e),
-        })
-      );
-    }
+    // try {
+    //   await optionsCreate.registerRenew({
+    //     variables: {
+    //       renewInput: renew,
+    //     },
+    //   });
+    //   dispatch(
+    //     setAlert({
+    //       type: "success",
+    //       text: "Se ha renovado correctamente.",
+    //     })
+    //   );
+    // } catch (e) {
+    //   dispatch(
+    //     setAlert({
+    //       type: "error",
+    //       text: findError(e),
+    //     })
+    //   );
+    // }
+    //TODO:  GENERACION DE PDF RENOVACION
+    const doc = new jsPDF();
+    const left = 10;
+    const titulo ="RENOVACION DE INSCRIPCIÓN";
+    const nom = "Nombre:   "+ vehicle.customer.name + " " + vehicle.customer.lastName;
+    const dni = "N°.DNI :  "+vehicle.customer.numDocument;
+    const fechaEmi = "Fecha de emisión :  "+moment(
+      vehicle.billigStart
+    ).format("DD/MM/YYYY");
+    const firma ="Kemay Tecnology E.I.R.L"; 
+    const ruc = "RUC:12345678";
+    doc.rect(10, 10, 190, 130);
+    doc.rect(50, 15, 140, 20)
+    //TODO:Contenido de la tabla
+    doc.addImage(logo, "JPG", left +3, 15, 35, 30);
+    doc.line(100,125,190,125)
+    doc.setFontSize(13);
+    doc.setFont("Bahnschrift", "bold");
+    doc.text(titulo,80, 20);
+    doc.setFontSize(10);
+    doc.setFont("Bahnschrift", "bold");
+    doc.text(nom,55,25);
+    doc.text(dni,130,25);
+    doc.text(fechaEmi,55,30);
+    doc.text(firma,125, 130);
+    doc.text(ruc,130, 135);
+    //TODO:Tabla
+    autoTable(doc, {
+      margin:{ top: 50 },
+      head: [['N°.GPS', 'Descripción', 'Plan','Placa','Fecha.I','Fecha.F','Precio']],
+      body: [
+        [vehicle.nroGPS, 'Renovacion ',vehicle!.platform,vehicle.plate,moment(
+          vehicle.billigStart
+        ).format("DD/MM/YYYY"),moment(vehicle.billigEnd).format("DD/MM/YYYY"),'S/.'],
+      
+      ],
+    })
+  
+    doc.save(`Comprobante Renovación`);
   };
 
   useEffect(() => {
