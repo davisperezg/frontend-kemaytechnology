@@ -1,6 +1,8 @@
 import { sms_cesar } from "./../images_data64/data64";
 import jsPDF from "jspdf";
 import { Vehicle } from "../../interfaces/vehicle.interface";
+import { Customer } from "../../interfaces/customer.interface";
+
 import {
   dashboard_cesar,
   inicio_pagina_cel,
@@ -27,13 +29,13 @@ import {
 } from "../images_data64/data64";
 import moment from "moment";
 
-const checkPlatform = (vehicle: Vehicle) => {
+const checkPlatform = (vehicle: Vehicle, customer: Customer) => {
   let message = "";
   if (vehicle!.platform === "STANDAR") {
     message =
-      "kemay/" + vehicle.customer.username + "/" + vehicle.customer.password;
+    `kemay/${vehicle.customer.username || customer.username}/${vehicle.customer.password || customer.password}`
   } else if (vehicle!.platform === "PREMIUM") {
-    message = vehicle.customer.username + "/" + vehicle.customer.password;
+    message = `${vehicle.customer.username || customer.username}/${vehicle.customer.password || customer.password}`
   } else {
     message = "SIN PLATAFORMA";
   }
@@ -52,7 +54,7 @@ const checkPage = (vehicle: Vehicle) => {
   return message;
 };
 
-export const GenerarGuiaUSua = (vehicle: Vehicle) => {
+export const GenerarGuiaUSua = (vehicle: Vehicle, customer?: any) => {
   if (vehicle!.platform === "SIN PLATAFORMA") return;
   const doc = new jsPDF();
   const top = 40;
@@ -69,9 +71,9 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
     "2. Ingresar sus credenciales (Las credenciales son las mismas para el aplicativo móvil)";
 
   const nameCustomer =
-    "SR(A): " + vehicle.customer.name + " " + vehicle.customer.lastName;
-  const plan = vehicle!.platform;
-  const account = `${checkPlatform(vehicle)}`;
+  `SR(A): ${vehicle.customer.name || customer.name} ${vehicle.customer.lastName || customer.lastName}`;
+  const plan = vehicle!.platform;   
+  const account = `${checkPlatform(vehicle, customer)}`;
   const linkPage = `${checkPage(vehicle)}`;
 
   const step3 = `3. Verificar vehiculos agregados a su cuenta`;
@@ -98,7 +100,7 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
   const SeleccionIncio = `Seleccionar añadir a pantalla de inicio`;
   const CambioNombre = `Cambiar nombre a "GPS" y Añadir`;
   const IrAtuPantalla = `Listo. Ir a tu pantalla de inicio`;
-  const Comandos = `Comandos para ${vehicle.device.name}`;
+  const Comandos = `Comandos para ${vehicle.device.name || vehicle.device}`;
 
   //logo
   doc.addImage(logo, "JPG", left + 153, 5, 35, 30);
@@ -270,11 +272,11 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
       );
 
       doc.text(
-        `Cuenta: ${vehicle.customer.username}@ktech.com`,
+        `Cuenta: ${vehicle.customer.username || customer.username}@ktech.com`,
         left,
         top - 10
       );
-      doc.text(`Contraseña: ${vehicle.customer.password}`, left, top);
+      doc.text(`Contraseña: ${vehicle.customer.password || customer.password}`, left, top);
       doc.setFont("helvetica", "normal");
       doc.text(`1. Selecciona la pestaña SIMS`, left, top + 10);
       doc.addImage(dashboard_cesar, "PNG", left, top + 20, 180, 100);
@@ -301,6 +303,6 @@ export const GenerarGuiaUSua = (vehicle: Vehicle) => {
     }
   }
   doc.save(
-    `MANUA DE ${vehicle.customer.name} ${vehicle.customer.lastName}.pdf`
+    `MANUA DE ${vehicle.customer.name || customer.name} ${vehicle.customer.lastName || customer.lastName}.pdf`
   );
 };
