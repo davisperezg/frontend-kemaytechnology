@@ -23,6 +23,7 @@ import { useGetBilling } from "../../hooks/billing/useGetBilling";
 import RedditTextField from "../textfield/reddit";
 import { MenuItem } from "@material-ui/core";
 import { GenerarGuiaUSua } from "../../helpers/pdf/guia_usuario";
+import { useGetCustomerById } from "../../hooks/customer/useGetCustomerById";
 
 interface Option {
   handleClose?: () => void;
@@ -84,7 +85,9 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
   const optionCustomer = useGetCustomers();
   const optionDevice = useGetDevices();
   const optionBilling = useGetBilling();
+  const optioncustomerbyid = useGetCustomerById();
 
+  
   const handleInput = (e: InputChange) => {
     setVehicleForm({
       ...vehicleForm,
@@ -107,11 +110,12 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
           },
         });
         dispatch(
+
           setAlert({
             type: "success",
             text: "El vehiculo se actualizó correctamente.",
           })
-        );
+        );  
       } catch (e) {
         dispatch(
           setAlert({
@@ -142,9 +146,10 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
         if (resAlert) {
         } else {
         }
-
+       
         //Generacion de pdf
-        GenerarGuiaUSua(vehicleForm);
+        GenerarGuiaUSua(vehicleForm, customer);
+        
       } catch (e) {
         dispatch(
           setAlert({
@@ -154,6 +159,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
         );
       }
     }
+    
   };
 
   useEffect(() => {
