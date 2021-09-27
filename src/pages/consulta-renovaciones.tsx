@@ -21,11 +21,15 @@ import { PERMIT_ONE } from "../const";
 import DialogForm from "../components/dialog/dialog.component";
 import TablePagination from "@material-ui/core/TablePagination";
 import { TablePaginationActions } from "../components/table/table-pagination";
-import { Button } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import SearchBar from "material-ui-search-bar";
+import moment from "moment";
+import VehicleConsult from "../components/consultas/consultas_instalaciones";
 
-const Consulta_renovaciones =()=>{
-  
+
+const Consulta_instalaciones =()=>{
+
+  const now = moment().utc().local().format("YYYY-MM-DD");
     const initialDialog = {
         name: "",
         active: false,
@@ -85,78 +89,13 @@ const Consulta_renovaciones =()=>{
       }
     };
   
-    const buscarCantVehiculosXtipo = (array: Vehicle[]) => {
-      setContVencidos(0);
-      setContXVencer(0);
-      setContActivos(0);
-      contVencidosGlobal = 0;
-      contXVencerGlobal = 0;
-      contActivosGlobal = 0;
   
-      const hoy = new Date().getTime();
-      for (let index = 0; index < array.length; index++) {
-        const vehicle = array[index];
-        const fechaFin = vehicle.billigEnd
-          ? new Date(vehicle.billigEnd).getTime()
-          : new Date().getTime();
-        const diff = fechaFin - hoy;
-        const calcDiff = diff / (1000 * 60 * 60 * 24);
-        if (hoy > fechaFin) {
-          contVencidosGlobal++;
-          setContVencidos(contVencidosGlobal);
-        } else if (calcDiff <= 1) {
-          contXVencerGlobal++;
-          setContXVencer(contXVencerGlobal);
-        } else {
-          contActivosGlobal++;
-          setContActivos(contActivosGlobal);
-        }
-      }
-    };
-  
-    const requestSearch = (searchedVal: string) => {
-      const filteredRows = data.getVehicles.filter((row: any) => {
-        return (
-          row.customer.name
-            .toLowerCase()
-            .includes(searchedVal.trim().toLowerCase()) ||
-          row.customer.lastName
-            .toLowerCase()
-            .includes(searchedVal.trim().toLowerCase()) ||
-          row.plate.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
-          row.billing.name
-            .toLowerCase()
-            .includes(searchedVal.trim().toLowerCase()) ||
-          row.nroGPS.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
-          row.platform.toLowerCase().includes(searchedVal.trim().toLowerCase())
-        );
-      });
-      setVehicles(filteredRows);
-      buscarCantVehiculosXtipo(filteredRows);
-    };
-  
-    const cancelSearch = () => {
-      setSearched("");
-      requestSearch(searched);
-      buscarCantVehiculosXtipo(data.getVehicles);
-    };
-  
+
     useEffect(() => {
       if (data) {
+        console.log(data.getVehicles)
         const allVehicles = data.getVehicles
-          .map((vehicle: any) => {
-            return {
-              ...vehicle,
-              billigStart: vehicle.billigStart
-                ? new Date(vehicle.billigStart)
-                : new Date(),
-            };
-          })
-          .sort(
-            (a: any, b: any) => b.billigStart.getTime() - a.billigStart.getTime()
-          );
         setVehicles(allVehicles);
-        buscarCantVehiculosXtipo(data.getVehicles);
       }
       //calc cant vehiculos
     }, [data]);
@@ -177,7 +116,7 @@ const Consulta_renovaciones =()=>{
           color="primary"
           endIcon={<AddRoundedIcon />}
         >
-          NUEVA REN.
+          NUEVA INS.
         </Button>
   
         {/* <Tooltip title="Crear vehiculo">
@@ -202,67 +141,14 @@ const Consulta_renovaciones =()=>{
         />
   
         <div style={{ width: "100%", display: "flex" }}>
-          <div style={{ width: "200px" }}>
-            {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)}
-            {/* {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)} */}
-          </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <label>Renovaciones activas</label>
-            <div
-              style={{
-                width: "10px",
-                height: "10px",
-                background: "#5bc959",
-                marginLeft: 3,
-                marginRight: 3,
-              }}
-            />
-            <strong>{contActivos}</strong>
-          </div>
-          {/* <div style={{ display: "flex", alignItems: "center", marginLeft: 20 }}>
-            <label>Instalaciones Pendientes</label>
-            <div
-              style={{
-                width: "10px",
-                height: "10px",
-                background: "#f7e160",
-                marginLeft: 3,
-                marginRight: 3,
-              }}
-            />
-            <strong>{contPorVencer}</strong>
-          </div> */}
-          <div style={{ display: "flex", alignItems: "center", marginLeft: 20 }}>
-            <label>Renovaciones Finalizadas</label>
-            <div
-              style={{
-                width: "10px",
-                height: "10px",
-                background: "#fc553f",
-                marginLeft: 3,
-                marginRight: 3,
-              }}
-            />
-            <strong>{contVencidos}</strong>
-          </div>
+              
+          <TextField value={now} id="outlined-desde" type="date" label="Fecha desde" variant="outlined" style={{ marginRight:20}}/>
+ 
+          <TextField value={now} id="outlined-hasta" type="date" label="Fecha hasta" variant="outlined" />
         </div>
-        <div
-          style={{
-            marginTop: 10,
-            marginBottom: 10,
-            width: "100%",
-            display: "flex",
-          }}
-        >
-          {/* documentacion https://www.npmjs.com/package/material-ui-search-bar */}
-          <SearchBar
-            style={{ width: "100%" }}
-            placeholder="Puede buscar por nombres, apellidos, placa, plan de facturación, tipo de plataforma o nro de gps"
-            value={searched}
-            onChange={(searchVal) => requestSearch(searchVal)}
-            onCancelSearch={() => cancelSearch()}
-          />
-        </div>
+        <div style={{ width: "100%", display: "flex" }}>
+        <Button  variant="outlined">Generar PDF</Button>
+      </div>
         <TableContainer
           component={Paper}
           style={{ whiteSpace: "nowrap", marginTop: 10 }}
@@ -271,26 +157,21 @@ const Consulta_renovaciones =()=>{
             <TableHead>
               <TableRow>
                 <TableCell>Cliente</TableCell>
-                <TableCell>Contacto</TableCell>
+                <TableCell>Fecha de instalación</TableCell>
+                <TableCell>Fecha Termino </TableCell>
                 <TableCell>Dispositivo</TableCell>
-                <TableCell>Fecha de renovación</TableCell>
-                <TableCell>Registrado por</TableCell>
-                <TableCell>Actualizado por</TableCell>
-                <TableCell>Fecha creada</TableCell>
-                <TableCell>Fecha modificada</TableCell>
-                <TableCell align="right">Opciones</TableCell>
+                <TableCell>Plataforma</TableCell>
+                <TableCell>Plan</TableCell>
+                <TableCell>Placa</TableCell>
+                <TableCell>SIM</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* {(rowsPerPage > 0
-                ? vehicles.slice(
-                    pagex * rowsPerPage,
-                    pagex * rowsPerPage + rowsPerPage
-                  )
-                : vehicles
-              ).map((vehicle) => (
-                <VehicleList key={vehicle.id} vehicle={vehicle} />
-              ))} */}
+              { 
+                vehicles
+              .map((vehicle) => (
+                <VehicleConsult key={vehicle.id} vehicle={vehicle} />
+              ))} 
             </TableBody>
           </Table>
         </TableContainer>
@@ -323,4 +204,4 @@ const Consulta_renovaciones =()=>{
       </>
     );
   };
-export default Consulta_renovaciones;
+export default Consulta_instalaciones;
