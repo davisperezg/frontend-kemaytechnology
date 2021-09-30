@@ -126,11 +126,13 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
       }
     } else {
       try {
+        
         await optionsCreate.registerVehicle({
           variables: {
             vehicleInput: vehicleForm,
           },
         });
+        
         dispatch(
           setAlert({
             type: "success",
@@ -151,6 +153,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
         GenerarGuiaUSua(vehicleForm, customer);
         
       } catch (e) {
+        console.log(e)
         dispatch(
           setAlert({
             type: "error",

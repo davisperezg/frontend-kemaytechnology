@@ -27,14 +27,14 @@ const initialDialog = {
   active: false,
 };
 
-const VehicleConsult = ({ vehicle }: { vehicle: Vehicle }) => {
+const VehicleConsultRenovaciones = ({ vehicle }: { vehicle: Vehicle | any}) => {
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const optionsVehicle = useDeleteVehicle();
   const [isActive, setActive] = useState<boolean>(false);
-
+console.log(vehicle)
 
   const showData = () => (
     <>
@@ -43,32 +43,30 @@ const VehicleConsult = ({ vehicle }: { vehicle: Vehicle }) => {
         
       >
         <TableCell component="th" scope="row">
-          {vehicle.customer.name} {vehicle.customer.lastName}
+          {vehicle.vehicle.customer.name} {vehicle.vehicle.customer.lastName}
         </TableCell>
         <TableCell component="th" scope="row" align="center">
-          {moment(vehicle.billigStart).format("DD/MM/YYYY")}</TableCell>
+          {moment(vehicle.vehicle.renovationStart).format("DD/MM/YYYY")}</TableCell>
         <TableCell component="th" scope="row" align="center">
-          {moment(vehicle.billigEnd).format("DD/MM/YYYY")}
+          {moment(vehicle.vehicle.renovationEnd).format("DD/MM/YYYY")}
         </TableCell>
         <TableCell component="th" scope="row">
-          {vehicle.device.name}
+          {vehicle.vehicle.device.name}
         </TableCell>
         <TableCell component="th" scope="row">
-          {vehicle.platform}
+          {vehicle.vehicle.platform}
         </TableCell>
         <TableCell component="th" scope="row">
           {vehicle.billing.name}
         </TableCell>
         <TableCell component="th" scope="row">
-          {vehicle.plate}
+          {vehicle.vehicle.plate}
         </TableCell>
         <TableCell component="th" scope="row">
-          {vehicle.sim}
+          {vehicle.vehicle.sim}
         </TableCell>
         
-        {/* <TableCell component="th" scope="row">
-          {vehicle.nroGPS}
-        </TableCell> */}
+ 
        
       </TableRow>
     </>
@@ -82,4 +80,4 @@ const VehicleConsult = ({ vehicle }: { vehicle: Vehicle }) => {
   );
 };
 
-export default VehicleConsult;
+export default VehicleConsultRenovaciones;
