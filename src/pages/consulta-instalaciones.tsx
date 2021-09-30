@@ -5,29 +5,32 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Paper from "@material-ui/core/Paper";
-import VehicleList from "../components/vehicle/vehicle-list";
-import { User } from "../interfaces/user.interface";
+
 import { Vehicle } from "../interfaces/vehicle.interface";
-import { useGetVehicles } from "../hooks/vehicle/useGetVehicle";
+
 import VehicleForm from "../components/vehicle/vehicle-form";
 import { findError } from "../helpers/control-errors";
-import { loadAccess } from "../components/acceso/filter-access.component";
+
 import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
-import AddRoundedIcon from "@material-ui/icons/AddRounded";
-import { useSelector, useDispatch } from "react-redux";
+
 import { setAlert } from "../store/alert/action";
 import { Dialog } from "../interfaces/dialog.interface";
-import { PERMIT_ONE } from "../const";
-import DialogForm from "../components/dialog/dialog.component";
+
 import TablePagination from "@material-ui/core/TablePagination";
 import { TablePaginationActions } from "../components/table/table-pagination";
 import { Button, TextField } from "@material-ui/core";
-import SearchBar from "material-ui-search-bar";
+
 import moment from "moment";
 import VehicleConsult from "../components/consultas/consultas_instalaciones";
+import { InputChange } from "../lib/types";
+import { Consulta } from "../interfaces/consulta.interface";
+import { useConsultaInstalaciones } from "../hooks/vehicle/useConsultaInstalaciones";
+import { useDispatch } from "react-redux";
+import DialogForm from "../components/dialog/dialog.component";
 
-const Consulta_instalaciones = () => {
+const ConsultaInstalaciones = () => {
   const now = moment().utc().local().format("YYYY-MM-DD");
+
   const initialDialog = {
     name: "",
     active: false,
@@ -37,26 +40,41 @@ const Consulta_instalaciones = () => {
     type: "",
     text: "",
   };
+  const initialConsulta:Consulta ={
+      desde:now,
+      hasta:now,
+  }
 
-  let contVencidosGlobal = 0;
-  let contXVencerGlobal = 0;
-  let contActivosGlobal = 0;
-  const auth: User = useSelector((state: any) => state.authReducer.authUser);
-  const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [contVencidos, setContVencidos] = useState<number>(0);
-  const [contActivos, setContActivos] = useState<number>(0);
-  const [contPorVencer, setContXVencer] = useState<number>(0);
-  const { data, loading, error } = useGetVehicles();
+ 
+  const optionsConsulta = useConsultaInstalaciones();
   //TABLE OPTIONS
+  
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [pagex, setPage] = useState(0);
-  const [searched, setSearched] = useState<string>("");
 
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, vehicles.length - pagex * rowsPerPage);
+
+  
+  const [consulta, setConsulta] = useState<Consulta>(initialConsulta);
+  
+   const handleInput = (e: InputChange) => {
+    setConsulta({
+        ...consulta,
+        [e.target.name]: e.target.value,
+      });
+      optionsConsulta.getVehiculosInstaladosXrango({
+        variables:{
+          desde:e.target.value,
+          hasta:e.target.value,
+        }
+      })
+    if(optionsConsulta.data){
+        // console.log(optionsConsulta.data.getVehiculosInstaladosXrango  )
+        setVehicles(optionsConsulta.data.getVehiculosInstaladosXrango )
+      }
+    };
 
   const handleChangePage = (
     event: MouseEvent<HTMLButtonElement> | null,
@@ -88,44 +106,33 @@ const Consulta_instalaciones = () => {
   };
 
   useEffect(() => {
-    if (data) {
-      console.log(data.getVehicles);
-      const allVehicles = data.getVehicles;
-      setVehicles(allVehicles);
-    }
-    //calc cant vehiculos
-  }, [data]);
 
-  if (loading) {
+
+    if(consulta){
+
+      optionsConsulta.getVehiculosInstaladosXrango({
+        variables:{
+          desde:consulta.desde,
+          hasta:consulta.hasta,
+        }
+      })
+
+      if(optionsConsulta.data){
+        // console.log(optionsConsulta.data.getVehiculosInstaladosXrango  )
+        setVehicles(optionsConsulta.data.getVehiculosInstaladosXrango )
+      }
+    }
+
+    //calc cant vehiculos
+  }, [optionsConsulta.data]);
+
+  if (optionsConsulta.loading) {
     return <h1>Cargando...</h1>;
   }
 
-  if (error) {
-    return <h1>{findError(error)}</h1>;
+  if (optionsConsulta.error) {
+    return <h1>{findError(optionsConsulta.error)}</h1>;
   }
-
-  const showDialogToCreate = () => (
-    <>
-      <Button
-        onClick={() => setDialog({ name: "Crear", active: true })}
-        variant="contained"
-        color="primary"
-        endIcon={<AddRoundedIcon />}
-      >
-        NUEVA INS.
-      </Button>
-
-      {/* <Tooltip title="Crear vehiculo">
-          <IconButton
-            aria-label="add"
-            size="small"
-            onClick={() => setDialog({ name: "Crear", active: true })}
-          >
-            <AddRoundedIcon />
-          </IconButton>
-        </Tooltip> */}
-    </>
-  );
 
   return (
     <>
@@ -138,25 +145,33 @@ const Consulta_instalaciones = () => {
 
       <div style={{ width: "100%", display: "flex" }}>
         <TextField
-          value={now}
+          value={consulta.desde}
           id="outlined-desde"
+          onChange={handleInput}
           type="date"
+          name="desde"
           label="Fecha desde"
           variant="outlined"
           style={{ marginRight: 20 }}
         />
 
         <TextField
-          value={now}
+          value={consulta.hasta}
           id="outlined-hasta"
+          name="hasta"
+          onChange={handleInput}
           type="date"
           label="Fecha hasta"
           variant="outlined"
         />
       </div>
-      <div style={{ width: "100%", display: "flex" }}>
-        <Button  variant="outlined">Generar PDF</Button>
+      {/* Generar PDF */}
+      <div style={{ width: "100%", display: "flex", marginLeft: 900 }}>
+        <Button variant="contained" size="large">
+          Generar PDF
+        </Button>
       </div>
+
       <TableContainer
         component={Paper}
         style={{ whiteSpace: "nowrap", marginTop: 10 }}
@@ -175,7 +190,13 @@ const Consulta_instalaciones = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {vehicles.map((vehicle) => (
+            {(rowsPerPage > 0
+              ? vehicles.slice(
+                  pagex * rowsPerPage,
+                  pagex * rowsPerPage + rowsPerPage
+                )
+              : vehicles
+            ).map((vehicle) => (
               <VehicleConsult key={vehicle.id} vehicle={vehicle} />
             ))}
           </TableBody>
@@ -210,4 +231,4 @@ const Consulta_instalaciones = () => {
     </>
   );
 };
-export default Consulta_instalaciones;
+export default ConsultaInstalaciones;

@@ -7,9 +7,9 @@ import BrandPage from "../pages/brand.page";
 import CategooryPage from "../pages/category.page";
 import CheckMoneyPage from "../pages/check-money.page";
 import CheckProducts from "../pages/check-products";
-import Consulta_instalaciones from "../pages/consulta-instalaciones";
-import Consulta_renovaciones from "../pages/consulta-renovaciones";
-import Consulta_vencidos from "../pages/consulta-vencidos";
+import ConsultaInstalaciones from "../pages/consulta-instalaciones";
+import ConsultaRenovaciones from "../pages/consulta-renovaciones";
+import ConsultaVencidos from "../pages/consulta-vencidos";
 import CustomerPage from "../pages/customer.page";
 import DevicePage from "../pages/device.page";
 import EgressPage from "../pages/egress.page";
@@ -145,16 +145,16 @@ const ItemSwitch = ({ link, page }: any) => {
         return Billing;
 
         case "CONSULTAR-INSTALACIONES":
-          const consulta_instalaciones = () => <Consulta_instalaciones/>;
-          return consulta_instalaciones;
+          const ConsultInsta = () => <ConsultaInstalaciones/>;
+          return ConsultInsta;
   
         case "CONSULTAR-VENCIDOS":
-          const consulta_vencidos = () => <Consulta_vencidos/>;
-          return consulta_vencidos;
+          const ConsultVenci = () => <ConsultaVencidos/>;
+          return ConsultVenci;
   
         case "CONSULTAR-RENOVACIONES":
-          const consulta_renovaciones = () => <Consulta_renovaciones/>;
-          return consulta_renovaciones;
+          const ConsultRenova = () => <ConsultaRenovaciones/>;
+          return ConsultRenova;
       default:
         const ERROR = () => <NoMatch />;
         return ERROR;
