@@ -40,9 +40,9 @@ export const ExportCSV = ({
             id: data.vehicle.customer.id,
             cliente:
               data.vehicle.customer.name + " " + data.vehicle.customer.lastName,
-            fecha_expirada: data.expirationDate,
-            fecha_renovada: data.renovationStart,
-            fecha_termina: data.renovationEnd,
+              fecha_renovada: data.renovationStart,
+              fecha_expirada: data.expirationDate,          
+            nueva_fecha_termino: data.renovationEnd,
             dispositivo: data.vehicle.device.name,
             plataforma: data.vehicle.platform,
             plan: data.billing.name,

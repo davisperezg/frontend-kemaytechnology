@@ -278,12 +278,12 @@ const VehiclesPage = () => {
               <TableCell>Placa</TableCell>
               <TableCell>Chip</TableCell>
               <TableCell>Nro GPS</TableCell>
-              <TableCell>Fecha de instalación</TableCell>
-              <TableCell>Fecha de termino</TableCell>
+              <TableCell>Fecha de Inicio</TableCell>
+              <TableCell>Fecha de Termino</TableCell>
               <TableCell>Registrado por</TableCell>
               <TableCell>Actualizado por</TableCell>
-              <TableCell>Fecha creada</TableCell>
-              <TableCell>Fecha modificada</TableCell>
+              <TableCell>Fecha Creada</TableCell>
+            <TableCell>Fecha Modificada</TableCell>
               <TableCell align="right">Opciones</TableCell>
             </TableRow>
           </TableHead>
