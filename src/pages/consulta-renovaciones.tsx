@@ -175,9 +175,9 @@ const ConsultaRenovaciones = () => {
                 <TableRow>
                   <TableCell>Cliente</TableCell>
                   <TableCell>N°.Contacto</TableCell>
-                  <TableCell>Fecha expirada</TableCell>
-                  <TableCell>Fecha de Renovacion</TableCell>
-                  <TableCell>Fecha Termino </TableCell>
+                  <TableCell>Fecha Renovada</TableCell>
+                  <TableCell>Fecha Expirada</TableCell>
+                  <TableCell>Nueva Fecha de Termino </TableCell>
                   <TableCell>Dispositivo</TableCell>
                   <TableCell>Plataforma</TableCell>
                   <TableCell>Plan</TableCell>

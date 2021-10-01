@@ -2,42 +2,38 @@ import { Vehicle } from "../../interfaces/vehicle.interface";
 
 import moment from "moment";
 
-import { PERMIT_FOUR} from "../../const";
+import { PERMIT_FOUR } from "../../const";
 import { loadAccess } from "../acceso/filter-access.component";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 
 import { useState } from "react";
 
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { User } from "../../interfaces/user.interface";
-
-
 
 import BackDrop from "../backdrop/backdrop";
 
-
-const VehicleConsultVencidos = ({ vehicle }: { vehicle: Vehicle | any}) => {
+const VehicleConsultVencidos = ({ vehicle }: { vehicle: Vehicle | any }) => {
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const page = useSelector((state: any) => state.page.user.module);
   const [isActive] = useState<boolean>(false);
-  console.log("vencidos")
-  console.log(vehicle)
+  console.log("vencidos");
+  console.log(vehicle);
 
   const showData = () => (
     <>
       {isActive && <BackDrop state={isActive} />}
-      <TableRow
-        
-      >
+      <TableRow>
         <TableCell component="th" scope="row">
           {vehicle.customer.name} {vehicle.customer.lastName}
         </TableCell>
         <TableCell component="th" scope="row" align="center">
           {vehicle.customer.cellphone_1} {vehicle.customer.cellphone_2}
-        </TableCell> 
+        </TableCell>
         <TableCell component="th" scope="row" align="center">
-          {moment(vehicle. billigStart).format("DD/MM/YYYY")}</TableCell>
+          {moment(vehicle.billigStart).format("DD/MM/YYYY")}
+        </TableCell>
         <TableCell component="th" scope="row" align="center">
           {moment(vehicle.billigEnd).format("DD/MM/YYYY")}
         </TableCell>
@@ -56,19 +52,14 @@ const VehicleConsultVencidos = ({ vehicle }: { vehicle: Vehicle | any}) => {
         <TableCell component="th" scope="row">
           {vehicle.sim}
         </TableCell>
-        
- 
-       
+        <TableCell component="th" scope="row">
+          {vehicle.nroGPS}
+        </TableCell>
       </TableRow>
     </>
   );
 
-  return (
-    <>
-      
-      {loadAccess(PERMIT_FOUR, auth, page, showData)}
-    </>
-  );
+  return <>{loadAccess(PERMIT_FOUR, auth, page, showData)}</>;
 };
 
 export default VehicleConsultVencidos;
