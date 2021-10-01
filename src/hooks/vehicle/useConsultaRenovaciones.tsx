@@ -10,6 +10,7 @@ export const GET_CONSULTA_RENOVACIONES_VEHICLE = gql`
       vehicle {
         plate
         customer {
+          id
           name
           lastName
         }
@@ -18,6 +19,7 @@ export const GET_CONSULTA_RENOVACIONES_VEHICLE = gql`
         }
         platform
         sim
+        nroGPS
       }
       billing {
         name

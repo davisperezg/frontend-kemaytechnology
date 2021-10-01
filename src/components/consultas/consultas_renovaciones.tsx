@@ -37,7 +37,6 @@ const VehicleConsultRenovaciones = ({
   const dispatch = useDispatch();
   const optionsVehicle = useDeleteVehicle();
   const [isActive, setActive] = useState<boolean>(false);
-  console.log(vehicle);
 
   const showData = () => (
     <>
@@ -50,10 +49,10 @@ const VehicleConsultRenovaciones = ({
           {moment(vehicle.expirationDate).format("DD/MM/YYYY")}
         </TableCell>
         <TableCell component="th" scope="row" align="center">
-          {vehicle.vehicle.renovationStart}
+          {moment(vehicle.renovationStart).format("DD/MM/YYYY")}
         </TableCell>
         <TableCell component="th" scope="row" align="center">
-          {vehicle.vehicle.renovationEnd}
+          {moment(vehicle.renovationEnd).format("DD/MM/YYYY")}
         </TableCell>
         <TableCell component="th" scope="row">
           {vehicle.vehicle.device.name}
@@ -69,6 +68,9 @@ const VehicleConsultRenovaciones = ({
         </TableCell>
         <TableCell component="th" scope="row">
           {vehicle.vehicle.sim}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {vehicle.vehicle.nroGPS}
         </TableCell>
       </TableRow>
     </>

@@ -14,7 +14,6 @@ import { User } from "../../interfaces/user.interface";
 import { Dialog } from "../../interfaces/dialog.interface";
 import { useDeleteVehicle } from "../../hooks/vehicle/useDeleteVehicle";
 
-
 import BackDrop from "../backdrop/backdrop";
 
 const initialAlert = {
@@ -35,20 +34,15 @@ const VehicleConsult = ({ vehicle }: { vehicle: Vehicle }) => {
   const optionsVehicle = useDeleteVehicle();
   const [isActive, setActive] = useState<boolean>(false);
 
-
   const showData = () => (
     <>
       {isActive && <BackDrop state={isActive} />}
-      <TableRow
-        
-      >
+      <TableRow>
         <TableCell component="th" scope="row">
           {vehicle.customer.name} {vehicle.customer.lastName}
         </TableCell>
         <TableCell component="th" scope="row" align="center">
-          {moment(vehicle.billigStart).format("DD/MM/YYYY")}</TableCell>
-        <TableCell component="th" scope="row" align="center">
-          {moment(vehicle.billigEnd).format("DD/MM/YYYY")}
+          {moment(vehicle.createdAt).format("DD/MM/YYYY")}
         </TableCell>
         <TableCell component="th" scope="row">
           {vehicle.device.name}
@@ -65,21 +59,14 @@ const VehicleConsult = ({ vehicle }: { vehicle: Vehicle }) => {
         <TableCell component="th" scope="row">
           {vehicle.sim}
         </TableCell>
-        
-        {/* <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row">
           {vehicle.nroGPS}
-        </TableCell> */}
-       
+        </TableCell>
       </TableRow>
     </>
   );
 
-  return (
-    <>
-      
-      {loadAccess(PERMIT_FOUR, auth, page, showData)}
-    </>
-  );
+  return <>{loadAccess(PERMIT_FOUR, auth, page, showData)}</>;
 };
 
 export default VehicleConsult;

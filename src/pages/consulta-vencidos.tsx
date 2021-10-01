@@ -5,14 +5,19 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Paper from "@material-ui/core/Paper";
-import VehicleList from "../components/vehicle/vehicle-list";
 import { User } from "../interfaces/user.interface";
 import { Vehicle } from "../interfaces/vehicle.interface";
 import { useGetVehicles } from "../hooks/vehicle/useGetVehicle";
 import VehicleForm from "../components/vehicle/vehicle-form";
 import { findError } from "../helpers/control-errors";
 import { loadAccess } from "../components/acceso/filter-access.component";
-import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
+import {
+  useState,
+  useCallback,
+  useEffect,
+  ChangeEvent,
+  MouseEvent,
+} from "react";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import { useSelector, useDispatch } from "react-redux";
 import { setAlert } from "../store/alert/action";
@@ -22,12 +27,12 @@ import DialogForm from "../components/dialog/dialog.component";
 import TablePagination from "@material-ui/core/TablePagination";
 import { TablePaginationActions } from "../components/table/table-pagination";
 import { Button, TextField } from "@material-ui/core";
-import SearchBar from "material-ui-search-bar";
 import moment from "moment";
-import VehicleConsult from "../components/consultas/consultas_instalaciones";
 import { InputChange } from "../lib/types";
 import { Consulta } from "../interfaces/consulta.interface";
 import { useConsultaVencidos } from "../hooks/vehicle/useConsultaVencidos";
+import VehicleConsultVencidos from "../components/consultas/consulta_vencidos";
+import { ExportCSV } from "../helpers/exports/csv";
 
 const ConsultaVencidos = () => {
   const now = moment().utc().local().format("YYYY-MM-DD");
@@ -104,27 +109,21 @@ const ConsultaVencidos = () => {
     }
   };
 
+  const memoizedResult = useCallback(() => {
+    optionsConsulta.getVehiculosVencidosXFecha({
+      variables: {
+        desde: consulta.desde,
+        hasta: consulta.hasta,
+      },
+    });
+  }, [consulta.desde, consulta.hasta]);
+
   useEffect(() => {
-    if (consulta) {
-      optionsConsulta.getVehiculosVencidosXFecha({
-        variables: {
-          desde: consulta.desde,
-          hasta: consulta.hasta,
-        },
-      });
-
-      if (optionsConsulta.data) {
-        // console.log(optionsConsulta.data.getVehiculosInstaladosXrango  )
-        setVehicles(optionsConsulta.data.getVehiculosVencidosXFecha);
-      }
+    memoizedResult();
+    if (optionsConsulta.data) {
+      setVehicles(optionsConsulta.data.getVehiculosVencidosXFecha);
     }
-
-    //calc cant vehiculos
-  }, [optionsConsulta.data]);
-
-  if (optionsConsulta.loading) {
-    return <h1>Cargando...</h1>;
-  }
+  }, [memoizedResult, optionsConsulta.data]);
 
   if (optionsConsulta.error) {
     return <h1>{findError(optionsConsulta.error)}</h1>;
@@ -165,67 +164,75 @@ const ConsultaVencidos = () => {
       <div
         style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
       >
-        <Button variant="contained" size="large">
-          Generar PDF
-        </Button>
-      </div>
-
-      <TableContainer
-        component={Paper}
-        style={{ whiteSpace: "nowrap", marginTop: 10 }}
-      >
-        <Table stickyHeader size="small" aria-label="a dense table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Cliente</TableCell>
-              <TableCell>Fecha de instalación</TableCell>
-              <TableCell>Fecha Termino </TableCell>
-              <TableCell>Dispositivo</TableCell>
-              <TableCell>Plataforma</TableCell>
-              <TableCell>Plan</TableCell>
-              <TableCell>Placa</TableCell>
-              <TableCell>SIM</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(rowsPerPage > 0
-              ? vehicles.slice(
-                  pagex * rowsPerPage,
-                  pagex * rowsPerPage + rowsPerPage
-                )
-              : vehicles
-            ).map((vehicle) => (
-              <VehicleConsult key={vehicle.id} vehicle={vehicle} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <div>
-        <TablePagination
-          rowsPerPageOptions={[
-            5,
-            10,
-            25,
-            { label: "Todos los registros", value: -1 },
-          ]}
-          //colSpan={3}
-          style={{ borderBottom: "none" }}
-          count={vehicles.length}
-          rowsPerPage={rowsPerPage}
-          page={pagex}
-          SelectProps={{
-            inputProps: { "aria-label": "filas por página" },
-            native: true,
-          }}
-          labelRowsPerPage="filas por página"
-          labelDisplayedRows={({ from, to, count }) =>
-            `${from}-${to} de ${count}`
-          }
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          ActionsComponent={TablePaginationActions}
+        <ExportCSV
+          csvData={vehicles}
+          nameTipoReporte="VENCIDOS"
+          fileName={`Vehiculos vencidos desde ${consulta.desde} hasta ${consulta.hasta}`}
         />
       </div>
+      {optionsConsulta.loading ? (
+        <h1>Cargando...</h1>
+      ) : (
+        <>
+          <TableContainer
+            component={Paper}
+            style={{ whiteSpace: "nowrap", marginTop: 10 }}
+          >
+            <Table stickyHeader size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Cliente</TableCell>
+                  <TableCell>Fecha de inicio</TableCell>
+                  <TableCell>Fecha de termino </TableCell>
+                  <TableCell>Dispositivo</TableCell>
+                  <TableCell>Plataforma</TableCell>
+                  <TableCell>Plan</TableCell>
+                  <TableCell>Placa</TableCell>
+                  <TableCell>SIM</TableCell>
+                  <TableCell>Nro SIM</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? vehicles.slice(
+                      pagex * rowsPerPage,
+                      pagex * rowsPerPage + rowsPerPage
+                    )
+                  : vehicles
+                ).map((vehicle) => (
+                  <VehicleConsultVencidos key={vehicle.id} vehicle={vehicle} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <div>
+            <TablePagination
+              rowsPerPageOptions={[
+                5,
+                10,
+                25,
+                { label: "Todos los registros", value: -1 },
+              ]}
+              //colSpan={3}
+              style={{ borderBottom: "none" }}
+              count={vehicles.length}
+              rowsPerPage={rowsPerPage}
+              page={pagex}
+              SelectProps={{
+                inputProps: { "aria-label": "filas por página" },
+                native: true,
+              }}
+              labelRowsPerPage="filas por página"
+              labelDisplayedRows={({ from, to, count }) =>
+                `${from}-${to} de ${count}`
+              }
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              ActionsComponent={TablePaginationActions}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };
