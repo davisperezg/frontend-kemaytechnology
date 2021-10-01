@@ -8,7 +8,6 @@ import CategooryPage from "../pages/category.page";
 import CheckMoneyPage from "../pages/check-money.page";
 import CheckProducts from "../pages/check-products";
 import ConsultaInstalaciones from "../pages/consulta-instalaciones";
-import Consulta_renovaciones from "../pages/consulta-renovaciones";
 import ConsultaRenovaciones from "../pages/consulta-renovaciones";
 import ConsultaVencidos from "../pages/consulta-vencidos";
 import CustomerPage from "../pages/customer.page";
