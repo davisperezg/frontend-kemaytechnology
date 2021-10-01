@@ -1,24 +1,25 @@
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 
 export const GET_CONSULTA_RENOVACIONES_VEHICLE = gql`
-query getVehiculosRenovadosXFecha($desde:DateTime!,$hasta:DateTime!){
-    getVehiculosRenovadosXFecha (desde:$desde,hasta:$hasta){
+  query getVehiculosRenovadosXFecha($desde: DateTime!, $hasta: DateTime!) {
+    getVehiculosRenovadosXFecha(desde: $desde, hasta: $hasta) {
       id
       renovationStart
       renovationEnd
-      vehicle{
+      expirationDate
+      vehicle {
         plate
         customer {
           name
           lastName
         }
-        device{
-            name
-          }
-          platform        
-          sim
+        device {
+          name
+        }
+        platform
+        sim
       }
-      billing{
+      billing {
         name
       }
     }
@@ -26,7 +27,9 @@ query getVehiculosRenovadosXFecha($desde:DateTime!,$hasta:DateTime!){
 `;
 
 export const useConsultaRenovaciones = () => {
-  const [getVehiculosRenovadosXFecha,{ data, error, loading }] = useLazyQuery(GET_CONSULTA_RENOVACIONES_VEHICLE);
+  const [getVehiculosRenovadosXFecha, { data, error, loading }] = useLazyQuery(
+    GET_CONSULTA_RENOVACIONES_VEHICLE
+  );
 
-  return { getVehiculosRenovadosXFecha,data, error, loading };
+  return { getVehiculosRenovadosXFecha, data, error, loading };
 };
