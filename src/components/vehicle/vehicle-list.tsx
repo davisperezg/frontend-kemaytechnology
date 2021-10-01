@@ -121,7 +121,7 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
       <TableRow
         style={{
           background:
-            hoy > fechaFin ? "#fc553f" : calcDiff <= 1 ? "#f7e160" : "#5bc959",
+            hoy > fechaFin ? "#fc553f" : calcDiff <= 10 ? "#f7e160" : "#5bc959",
         }}
       >
         <TableCell component="th" scope="row">

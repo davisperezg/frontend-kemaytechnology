@@ -162,7 +162,9 @@ const ConsultaVencidos = () => {
         />
       </div>
       {/* Generar PDF */}
-      <div style={{ width: "100%", display: "flex", marginLeft: 900 }}>
+      <div
+        style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+      >
         <Button variant="contained" size="large">
           Generar PDF
         </Button>
