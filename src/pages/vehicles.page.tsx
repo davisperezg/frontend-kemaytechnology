@@ -104,7 +104,7 @@ const VehiclesPage = () => {
       if (hoy > fechaFin) {
         contVencidosGlobal++;
         setContVencidos(contVencidosGlobal);
-      } else if (calcDiff <= 1) {
+      } else if (calcDiff <= 10) {
         contXVencerGlobal++;
         setContXVencer(contXVencerGlobal);
       } else {

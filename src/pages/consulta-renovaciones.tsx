@@ -30,7 +30,7 @@ import { InputChange } from "../lib/types";
 import VehicleConsultRenovaciones from "../components/consultas/consultas_renovaciones";
 import { useConsultaRenovaciones } from "../hooks/vehicle/useConsultaRenovaciones";
 
-const Consulta_renovaciones = () => {
+const ConsultaRenovaciones = () => {
   const now = moment().utc().local().format("YYYY-MM-DD");
   const initialDialog = {
     name: "",
@@ -41,47 +41,41 @@ const Consulta_renovaciones = () => {
     type: "",
     text: "",
   };
-  const initialConsulta:Consulta ={
-    desde:now,
-    hasta:now,
-}
+  const initialConsulta: Consulta = {
+    desde: now,
+    hasta: now,
+  };
 
-  
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
 
-  
   const optionsConsulta = useConsultaRenovaciones();
   //TABLE OPTIONS
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [pagex, setPage] = useState(0);
-  
 
+  const [consulta, setConsulta] = useState<Consulta>(initialConsulta);
 
-  
+  const handleInput = (e: InputChange) => {
+    setConsulta({
+      ...consulta,
+      [e.target.name]: e.target.value,
+    });
+    optionsConsulta.getVehiculosRenovadosXFecha({
+      variables: {
+        desde: e.target.value,
+        hasta: e.target.value,
+      },
+    });
+    if (optionsConsulta.data) {
+      // console.log(optionsConsulta.data.getVehiculosInstaladosXrango  )
+      setVehicles(optionsConsulta.data.getVehiculosRenovadosXFecha);
+    }
+  };
 
-    const [consulta, setConsulta] = useState<Consulta>(initialConsulta);
-  
-    const handleInput = (e: InputChange) => {
-      setConsulta({
-        ...consulta,
-        [e.target.name]: e.target.value,
-      });
-      optionsConsulta.getVehiculosRenovadosXFecha({
-      variables:{
-        desde:e.target.value,
-        hasta:e.target.value,
-      }
-       })
-       if(optionsConsulta.data){
-        // console.log(optionsConsulta.data.getVehiculosInstaladosXrango  )
-        setVehicles(optionsConsulta.data.getVehiculosRenovadosXFecha )
-      }
-     };
-     
   const handleChangePage = (
     event: MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -112,23 +106,19 @@ const Consulta_renovaciones = () => {
   };
 
   useEffect(() => {
-
-
-    if(consulta){
-
+    if (consulta) {
       optionsConsulta.getVehiculosRenovadosXFecha({
-        variables:{
-          desde:consulta.desde,
-          hasta:consulta.hasta,
-        }
-      })
+        variables: {
+          desde: consulta.desde,
+          hasta: consulta.hasta,
+        },
+      });
 
-      if(optionsConsulta.data){
+      if (optionsConsulta.data) {
         // console.log(optionsConsulta.data.getVehiculosRenovadosXFecha)
-        setVehicles(optionsConsulta.data.getVehiculosRenovadosXFecha )
+        setVehicles(optionsConsulta.data.getVehiculosRenovadosXFecha);
       }
     }
-    
 
     //calc cant vehiculos
   }, [optionsConsulta.data]);
@@ -140,8 +130,6 @@ const Consulta_renovaciones = () => {
   if (optionsConsulta.error) {
     return <h1>{findError(optionsConsulta.error)}</h1>;
   }
-
-  
 
   return (
     <>
@@ -175,7 +163,9 @@ const Consulta_renovaciones = () => {
         />
       </div>
       {/* Generar PDF */}
-      <div style={{ width: "100%", display: "flex", marginLeft: 900 }}>
+      <div
+        style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+      >
         <Button variant="contained" size="large">
           Generar PDF
         </Button>
@@ -197,10 +187,9 @@ const Consulta_renovaciones = () => {
               <TableCell>Placa</TableCell>
               <TableCell>SIM</TableCell>
             </TableRow>
-
           </TableHead>
           <TableBody>
-               {(rowsPerPage > 0
+            {(rowsPerPage > 0
               ? vehicles.slice(
                   pagex * rowsPerPage,
                   pagex * rowsPerPage + rowsPerPage
@@ -241,4 +230,4 @@ const Consulta_renovaciones = () => {
     </>
   );
 };
-export default Consulta_renovaciones;
+export default ConsultaRenovaciones;

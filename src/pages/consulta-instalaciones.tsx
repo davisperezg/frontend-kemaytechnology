@@ -40,41 +40,39 @@ const ConsultaInstalaciones = () => {
     type: "",
     text: "",
   };
-  const initialConsulta:Consulta ={
-      desde:now,
-      hasta:now,
-  }
+  const initialConsulta: Consulta = {
+    desde: now,
+    hasta: now,
+  };
 
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
- 
+
   const optionsConsulta = useConsultaInstalaciones();
   //TABLE OPTIONS
-  
+
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [pagex, setPage] = useState(0);
 
-
-  
   const [consulta, setConsulta] = useState<Consulta>(initialConsulta);
-  
-   const handleInput = (e: InputChange) => {
+
+  const handleInput = (e: InputChange) => {
     setConsulta({
-        ...consulta,
-        [e.target.name]: e.target.value,
-      });
-      optionsConsulta.getVehiculosInstaladosXrango({
-        variables:{
-          desde:e.target.value,
-          hasta:e.target.value,
-        }
-      })
-    if(optionsConsulta.data){
-        // console.log(optionsConsulta.data.getVehiculosInstaladosXrango  )
-        setVehicles(optionsConsulta.data.getVehiculosInstaladosXrango )
-      }
-    };
+      ...consulta,
+      [e.target.name]: e.target.value,
+    });
+    optionsConsulta.getVehiculosInstaladosXrango({
+      variables: {
+        desde: e.target.value,
+        hasta: e.target.value,
+      },
+    });
+    if (optionsConsulta.data) {
+      // console.log(optionsConsulta.data.getVehiculosInstaladosXrango  )
+      setVehicles(optionsConsulta.data.getVehiculosInstaladosXrango);
+    }
+  };
 
   const handleChangePage = (
     event: MouseEvent<HTMLButtonElement> | null,
@@ -106,20 +104,17 @@ const ConsultaInstalaciones = () => {
   };
 
   useEffect(() => {
-
-
-    if(consulta){
-
+    if (consulta) {
       optionsConsulta.getVehiculosInstaladosXrango({
-        variables:{
-          desde:consulta.desde,
-          hasta:consulta.hasta,
-        }
-      })
+        variables: {
+          desde: consulta.desde,
+          hasta: consulta.hasta,
+        },
+      });
 
-      if(optionsConsulta.data){
+      if (optionsConsulta.data) {
         // console.log(optionsConsulta.data.getVehiculosInstaladosXrango  )
-        setVehicles(optionsConsulta.data.getVehiculosInstaladosXrango )
+        setVehicles(optionsConsulta.data.getVehiculosInstaladosXrango);
       }
     }
 
@@ -166,7 +161,9 @@ const ConsultaInstalaciones = () => {
         />
       </div>
       {/* Generar PDF */}
-      <div style={{ width: "100%", display: "flex", marginLeft: 900 }}>
+      <div
+        style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+      >
         <Button variant="contained" size="large">
           Generar PDF
         </Button>
