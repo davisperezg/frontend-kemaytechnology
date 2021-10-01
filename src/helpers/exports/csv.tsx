@@ -58,8 +58,8 @@ export const ExportCSV = ({
           return {
             id: data.customer.id,
             cliente: data.customer.name + " " + data.customer.lastName,
-            fecha_inicio: data.createdAt,
-            fecha_termino: data.device.name,
+            fecha_inicio: data.billigStart,
+            fecha_termino: data.billigEnd,
             dispositivo: data.device.name,
             plataforma: data.platform,
             plan_facturacion: data.billing.name,
