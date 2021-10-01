@@ -41,6 +41,9 @@ const VehicleConsult = ({ vehicle }: { vehicle: Vehicle }) => {
         <TableCell component="th" scope="row">
           {vehicle.customer.name} {vehicle.customer.lastName}
         </TableCell>
+         <TableCell component="th" scope="row" align="center">
+          {vehicle.customer.cellphone_1} {vehicle.customer.cellphone_2}
+        </TableCell> 
         <TableCell component="th" scope="row" align="center">
           {moment(vehicle.createdAt).format("DD/MM/YYYY")}
         </TableCell>

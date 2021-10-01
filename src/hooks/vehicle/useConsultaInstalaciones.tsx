@@ -9,6 +9,8 @@ export const GET_CONSULTA_INSTALACIONES_VEHICLE = gql`
         id
         name
         lastName
+        cellphone_1
+        cellphone_2
       }
       createdAt
       device {
