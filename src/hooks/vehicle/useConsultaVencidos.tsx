@@ -17,6 +17,8 @@ export const GET_CONSULTA_VENCIDOS_VEHICLE = gql`
         id
         name
         lastName
+        cellphone_1
+        cellphone_2
       }
       device {
         name

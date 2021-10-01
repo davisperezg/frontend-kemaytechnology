@@ -183,6 +183,7 @@ const ConsultaInstalaciones = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>Cliente</TableCell>
+                  <TableCell>N°.Contacto</TableCell>
                   <TableCell>Fecha de instalación</TableCell>
                   <TableCell>Dispositivo</TableCell>
                   <TableCell>Plataforma</TableCell>

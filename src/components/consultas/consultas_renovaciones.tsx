@@ -46,6 +46,9 @@ const VehicleConsultRenovaciones = ({
           {vehicle.vehicle.customer.name} {vehicle.vehicle.customer.lastName}
         </TableCell>
         <TableCell component="th" scope="row" align="center">
+          {vehicle.vehicle.customer.cellphone_1} {vehicle.vehicle.customer.cellphone_2}
+        </TableCell>
+        <TableCell component="th" scope="row" align="center">
           {moment(vehicle.expirationDate).format("DD/MM/YYYY")}
         </TableCell>
         <TableCell component="th" scope="row" align="center">

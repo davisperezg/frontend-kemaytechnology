@@ -13,6 +13,8 @@ export const GET_CONSULTA_RENOVACIONES_VEHICLE = gql`
           id
           name
           lastName
+          cellphone_1
+        cellphone_2
         }
         device {
           name

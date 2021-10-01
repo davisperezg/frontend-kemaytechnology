@@ -182,6 +182,7 @@ const ConsultaVencidos = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>Cliente</TableCell>
+                  <TableCell>N°.Contacto</TableCell>
                   <TableCell>Fecha de inicio</TableCell>
                   <TableCell>Fecha de termino </TableCell>
                   <TableCell>Dispositivo</TableCell>
