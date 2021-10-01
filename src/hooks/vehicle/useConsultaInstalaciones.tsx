@@ -1,31 +1,33 @@
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 
 export const GET_CONSULTA_INSTALACIONES_VEHICLE = gql`
-query getVehiculosInstaladosXrango($desde:DateTime!,$hasta:DateTime!){
-    getVehiculosInstaladosXrango (desde:$desde,hasta:$hasta){
+  query getVehiculosInstaladosXrango($desde: DateTime!, $hasta: DateTime!) {
+    getVehiculosInstaladosXrango(desde: $desde, hasta: $hasta) {
       id
       plate
       customer {
+        id
         name
         lastName
       }
-      billigStart
-      billigEnd
-      
-      device{
+      createdAt
+      device {
         name
       }
       platform
-      billing{
+      billing {
         name
       }
       sim
+      nroGPS
     }
   }
 `;
 
 export const useConsultaInstalaciones = () => {
-  const [getVehiculosInstaladosXrango,{ data, error, loading }] = useLazyQuery(GET_CONSULTA_INSTALACIONES_VEHICLE);
+  const [getVehiculosInstaladosXrango, { data, error, loading }] = useLazyQuery(
+    GET_CONSULTA_INSTALACIONES_VEHICLE
+  );
 
-  return { getVehiculosInstaladosXrango,data, error, loading };
+  return { getVehiculosInstaladosXrango, data, error, loading };
 };
