@@ -5,29 +5,34 @@ import { firm_digi, logo } from "../images_data64/data64";
 import autoTable from "jspdf-autotable";
 import { Renew } from "../../interfaces/renewinterface";
 
-export const GenerarComprobante = (vehicle: Vehicle, param1:any) => 
-       
-{
+export const GenerarComprobante = (
+  vehicle: Vehicle,
+  param1: any,
+  fechaDesde: any,
+  renew: any
+) => {
   const obtenerPrecioxPLan = () => {
     let precio = "";
     if (vehicle.platform === "PREMIUM") {
-      if (vehicle.billing.name === "PLAN ANUAL") {
+      if (renew.billing === "PLAN ANUAL") {
         //aual premium
         precio = "280";
-      } else if (vehicle.billing.name === "PLAN MENSUAL") {
+      } else if (renew.billing === "PLAN MENSUAL") {
         //mensual premium
         precio = "35";
       } else {
         //semanal premium
+        precio = "no especificado";
       }
     } else if (vehicle.platform === "STANDAR") {
-      if (vehicle.billing.name === "PLAN ANUAL") {
+      if (renew.billing === "PLAN ANUAL") {
         //aual standar
         precio = "250";
-      } else if (vehicle.billing.name === "PLAN MENSUAL") {
+      } else if (renew.billing === "PLAN MENSUAL") {
         //mensual standar
         precio = "no especificado";
       } else {
+        precio = "no especificado";
         //semanal standar
       }
     } else {
@@ -82,9 +87,9 @@ export const GenerarComprobante = (vehicle: Vehicle, param1:any) =>
     body: [
       [
         vehicle.nroGPS,
-        vehicle.billing.name + " - " + vehicle!.platform,
+        renew.billing + " - " + vehicle!.platform,
         vehicle.plate,
-        moment().format("DD/MM/YYYY"), //hoy
+        fechaDesde,
         moment(param1).format("DD/MM/YYYY"),
         "S/." + obtenerPrecioxPLan(),
       ],

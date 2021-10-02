@@ -50,8 +50,20 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
   const optionBilling = useBillingByName();
   const optionsCreate = useCreateRenew();
 
-  const today = startOfDay(new Date());
-  const newDate = add(today, { days: state.day });
+  const dateEnd = startOfDay(new Date(vehicle.billigEnd || ""));
+  const dateStart = startOfDay(new Date());
+  const getTimeStart = dateStart.getTime();
+  const getTimeEnd = new Date(vehicle.billigEnd || "").getTime();
+  let newDate: Date;
+  let fechaDesde: any;
+
+  if (getTimeStart > getTimeEnd) {
+    newDate = add(dateStart, { days: state.day });
+    fechaDesde = moment().format("DD/MM/YYYY");
+  } else {
+    newDate = add(dateEnd, { days: state.day });
+    fechaDesde = moment(dateEnd).format("DD/MM/YYYY");
+  }
 
   const getBilling = async (name: string) => {
     try {
@@ -74,35 +86,6 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
     setRenew({ ...renew, billing: event.target.value });
   };
 
-  const obtenerPrecioxPLan = () => {
-    let precio = "";
-    if (vehicle.platform === "PREMIUM") {
-      if (vehicle.billing.name === "PLAN ANUAL") {
-        //aual premium
-        precio = "280";
-      } else if (vehicle.billing.name === "PLAN MENSUAL") {
-        //mensual premium
-        precio = "35";
-      } else {
-        //semanal premium
-      }
-    } else if (vehicle.platform === "STANDAR") {
-      if (vehicle.billing.name === "PLAN ANUAL") {
-        //aual standar
-        precio = "250";
-      } else if (vehicle.billing.name === "PLAN MENSUAL") {
-        //mensual standar
-        precio = "no especificado";
-      } else {
-        //semanal standar
-      }
-    } else {
-      //nada
-    }
-
-    return precio;
-  };
-
   const registerRenew = async () => {
     try {
       await optionsCreate.registerRenew({
@@ -116,9 +99,9 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
           text: "Se ha renovado correctamente.",
         })
       );
-    
-    //Generacion de pdf
-    GenerarComprobante(vehicle,newDate);
+
+      //Generacion de pdf
+      GenerarComprobante(vehicle, newDate, fechaDesde, renew);
     } catch (e) {
       dispatch(
         setAlert({
@@ -127,7 +110,6 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
         })
       );
     }
-
   };
 
   useEffect(() => {
@@ -218,9 +200,7 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
           <div style={{ width: "50%", float: "left", backgroundColor: "#fff" }}>
             Renueva desde
           </div>
-          <div style={{ width: "50%", float: "left" }}>
-            {moment().format("DD/MM/YYYY")}
-          </div>
+          <div style={{ width: "50%", float: "left" }}>{fechaDesde}</div>
         </div>
         <div style={{ width: "100%", height: "auto" }}>
           <div style={{ width: "50%", float: "left", backgroundColor: "#fff" }}>
