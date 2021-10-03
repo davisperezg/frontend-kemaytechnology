@@ -87,28 +87,31 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
   };
 
   const registerRenew = async () => {
-    try {
-      await optionsCreate.registerRenew({
-        variables: {
-          renewInput: renew,
-        },
-      });
-      dispatch(
-        setAlert({
-          type: "success",
-          text: "Se ha renovado correctamente.",
-        })
-      );
+    const confirm = window.confirm(
+      "¿ Esta seguro que desea renovar el vehiculo ?"
+    );
 
-      //Generacion de pdf
-      GenerarComprobante(vehicle, newDate, fechaDesde, renew);
-    } catch (e) {
-      dispatch(
-        setAlert({
-          type: "error",
-          text: findError(e),
-        })
-      );
+    if (confirm) {
+      try {
+        await optionsCreate.registerRenew({
+          variables: {
+            renewInput: renew,
+          },
+        });
+        dispatch(
+          setAlert({
+            type: "success",
+            text: "Se ha renovado correctamente.",
+          })
+        );
+      } catch (e) {
+        dispatch(
+          setAlert({
+            type: "error",
+            text: findError(e),
+          })
+        );
+      }
     }
   };
 
@@ -119,7 +122,17 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
     if (optionBilling.data) {
       setState({ ...state, day: optionBilling.data.getBillingByName.day });
     }
-  }, [optionsBillings.data, optionBilling.data]);
+    if (optionsCreate.data) {
+      //Generacion de pdf
+      GenerarComprobante(
+        vehicle,
+        newDate,
+        fechaDesde,
+        renew,
+        optionsCreate.data.registerRenew.id
+      );
+    }
+  }, [optionsBillings.data, optionBilling.data, optionsCreate.data]);
 
   return (
     <>

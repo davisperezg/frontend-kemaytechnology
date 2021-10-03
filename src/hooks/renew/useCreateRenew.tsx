@@ -41,7 +41,7 @@ const CREATE_RENEW = gql`
 `;
 
 export const useCreateRenew = () => {
-  const [registerRenew, { error, loading }] = useMutation(CREATE_RENEW, {
+  const [registerRenew, { error, loading, data }] = useMutation(CREATE_RENEW, {
     refetchQueries: () => [
       {
         query: GET_VEHICLES,
@@ -49,5 +49,5 @@ export const useCreateRenew = () => {
     ],
   });
 
-  return { registerRenew, error, loading };
+  return { registerRenew, error, loading, data };
 };
