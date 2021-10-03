@@ -23,6 +23,8 @@ export const ExportCSV = ({
           return {
             id: data.customer.id,
             cliente: data.customer.name + " " + data.customer.lastName,
+            contacto:
+              data.customer.cellphone_1 + " " + data.customer.cellphone_2,
             fecha_instalacion: data.createdAt,
             dispositivo: data.device.name,
             plataforma: data.platform,
@@ -40,8 +42,12 @@ export const ExportCSV = ({
             id: data.vehicle.customer.id,
             cliente:
               data.vehicle.customer.name + " " + data.vehicle.customer.lastName,
-              fecha_renovada: data.renovationStart,
-              fecha_expirada: data.expirationDate,          
+            contacto:
+              data.vehicle.customer.cellphone_1 +
+              " " +
+              data.vehicle.customer.cellphone_2,
+            fecha_renovada: data.renovationStart,
+            fecha_expirada: data.expirationDate,
             nueva_fecha_termino: data.renovationEnd,
             dispositivo: data.vehicle.device.name,
             plataforma: data.vehicle.platform,
@@ -58,6 +64,8 @@ export const ExportCSV = ({
           return {
             id: data.customer.id,
             cliente: data.customer.name + " " + data.customer.lastName,
+            contacto:
+              data.customer.cellphone_1 + " " + data.customer.cellphone_2,
             fecha_inicio: data.billigStart,
             fecha_termino: data.billigEnd,
             dispositivo: data.device.name,

@@ -9,7 +9,8 @@ export const GenerarComprobante = (
   vehicle: Vehicle,
   param1: any,
   fechaDesde: any,
-  renew: any
+  renew: any,
+  renewForm: any
 ) => {
   const obtenerPrecioxPLan = () => {
     let precio = "";
@@ -71,18 +72,20 @@ export const GenerarComprobante = (
   doc.text(dni, 130, 63);
   doc.setFontSize(12);
   doc.setFont("Bahnschrift", "normal");
-  doc.text(nom2, 60, 63);
+  const nom2_message = doc.splitTextToSize(nom2, 70);
+  doc.text(nom2_message, 60, 63);
   doc.text(dni2, 150, 63);
   doc.setFontSize(12);
   const desc_message = doc.splitTextToSize(desc, 185);
   doc.text(desc_message, 15, 50);
   doc.setFontSize(12);
   doc.text(fechaEmi, 140, 35);
+  doc.text("ID de transacción:" + String(renewForm).toUpperCase(), 15, 138);
   doc.setFontSize(10);
   doc.text(firma, 125, 130);
   doc.text(ruc, 130, 135);
   autoTable(doc, {
-    margin: { top: 65 },
+    margin: { top: 70 },
     head: [["N°.GPS", "Plan", "Placa", "Fecha.I", "Fecha.F", "Monto"]],
     body: [
       [
