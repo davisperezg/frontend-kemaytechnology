@@ -120,7 +120,6 @@ const ConsultaRenovaciones = () => {
   if (optionsConsulta.error) {
     return <h1>{findError(optionsConsulta.error)}</h1>;
   }
-
   return (
     <>
       <DialogForm
@@ -173,6 +172,7 @@ const ConsultaRenovaciones = () => {
             <Table stickyHeader size="small" aria-label="a dense table">
               <TableHead>
                 <TableRow>
+                  <TableCell>ID Transaccion</TableCell>
                   <TableCell>Cliente</TableCell>
                   <TableCell>N°.Contacto</TableCell>
                   <TableCell>Fecha Renovada</TableCell>
@@ -184,6 +184,7 @@ const ConsultaRenovaciones = () => {
                   <TableCell>Placa</TableCell>
                   <TableCell>SIM</TableCell>
                   <TableCell>Nro SIM</TableCell>
+                  <TableCell align="right">PDF Renovados</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

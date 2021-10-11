@@ -4,6 +4,8 @@ import moment from "moment";
 import { firm_digi, logo } from "../images_data64/data64";
 import autoTable from "jspdf-autotable";
 import { Renew } from "../../interfaces/renewinterface";
+import QRCode from "react-qr-code";
+
 
 export const GenerarComprobante = (
   vehicle: Vehicle,
@@ -12,13 +14,15 @@ export const GenerarComprobante = (
   renew: any,
   renewForm: any
 ) => {
+  console.log(vehicle!.platform);
+  console.log(vehicle?.platform);
   const obtenerPrecioxPLan = () => {
     let precio = "";
     if (vehicle.platform === "PREMIUM") {
-      if (renew.billing === "PLAN ANUAL") {
+      if (renew.billing || renew === "PLAN ANUAL") {
         //aual premium
         precio = "280";
-      } else if (renew.billing === "PLAN MENSUAL") {
+      } else if (renew.billing || renew === "PLAN MENSUAL") {
         //mensual premium
         precio = "35";
       } else {
@@ -26,10 +30,10 @@ export const GenerarComprobante = (
         precio = "no especificado";
       }
     } else if (vehicle.platform === "STANDAR") {
-      if (renew.billing === "PLAN ANUAL") {
+      if (renew.billing || renew === "PLAN ANUAL") {
         //aual standar
         precio = "250";
-      } else if (renew.billing === "PLAN MENSUAL") {
+      } else if (renew.billing || renew === "PLAN MENSUAL") {
         //mensual standar
         precio = "no especificado";
       } else {
@@ -54,11 +58,15 @@ export const GenerarComprobante = (
   const fechaEmi = "Fecha de emisión :  " + moment().format("DD/MM/YYYY");
   const firma = "Kemay Tecnology E.I.R.L";
   const ruc = "RUC:20605350802";
-  doc.rect(10, 10, 190, 130);
+
+
+  doc.rect(10, 10, 190, 160);
   //Contenido de la tabla
   doc.addImage(logo, "JPG", left + 3, 15, 35, 30);
-  doc.addImage(firm_digi, "JPG", left + 114, 87, 45, 35);
-  doc.line(100, 125, 190, 125);
+  doc.addImage(firm_digi, "JPG", left + 114, 110, 45, 35);
+  doc.line(100, 150, 190, 150);
+  //Codigo QR
+
   //Linea
   doc.setLineWidth(1.0);
   doc.line(50, 27, 172, 27);
@@ -82,17 +90,17 @@ export const GenerarComprobante = (
   doc.text(fechaEmi, 140, 35);
   doc.text("ID de transacción:" + String(renewForm).toUpperCase(), 15, 138);
   doc.setFontSize(10);
-  doc.text(firma, 125, 130);
-  doc.text(ruc, 130, 135);
+  doc.text(firma, 125, 155);
+  doc.text(ruc, 130, 160);
   autoTable(doc, {
     margin: { top: 70 },
     head: [["N°.GPS", "Plan", "Placa", "Fecha.I", "Fecha.F", "Monto"]],
     body: [
       [
         vehicle.nroGPS,
-        renew.billing + " - " + vehicle!.platform,
+        `${renew.billing || renew} - ${vehicle.platform}`,
         vehicle.plate,
-        fechaDesde,
+         moment(fechaDesde).format("DD/MM/YYYY"),
         moment(param1).format("DD/MM/YYYY"),
         "S/." + obtenerPrecioxPLan(),
       ],

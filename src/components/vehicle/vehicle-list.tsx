@@ -94,7 +94,6 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
       </Tooltip>
     </>
   );
-
   const showOptionsForEdit = () => (
     <>
       <Tooltip
@@ -186,6 +185,7 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
               <PictureAsPdfIcon />
             </IconButton>
           </Tooltip>
+         
         </TableCell>
       </TableRow>
     </>

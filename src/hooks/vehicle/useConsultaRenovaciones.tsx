@@ -15,6 +15,7 @@ export const GET_CONSULTA_RENOVACIONES_VEHICLE = gql`
           lastName
           cellphone_1
         cellphone_2
+        numDocument
         }
         device {
           name
@@ -25,6 +26,7 @@ export const GET_CONSULTA_RENOVACIONES_VEHICLE = gql`
       }
       billing {
         name
+        day
       }
     }
   }
