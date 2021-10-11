@@ -31,7 +31,7 @@ interface Option {
 }
 
 const VehicleForm = ({ handleClose, vehicle }: Option) => {
-  const now = moment().utc().local().format("YYYY-MM-DD");
+  //const now = moment().utc().local().format("YYYY-MM-DD");
 
   const initialStateCreate: Vehicle = {
     customer: "",
@@ -41,7 +41,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     nroGPS: "",
     platform: "",
     sim: "",
-    billigStart: now,
+    //billigStart: now,
   };
 
   const initialStateUpdate: Vehicle = {
@@ -53,7 +53,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     nroGPS: vehicle?.nroGPS || "",
     platform: vehicle?.platform || "",
     sim: vehicle?.sim || "",
-    billigStart: moment(vehicle?.billigStart).format("YYYY-MM-DD") || now,
+    //billigStart: moment(vehicle?.billigStart).format("YYYY-MM-DD") || now,
   };
 
   const [vehicleForm, setVehicleForm] = useState<Vehicle>(
@@ -321,7 +321,8 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
               )}
             />
           </Grid>
-          <Grid item xs={12}>
+          {
+            vehicleForm.id ? "" : <Grid item xs={12}>
             <Autocomplete
               id="idBilling"
               value={{
@@ -363,6 +364,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
               )}
             />
           </Grid>
+          }
           <Grid item xs={12}>
             <TextField
               id="idPlatform"
@@ -423,7 +425,9 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
               value={vehicleForm.nroGPS}
             />
           </Grid>
-          <Grid item xs={12}>
+          {
+            /**
+             *  vehicleForm.id ? "" : <Grid item xs={12}>
             <RedditTextField
               fullWidth
               type="date"
@@ -436,6 +440,9 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
               value={vehicleForm.billigStart}
             />
           </Grid>
+             * 
+             */
+          }
           <DialogActions style={{ width: "100%" }}>
             <Button onClick={handleClose} color="primary">
               Cancelar

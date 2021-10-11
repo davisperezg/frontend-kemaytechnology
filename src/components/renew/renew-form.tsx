@@ -21,18 +21,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/alert/action";
 import { findError } from "../../helpers/control-errors";
 import Progress from "../progress/progress";
-
-import { firm_digi, logo } from "../../helpers/images_data64/data64";
-import { ArrowLeft } from "@material-ui/icons";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { GenerarComprobante } from "../../helpers/pdf/comprobante";
+import QRCode from "react-qr-code";
 
 interface Options {
   handleClose: () => void;
   vehicle: Vehicle;
 }
-
 const RenewForm = ({ handleClose, vehicle }: Options) => {
   const [isActive, setActive] = useState<boolean>(false);
   const [billings, setBillings] = useState<Billing[]>([]);
@@ -62,7 +57,7 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
     fechaDesde = moment().format("DD/MM/YYYY");
   } else {
     newDate = add(dateEnd, { days: state.day });
-    fechaDesde = moment(dateEnd).format("DD/MM/YYYY");
+    fechaDesde = dateEnd
   }
 
   const getBilling = async (name: string) => {
@@ -90,6 +85,7 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
     const confirm = window.confirm(
       "¿ Esta seguro que desea renovar el vehiculo ?"
     );
+ 
 
     if (confirm) {
       try {
@@ -131,6 +127,8 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
         renew,
         optionsCreate.data.registerRenew.id
       );
+
+      // const imgqr=<QRCode value={optionsCreate.data.registerRenew.id} />
     }
   }, [optionsBillings.data, optionBilling.data, optionsCreate.data]);
 
@@ -211,9 +209,9 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
       >
         <div style={{ width: "100%", height: "auto" }}>
           <div style={{ width: "50%", float: "left", backgroundColor: "#fff" }}>
-            Renueva desde
+            Renueva desde:
           </div>
-          <div style={{ width: "50%", float: "left" }}>{fechaDesde}</div>
+          <div style={{ width: "50%", float: "left" }}>{moment(fechaDesde).format("DD/MM/YYYY")}</div>
         </div>
         <div style={{ width: "100%", height: "auto" }}>
           <div style={{ width: "50%", float: "left", backgroundColor: "#fff" }}>
@@ -225,11 +223,17 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
         </div>
         <div style={{ width: "100%", height: "auto" }}>
           <div style={{ width: "50%", float: "left", backgroundColor: "#fff" }}>
-            Renovando hasta
+            Renovando hasta:
           </div>
           <div style={{ width: "50%", float: "left" }}>
             {moment(newDate).format("DD/MM/YYYY")}
           </div>
+
+          {/* <div>Codigo QR :</div>
+          <div id="qr_code" style={{ width:"100%",height: "auto" , float: "left" }}>   
+           <QRCode value="test"/>
+           
+          </div> */}
         </div>
       </div>
       <DialogActions style={{ width: "100%" }}>
@@ -249,9 +253,9 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
             Aceptar
           </Button>
         )}
+         
       </DialogActions>
     </>
   );
-};
-
+  }
 export default RenewForm;

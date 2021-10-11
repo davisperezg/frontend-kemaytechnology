@@ -6,7 +6,7 @@ import { PERMIT_FOUR, PERMIT_TREE, PERMIT_TWO } from "../../const";
 import { loadAccess } from "../acceso/filter-access.component";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-
+import { startOfDay, add } from "date-fns";
 import { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +15,9 @@ import { Dialog } from "../../interfaces/dialog.interface";
 import { useDeleteVehicle } from "../../hooks/vehicle/useDeleteVehicle";
 
 import BackDrop from "../backdrop/backdrop";
-
+import { IconButton, Tooltip } from "@material-ui/core";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import { GenerarComprobante } from "../../helpers/pdf/comprobante";
 const initialAlert = {
   type: "",
   text: "",
@@ -31,17 +33,26 @@ const VehicleConsultRenovaciones = ({
 }: {
   vehicle: Vehicle | any;
 }) => {
+
+  
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const optionsVehicle = useDeleteVehicle();
   const [isActive, setActive] = useState<boolean>(false);
+  const dateEnd = startOfDay(new Date(vehicle.billigEnd || ""));
+  const dateStart = startOfDay(new Date());
+  const getTimeStart = dateStart.getTime();
+  const getTimeEnd = new Date(vehicle.billigEnd || "").getTime();
 
   const showData = () => (
     <>
       {isActive && <BackDrop state={isActive} />}
       <TableRow>
+        <TableCell component="th" scope="row">
+          {String(vehicle.id).toUpperCase()}  
+        </TableCell>
         <TableCell component="th" scope="row">
           {vehicle.vehicle.customer.name} {vehicle.vehicle.customer.lastName}
         </TableCell>
@@ -74,6 +85,26 @@ const VehicleConsultRenovaciones = ({
         </TableCell>
         <TableCell component="th" scope="row">
           {vehicle.vehicle.nroGPS}
+        </TableCell>
+        <TableCell align="center">
+          {/* boton para pdf guia de usuario */}
+          <Tooltip
+            title="Generar comprobante"
+            onClick={() => {
+              GenerarComprobante(
+                vehicle.vehicle,  
+                vehicle.renovationEnd,
+                vehicle.expirationDate,
+                vehicle.billing.name,
+                vehicle.id
+                );
+            }}
+          >
+            <IconButton aria-label="user" size="small">
+              <PictureAsPdfIcon />
+            </IconButton>
+          </Tooltip>
+         
         </TableCell>
       </TableRow>
     </>
