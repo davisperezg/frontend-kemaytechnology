@@ -32,10 +32,13 @@ import moment from "moment";
 const checkPlatform = (vehicle: Vehicle, customer: Customer) => {
   let message = "";
   if (vehicle!.platform === "STANDAR") {
-    message =
-    `kemay/${vehicle.customer.username || customer.username}/${vehicle.customer.password || customer.password}`
+    message = `kemay/${vehicle.customer.username || customer.username}/${
+      vehicle.customer.password || customer.password
+    }`;
   } else if (vehicle!.platform === "PREMIUM") {
-    message = `${vehicle.customer.username || customer.username}/${vehicle.customer.password || customer.password}`
+    message = `${vehicle.customer.username || customer.username}/${
+      vehicle.customer.password || customer.password
+    }`;
   } else {
     message = "SIN PLATAFORMA";
   }
@@ -70,9 +73,10 @@ export const GenerarGuiaUSua = (vehicle: Vehicle, customer?: any) => {
   const step2 =
     "2. Ingresar sus credenciales (Las credenciales son las mismas para el aplicativo móvil)";
 
-  const nameCustomer =
-  `SR(A): ${vehicle.customer.name || customer.name} ${vehicle.customer.lastName || customer.lastName}`;
-  const plan = vehicle!.platform;   
+  const nameCustomer = `SR(A): ${vehicle.customer.name || customer.name} ${
+    vehicle.customer.lastName || customer.lastName
+  }`;
+  const plan = vehicle!.platform;
   const account = `${checkPlatform(vehicle, customer)}`;
   const linkPage = `${checkPage(vehicle)}`;
 
@@ -276,7 +280,11 @@ export const GenerarGuiaUSua = (vehicle: Vehicle, customer?: any) => {
         left,
         top - 10
       );
-      doc.text(`Contraseña: ${vehicle.customer.password || customer.password}`, left, top);
+      doc.text(
+        `Contraseña: ${vehicle.customer.password || customer.password}`,
+        left,
+        top
+      );
       doc.setFont("helvetica", "normal");
       doc.text(`1. Selecciona la pestaña SIMS`, left, top + 10);
       doc.addImage(dashboard_cesar, "PNG", left, top + 20, 180, 100);
@@ -303,6 +311,8 @@ export const GenerarGuiaUSua = (vehicle: Vehicle, customer?: any) => {
     }
   }
   doc.save(
-    `MANUA DE ${vehicle.customer.name || customer.name} ${vehicle.customer.lastName || customer.lastName}.pdf`
+    `MANUA DE ${vehicle.customer.name || customer.name} ${
+      vehicle.customer.lastName || customer.lastName
+    }.pdf`
   );
 };

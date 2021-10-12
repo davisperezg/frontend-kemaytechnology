@@ -48,13 +48,16 @@ const CREATE_DEVICE = gql`
 `;
 
 export const useCreateVehicle = () => {
-  const [registerVehicle, { error, loading }] = useMutation(CREATE_DEVICE, {
-    refetchQueries: () => [
-      {
-        query: GET_VEHICLES,
-      },
-    ],
-  });
+  const [registerVehicle, { error, loading, data }] = useMutation(
+    CREATE_DEVICE,
+    {
+      refetchQueries: () => [
+        {
+          query: GET_VEHICLES,
+        },
+      ],
+    }
+  );
 
-  return { registerVehicle, error, loading };
+  return { registerVehicle, error, loading, data };
 };
