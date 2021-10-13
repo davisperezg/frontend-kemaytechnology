@@ -18,7 +18,25 @@ export const GET_RENEWS = gql`
       vehicle {
         id
         plate
+        nroGPS
+        sim
+        platform
+        customer{
+          id
+        name
+        lastName
+        document
+        numDocument
+        cellphone_1
+        cellphone_2
+        username
+        password
+        }
+        device{
+          name
+        }
       }
+      
       billing {
         id
         name

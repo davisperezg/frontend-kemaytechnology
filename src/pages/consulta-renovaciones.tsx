@@ -10,7 +10,7 @@ import { User } from "../interfaces/user.interface";
 import { Vehicle } from "../interfaces/vehicle.interface";
 import VehicleForm from "../components/vehicle/vehicle-form";
 import { findError } from "../helpers/control-errors";
-import { loadAccess } from "../components/acceso/filter-access.component";
+
 import {
   useState,
   useEffect,
@@ -18,23 +18,25 @@ import {
   MouseEvent,
   useCallback,
 } from "react";
-import AddRoundedIcon from "@material-ui/icons/AddRounded";
+
 import { useSelector, useDispatch } from "react-redux";
 import { setAlert } from "../store/alert/action";
 import { Dialog } from "../interfaces/dialog.interface";
-import { PERMIT_ONE } from "../const";
+
 import DialogForm from "../components/dialog/dialog.component";
 import TablePagination from "@material-ui/core/TablePagination";
 import { TablePaginationActions } from "../components/table/table-pagination";
-import { Button, TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import SearchBar from "material-ui-search-bar";
 import moment from "moment";
-import VehicleConsult from "../components/consultas/consultas_instalaciones";
+
 import { Consulta } from "../interfaces/consulta.interface";
 import { InputChange } from "../lib/types";
 import VehicleConsultRenovaciones from "../components/consultas/consultas_renovaciones";
 import { useConsultaRenovaciones } from "../hooks/vehicle/useConsultaRenovaciones";
 import { ExportCSV } from "../helpers/exports/csv";
+import { useGetVehicles } from "../hooks/vehicle/useGetVehicle";
+import { useGetRenews } from "../hooks/renew/useGetRenew";
 
 const ConsultaRenovaciones = () => {
   const now = moment().utc().local().format("YYYY-MM-DD");
@@ -57,12 +59,14 @@ const ConsultaRenovaciones = () => {
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-
+  const { data, loading, error } = useGetVehicles();
   const optionsConsulta = useConsultaRenovaciones();
+  const optionListado = useGetRenews();
+
   //TABLE OPTIONS
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [pagex, setPage] = useState(0);
-
+  const [searched, setSearched] = useState<string>("");
   const [consulta, setConsulta] = useState<Consulta>(initialConsulta);
 
   const handleInput = (e: InputChange) => {
@@ -90,6 +94,20 @@ const ConsultaRenovaciones = () => {
     setDialog(initialDialog);
     dispatch(setAlert(initialAlert));
   };
+  const requestSearch = (searchedVal: string) => {
+    const filteredRows = optionListado.data.getRenews.filter((row: any) => {
+      return (
+        row.vehicle.plate
+          .toLowerCase()
+          .includes(searchedVal.trim().toLowerCase()) ||
+        row.vehicle.nroGPS
+          .toLowerCase()
+          .includes(searchedVal.trim().toLowerCase()) ||
+        row.id.toLowerCase().includes(searchedVal.trim().toLowerCase())
+      );
+    });
+    setVehicles(filteredRows);
+  };
 
   const component = (name: string) => {
     switch (name) {
@@ -100,7 +118,10 @@ const ConsultaRenovaciones = () => {
         break;
     }
   };
-
+  const cancelSearch = () => {
+    setSearched("");
+    requestSearch(searched);
+  };
   const memoizedResult = useCallback(() => {
     optionsConsulta.getVehiculosRenovadosXFecha({
       variables: {
@@ -151,6 +172,7 @@ const ConsultaRenovaciones = () => {
           variant="outlined"
         />
       </div>
+    
       {/* Generar PDF */}
       <div
         style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
@@ -160,7 +182,15 @@ const ConsultaRenovaciones = () => {
           nameTipoReporte="RENOVACIONES"
           fileName={`Vehiculos renovados desde ${consulta.desde} hasta ${consulta.hasta}`}
         />
+        
       </div>
+      <SearchBar
+        style={{ width: "100%" }}
+        placeholder="Puede buscar por ID de transacción, placa o nro de gps"
+        value={searched}
+        onChange={(searchVal) => requestSearch(searchVal)}
+        onCancelSearch={() => cancelSearch()}
+      />
       {optionsConsulta.loading ? (
         <h1>Cargando...</h1>
       ) : (
