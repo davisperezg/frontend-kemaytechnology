@@ -6,7 +6,6 @@ import autoTable from "jspdf-autotable";
 import { Renew } from "../../interfaces/renewinterface";
 import QRCode from "react-qr-code";
 
-
 export const GenerarComprobante = (
   vehicle: Vehicle,
   param1: any,
@@ -14,15 +13,13 @@ export const GenerarComprobante = (
   renew: any,
   renewForm: any
 ) => {
-  console.log(vehicle!.platform);
-  console.log(vehicle?.platform);
   const obtenerPrecioxPLan = () => {
     let precio = "";
     if (vehicle.platform === "PREMIUM") {
-      if (renew.billing || renew === "PLAN ANUAL") {
+      if (renew.billing === "PLAN ANUAL" || renew === "PLAN ANUAL") {
         //aual premium
         precio = "280";
-      } else if (renew.billing || renew === "PLAN MENSUAL") {
+      } else if (renew.billing === "PLAN MENSUAL" || renew === "PLAN MENSUAL") {
         //mensual premium
         precio = "35";
       } else {
@@ -30,10 +27,10 @@ export const GenerarComprobante = (
         precio = "no especificado";
       }
     } else if (vehicle.platform === "STANDAR") {
-      if (renew.billing || renew === "PLAN ANUAL") {
+      if (renew.billing === "PLAN ANUAL" || renew === "PLAN ANUAL") {
         //aual standar
         precio = "250";
-      } else if (renew.billing || renew === "PLAN MENSUAL") {
+      } else if (renew.billing === "PLAN MENSUAL" || renew === "PLAN MENSUAL") {
         //mensual standar
         precio = "no especificado";
       } else {
@@ -58,7 +55,6 @@ export const GenerarComprobante = (
   const fechaEmi = "Fecha de emisión :  " + moment().format("DD/MM/YYYY");
   const firma = "Kemay Tecnology E.I.R.L";
   const ruc = "RUC:20605350802";
-
 
   doc.rect(10, 10, 190, 160);
   //Contenido de la tabla
@@ -100,7 +96,7 @@ export const GenerarComprobante = (
         vehicle.nroGPS,
         `${renew.billing || renew} - ${vehicle.platform}`,
         vehicle.plate,
-         moment(fechaDesde).format("DD/MM/YYYY"),
+        fechaDesde,
         moment(param1).format("DD/MM/YYYY"),
         "S/." + obtenerPrecioxPLan(),
       ],
