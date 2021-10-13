@@ -52,12 +52,12 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
   let newDate: Date;
   let fechaDesde: any;
 
-  if (getTimeStart > getTimeEnd) {
+  if (getTimeStart >= getTimeEnd) {
     newDate = add(dateStart, { days: state.day });
     fechaDesde = moment().format("DD/MM/YYYY");
   } else {
     newDate = add(dateEnd, { days: state.day });
-    fechaDesde = dateEnd
+    fechaDesde = moment(dateEnd).format("DD/MM/YYYY");
   }
 
   const getBilling = async (name: string) => {
@@ -85,7 +85,6 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
     const confirm = window.confirm(
       "¿ Esta seguro que desea renovar el vehiculo ?"
     );
- 
 
     if (confirm) {
       try {
@@ -211,7 +210,7 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
           <div style={{ width: "50%", float: "left", backgroundColor: "#fff" }}>
             Renueva desde:
           </div>
-          <div style={{ width: "50%", float: "left" }}>{moment(fechaDesde).format("DD/MM/YYYY")}</div>
+          <div style={{ width: "50%", float: "left" }}>{fechaDesde}</div>
         </div>
         <div style={{ width: "100%", height: "auto" }}>
           <div style={{ width: "50%", float: "left", backgroundColor: "#fff" }}>
@@ -253,9 +252,8 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
             Aceptar
           </Button>
         )}
-         
       </DialogActions>
     </>
   );
-  }
+};
 export default RenewForm;
