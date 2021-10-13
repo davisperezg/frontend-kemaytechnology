@@ -87,7 +87,6 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
   const optionBilling = useGetBilling();
   const optioncustomerbyid = useGetCustomerById();
 
-  
   const handleInput = (e: InputChange) => {
     setVehicleForm({
       ...vehicleForm,
@@ -110,12 +109,11 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
           },
         });
         dispatch(
-
           setAlert({
             type: "success",
             text: "El vehiculo se actualizó correctamente.",
           })
-        );  
+        );
       } catch (e) {
         dispatch(
           setAlert({
@@ -126,13 +124,12 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
       }
     } else {
       try {
-        
-        await optionsCreate.registerVehicle({
+        const res = await optionsCreate.registerVehicle({
           variables: {
             vehicleInput: vehicleForm,
           },
         });
-        
+
         dispatch(
           setAlert({
             type: "success",
@@ -148,12 +145,11 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
         if (resAlert) {
         } else {
         }
-       
+
         //Generacion de pdf
-        GenerarGuiaUSua(vehicleForm, customer);
-        
+        GenerarGuiaUSua(res.data.registerVehicle, customer);
       } catch (e) {
-        console.log(e)
+        console.log(e);
         dispatch(
           setAlert({
             type: "error",
@@ -162,7 +158,6 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
         );
       }
     }
-    
   };
 
   useEffect(() => {
@@ -321,50 +316,52 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
               )}
             />
           </Grid>
-          {
-            vehicleForm.id ? "" : <Grid item xs={12}>
-            <Autocomplete
-              id="idBilling"
-              value={{
-                name: billing?.name,
-              }}
-              onChange={(event, value) => {
-                setBilling({
-                  ...billing,
-                  name: value ? value!.name : billings[0]?.name,
-                });
+          {vehicleForm.id ? (
+            ""
+          ) : (
+            <Grid item xs={12}>
+              <Autocomplete
+                id="idBilling"
+                value={{
+                  name: billing?.name,
+                }}
+                onChange={(event, value) => {
+                  setBilling({
+                    ...billing,
+                    name: value ? value!.name : billings[0]?.name,
+                  });
 
-                setVehicleForm({
-                  ...vehicleForm,
-                  billing: value ? `${value!.name}` : `${billings[0]?.name}`,
-                });
-              }}
-              options={billings}
-              getOptionLabel={(billing) => (billing.name ? billing.name : "")}
-              getOptionSelected={(option, value) => {
-                if (value.name) {
+                  setVehicleForm({
+                    ...vehicleForm,
+                    billing: value ? `${value!.name}` : `${billings[0]?.name}`,
+                  });
+                }}
+                options={billings}
+                getOptionLabel={(billing) => (billing.name ? billing.name : "")}
+                getOptionSelected={(option, value) => {
+                  if (value.name) {
+                    return option.name === value.name;
+                  }
+                  value = {
+                    ...value,
+                    name: billings[0]?.name,
+                  };
                   return option.name === value.name;
-                }
-                value = {
-                  ...value,
-                  name: billings[0]?.name,
-                };
-                return option.name === value.name;
-              }}
-              loading={optionBilling.loading}
-              loadingText="Cargando..."
-              noOptionsText="No hay resultados"
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  name="billing"
-                  label="Plan de facturación"
-                  variant="outlined"
-                />
-              )}
-            />
-          </Grid>
-          }
+                }}
+                loading={optionBilling.loading}
+                loadingText="Cargando..."
+                noOptionsText="No hay resultados"
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    name="billing"
+                    label="Plan de facturación"
+                    variant="outlined"
+                  />
+                )}
+              />
+            </Grid>
+          )}
           <Grid item xs={12}>
             <TextField
               id="idPlatform"
@@ -425,8 +422,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
               value={vehicleForm.nroGPS}
             />
           </Grid>
-          {
-            /**
+          {/**
              *  vehicleForm.id ? "" : <Grid item xs={12}>
             <RedditTextField
               fullWidth
@@ -441,8 +437,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
             />
           </Grid>
              * 
-             */
-          }
+             */}
           <DialogActions style={{ width: "100%" }}>
             <Button onClick={handleClose} color="primary">
               Cancelar

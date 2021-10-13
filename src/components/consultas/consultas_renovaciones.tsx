@@ -33,8 +33,6 @@ const VehicleConsultRenovaciones = ({
 }: {
   vehicle: Vehicle | any;
 }) => {
-
-  
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
@@ -51,13 +49,14 @@ const VehicleConsultRenovaciones = ({
       {isActive && <BackDrop state={isActive} />}
       <TableRow>
         <TableCell component="th" scope="row">
-          {String(vehicle.id).toUpperCase()}  
+          {String(vehicle.id).toUpperCase()}
         </TableCell>
         <TableCell component="th" scope="row">
           {vehicle.vehicle.customer.name} {vehicle.vehicle.customer.lastName}
         </TableCell>
         <TableCell component="th" scope="row" align="center">
-          {vehicle.vehicle.customer.cellphone_1} {vehicle.vehicle.customer.cellphone_2}
+          {vehicle.vehicle.customer.cellphone_1}{" "}
+          {vehicle.vehicle.customer.cellphone_2}
         </TableCell>
         <TableCell component="th" scope="row" align="center">
           {moment(vehicle.renovationStart).format("DD/MM/YYYY")}
@@ -92,19 +91,18 @@ const VehicleConsultRenovaciones = ({
             title="Generar comprobante"
             onClick={() => {
               GenerarComprobante(
-                vehicle.vehicle,  
+                vehicle.vehicle,
                 vehicle.renovationEnd,
-                vehicle.expirationDate,
+                moment(vehicle.expirationDate).format("DD/MM/YYYY"),
                 vehicle.billing.name,
                 vehicle.id
-                );
+              );
             }}
           >
             <IconButton aria-label="user" size="small">
               <PictureAsPdfIcon />
             </IconButton>
           </Tooltip>
-         
         </TableCell>
       </TableRow>
     </>
