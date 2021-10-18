@@ -126,7 +126,7 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
         renew,
         optionsCreate.data.registerRenew.id
       );
-
+     
       // const imgqr=<QRCode value={optionsCreate.data.registerRenew.id} />
     }
   }, [optionsBillings.data, optionBilling.data, optionsCreate.data]);
@@ -255,5 +255,7 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
       </DialogActions>
     </>
   );
+  
 };
+
 export default RenewForm;

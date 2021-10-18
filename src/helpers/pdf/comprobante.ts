@@ -84,18 +84,19 @@ export const GenerarComprobante = (
   doc.text(desc_message, 15, 50);
   doc.setFontSize(12);
   doc.text(fechaEmi, 140, 35);
-  doc.text("ID de transacción:" + String(renewForm).toUpperCase(), 15, 138);
+  doc.text("ID de transacción:" + String(renewForm).toUpperCase(), 15, 165);
   doc.setFontSize(10);
   doc.text(firma, 125, 155);
   doc.text(ruc, 130, 160);
   autoTable(doc, {
     margin: { top: 70 },
-    head: [["N°.GPS", "Plan", "Placa", "Fecha.I", "Fecha.F", "Monto"]],
+    head: [["N°.GPS", "Plan", "Placa","Fecha.I", "Fecha.F", "Monto"]],
     body: [
       [
         vehicle.nroGPS,
         `${renew.billing || renew} - ${vehicle.platform}`,
         vehicle.plate,
+      
         fechaDesde,
         moment(param1).format("DD/MM/YYYY"),
         "S/." + obtenerPrecioxPLan(),
