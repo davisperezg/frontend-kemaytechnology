@@ -33,6 +33,7 @@ const VehicleConsultRenovaciones = ({
 }: {
   vehicle: Vehicle | any;
 }) => {
+
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
@@ -43,6 +44,8 @@ const VehicleConsultRenovaciones = ({
   const dateStart = startOfDay(new Date());
   const getTimeStart = dateStart.getTime();
   const getTimeEnd = new Date(vehicle.billigEnd || "").getTime();
+
+
 
   const showData = () => (
     <>
@@ -89,13 +92,21 @@ const VehicleConsultRenovaciones = ({
           {/* boton para pdf guia de usuario */}
           <Tooltip
             title="Generar comprobante"
+            
             onClick={() => {
+              let FechaActualizada;
+              if (vehicle.renovationStart>vehicle.expirationDate) {
+                FechaActualizada=vehicle.renovationStart;
+              }else{
+                FechaActualizada=vehicle.expirationDate;
+              }
               GenerarComprobante(
                 vehicle.vehicle,
                 vehicle.renovationEnd,
-                moment(vehicle.expirationDate).format("DD/MM/YYYY"),
+                moment(FechaActualizada).format("DD/MM/YYYY"),
                 vehicle.billing.name,
                 vehicle.id
+                
               );
             }}
           >
