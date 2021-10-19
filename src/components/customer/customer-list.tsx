@@ -17,6 +17,7 @@ import moment from "moment";
 import EditRoundedIcon from "@material-ui/icons/EditRounded";
 import { useDeleteCustomer } from "../../hooks/customer/useDeleteCustomer";
 import { findError } from "../../helpers/control-errors";
+import { add } from "date-fns";
 
 const initialAlert = {
   type: "",
@@ -120,6 +121,12 @@ const CustomerList = ({ customer }: { customer: Customer }) => {
         </TableCell>
         <TableCell component="th" scope="row">
           {customer.direction}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {moment(add(new Date(String(customer?.fecha_nac)), { days: 1 }))
+            .utc()
+            .local()
+            .format("DD/MM/YYYY")}
         </TableCell>
         <TableCell component="th" scope="row" align="center">
           {customer.username}/{customer.password}

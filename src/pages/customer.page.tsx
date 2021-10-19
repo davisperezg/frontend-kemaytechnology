@@ -186,7 +186,8 @@ const CustomerPage = () => {
               <TableCell>Nro. Documento</TableCell>
               <TableCell>Contacto</TableCell>
               <TableCell>Dirección</TableCell>
-              <TableCell>Credenciales</TableCell>
+              <TableCell>Fecha de nacimiento</TableCell>
+              <TableCell align="center">Credenciales</TableCell>
               <TableCell>Fecha creada</TableCell>
               <TableCell>Fecha modificada</TableCell>
               <TableCell>Opciones</TableCell>
