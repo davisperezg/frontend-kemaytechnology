@@ -15,6 +15,7 @@ export const GET_CUSTOMERS = gql`
       password
       createdAt
       updatedAt
+      fecha_nac
     }
   }
 `;

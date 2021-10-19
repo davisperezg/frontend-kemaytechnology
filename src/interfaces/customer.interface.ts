@@ -11,4 +11,5 @@ export interface Customer {
   password: string;
   createdAt?: Date;
   updatedAt?: Date;
+  fecha_nac?: Date | string;
 }

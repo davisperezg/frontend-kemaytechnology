@@ -25,6 +25,8 @@ import { Company } from "../../interfaces/company.interface";
 import { getPerson } from "../../services/api-reniec";
 import { getCompany } from "../../services/api-sunat";
 import BackDrop from "../backdrop/backdrop";
+import moment from "moment";
+import { add } from "date-fns";
 
 interface Option {
   handleClose?: () => void;
@@ -58,6 +60,10 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
     direction: customer?.direction || undefined,
     username: customer?.username || "",
     password: customer?.password || "",
+    fecha_nac: moment(add(new Date(String(customer?.fecha_nac)), { days: 1 }))
+      .utc()
+      .local()
+      .format("YYYY-MM-DD"),
   };
 
   const [customerForm, setCustomerForm] = useState<Customer>(
@@ -376,6 +382,19 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
               label="Direccion (opcional)"
               variant="filled"
               value={customerForm.direction || ""}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <RedditTextField
+              fullWidth
+              type="date"
+              onChange={handleInput}
+              name="fecha_nac"
+              autoComplete="off"
+              id="idFechaNac"
+              label="Fecha de nacimiento (opcional)"
+              variant="filled"
+              value={customerForm.fecha_nac}
             />
           </Grid>
           <Grid item xs={6}>
