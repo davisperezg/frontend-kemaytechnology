@@ -4,7 +4,6 @@ export const GET_RENEWS = gql`
   query getRenews {
     getRenews {
       id
-
       registeredBy {
         id
         name
@@ -21,22 +20,22 @@ export const GET_RENEWS = gql`
         nroGPS
         sim
         platform
-        customer{
+        customer {
           id
-        name
-        lastName
-        document
-        numDocument
-        cellphone_1
-        cellphone_2
-        username
-        password
+          name
+          lastName
+          document
+          numDocument
+          cellphone_1
+          cellphone_2
+          username
+          password
         }
-        device{
+        device {
           name
         }
       }
-      
+
       billing {
         id
         name
