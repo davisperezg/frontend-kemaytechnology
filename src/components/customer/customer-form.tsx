@@ -60,10 +60,12 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
     direction: customer?.direction || undefined,
     username: customer?.username || "",
     password: customer?.password || "",
-    fecha_nac: moment(add(new Date(String(customer?.fecha_nac)), { days: 1 }))
-      .utc()
-      .local()
-      .format("YYYY-MM-DD"),
+    fecha_nac: customer?.fecha_nac
+      ? moment(add(new Date(String(customer?.fecha_nac)), { days: 1 }))
+          .utc()
+          .local()
+          .format("YYYY-MM-DD")
+      : undefined,
   };
 
   const [customerForm, setCustomerForm] = useState<Customer>(
