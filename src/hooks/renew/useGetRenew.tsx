@@ -4,15 +4,14 @@ export const GET_RENEWS = gql`
   query getRenews {
     getRenews {
       id
-      registeredBy {
+      expirationDate
+      renovationStart
+      renovationEnd
+      createdAt
+      updatedAt
+      billing {
         id
         name
-        lastName
-      }
-      updatedBy {
-        id
-        name
-        lastName
       }
       vehicle {
         id
@@ -35,15 +34,6 @@ export const GET_RENEWS = gql`
           name
         }
       }
-      billing {
-        id
-        name
-      }
-      expirationDate
-      renovationStart
-      renovationEnd
-      createdAt
-      updatedAt
     }
   }
 `;
