@@ -95,10 +95,13 @@ const ConsultaRenovaciones = () => {
     dispatch(setAlert(initialAlert));
   };
 
-  const requestSearch = (searchedVal: string) => {
+  const requestSearch = async (searchedVal: string) => {
     console.log("query");
     console.log(searchedVal);
     console.log("option");
+    console.log(await optionListado);
+    console.log(optionListado);
+    console.log(optionListado.data);
     console.log(optionListado?.data?.getRenews);
     const filteredRows =
       optionListado?.data?.getRenews.filter((row: any) => {
