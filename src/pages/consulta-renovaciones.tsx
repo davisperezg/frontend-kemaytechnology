@@ -62,7 +62,7 @@ const ConsultaRenovaciones = () => {
   const { data, loading, error } = useGetVehicles();
   const optionsConsulta = useConsultaRenovaciones();
   const optionListado = useGetRenews();
-
+  const [renews, setRenews] = useState<any[]>([]);
   //TABLE OPTIONS
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [pagex, setPage] = useState(0);
@@ -96,15 +96,8 @@ const ConsultaRenovaciones = () => {
   };
 
   const requestSearch = (searchedVal: string) => {
-    console.log("query");
-    console.log(searchedVal);
-    console.log("option");
-    console.log(optionListado.data);
-    console.log(optionListado?.data?.getRenews);
     const filteredRows =
-      optionListado?.data?.getRenews.filter((row: any) => {
-        console.log("row");
-        console.log(row);
+      renews.filter((row: any) => {
         return (
           row.vehicle.plate
             .toLowerCase()
@@ -115,8 +108,6 @@ const ConsultaRenovaciones = () => {
           row.id.toLowerCase().includes(searchedVal.trim().toLowerCase())
         );
       }) || [];
-    console.log("filter");
-    console.log(filteredRows);
     setVehicles(filteredRows);
   };
 
@@ -129,10 +120,12 @@ const ConsultaRenovaciones = () => {
         break;
     }
   };
+
   const cancelSearch = () => {
     setSearched("");
     requestSearch(searched);
   };
+
   const memoizedResult = useCallback(() => {
     optionsConsulta.getVehiculosRenovadosXFecha({
       variables: {
@@ -146,6 +139,9 @@ const ConsultaRenovaciones = () => {
     memoizedResult();
     if (optionsConsulta.data) {
       setVehicles(optionsConsulta.data.getVehiculosRenovadosXFecha || []);
+    }
+    if (optionListado.data) {
+      setRenews(optionListado.data.getRenews);
     }
   }, [memoizedResult, optionsConsulta.data, optionListado.data]);
 

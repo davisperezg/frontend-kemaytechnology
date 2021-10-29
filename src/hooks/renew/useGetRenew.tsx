@@ -40,6 +40,5 @@ export const GET_RENEWS = gql`
 
 export const useGetRenews = () => {
   const { data, error, loading } = useQuery(GET_RENEWS);
-  console.log(data);
   return { data, error, loading };
 };
