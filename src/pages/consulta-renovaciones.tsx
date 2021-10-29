@@ -95,12 +95,10 @@ const ConsultaRenovaciones = () => {
     dispatch(setAlert(initialAlert));
   };
 
-  const requestSearch = async (searchedVal: string) => {
+  const requestSearch = (searchedVal: string) => {
     console.log("query");
     console.log(searchedVal);
     console.log("option");
-    console.log(await optionListado);
-    console.log(optionListado);
     console.log(optionListado.data);
     console.log(optionListado?.data?.getRenews);
     const filteredRows =
@@ -149,7 +147,7 @@ const ConsultaRenovaciones = () => {
     if (optionsConsulta.data) {
       setVehicles(optionsConsulta.data.getVehiculosRenovadosXFecha || []);
     }
-  }, [memoizedResult, optionsConsulta.data]);
+  }, [memoizedResult, optionsConsulta.data, optionListado.data]);
 
   if (optionsConsulta.error) {
     return <h1>{findError(optionsConsulta.error)}</h1>;
