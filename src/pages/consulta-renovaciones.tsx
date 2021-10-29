@@ -94,18 +94,28 @@ const ConsultaRenovaciones = () => {
     setDialog(initialDialog);
     dispatch(setAlert(initialAlert));
   };
+
   const requestSearch = (searchedVal: string) => {
-    const filteredRows = optionListado.data.getRenews.filter((row: any) => {
-      return (
-        row.vehicle.plate
-          .toLowerCase()
-          .includes(searchedVal.trim().toLowerCase()) ||
-        row.vehicle.nroGPS
-          .toLowerCase()
-          .includes(searchedVal.trim().toLowerCase()) ||
-        row.id.toLowerCase().includes(searchedVal.trim().toLowerCase())
-      );
-    });
+    console.log("query");
+    console.log(searchedVal);
+    console.log("option");
+    console.log(optionListado?.data?.getRenews);
+    const filteredRows =
+      optionListado?.data?.getRenews.filter((row: any) => {
+        console.log("row");
+        console.log(row);
+        return (
+          row.vehicle.plate
+            .toLowerCase()
+            .includes(searchedVal.trim().toLowerCase()) ||
+          row.vehicle.nroGPS
+            .toLowerCase()
+            .includes(searchedVal.trim().toLowerCase()) ||
+          row.id.toLowerCase().includes(searchedVal.trim().toLowerCase())
+        );
+      }) || [];
+    console.log("filter");
+    console.log(filteredRows);
     setVehicles(filteredRows);
   };
 
@@ -172,7 +182,7 @@ const ConsultaRenovaciones = () => {
           variant="outlined"
         />
       </div>
-    
+
       {/* Generar PDF */}
       <div
         style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
@@ -182,7 +192,6 @@ const ConsultaRenovaciones = () => {
           nameTipoReporte="RENOVACIONES"
           fileName={`Vehiculos renovados desde ${consulta.desde} hasta ${consulta.hasta}`}
         />
-        
       </div>
       <SearchBar
         style={{ width: "100%" }}
