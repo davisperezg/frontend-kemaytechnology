@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronRight, ExpandMore } from "@material-ui/icons";
+import { ChevronRight, ExpandMore } from "@mui/icons-material";
 import ListItemMenus from "./list-item-menus";
 import { Menu } from "../../interfaces/menu.interface";
 import { Module } from "../../interfaces/module.interface";

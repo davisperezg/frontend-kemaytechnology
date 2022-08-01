@@ -1,10 +1,10 @@
 import { Egress } from "../../interfaces/egress.interface";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import Progress from "../progress/progress";
-import DialogActions from "@material-ui/core/DialogActions";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import DialogActions from "@mui/material/DialogActions";
+import Autocomplete from "@mui/lab/Autocomplete";
 import { useState, useCallback, useEffect } from "react";
 import { useGetCategorys } from "../../hooks/category/useGetCategorys";
 import { FormChange, InputChange } from "../../lib/types";
@@ -14,7 +14,7 @@ import { useCreateEgress } from "../../hooks/egress/useCreateEgress";
 import { findError } from "../../helpers/control-errors";
 import { setAlert } from "../../store/alert/action";
 import { useDispatch, useSelector } from "react-redux";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import InputAdornment from "@mui/material/InputAdornment";
 import { AutoCompleteInput } from "../../interfaces/autocompleteinput.interface";
 import { User } from "../../interfaces/user.interface";
 
@@ -140,7 +140,7 @@ const EgressForm = ({ handleClose, egress }: Options) => {
   return (
     <form onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Autocomplete
             id="idCategory"
             value={egressForm.category}
@@ -170,7 +170,7 @@ const EgressForm = ({ handleClose, egress }: Options) => {
               />
             )}
           />
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={4}>
           <TextField

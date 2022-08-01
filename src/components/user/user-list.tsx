@@ -1,24 +1,24 @@
 import React, { useState } from "react";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
-import EditRoundedIcon from "@material-ui/icons/EditRounded";
-import RemoveRoundedIcon from "@material-ui/icons/RemoveRounded";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { setAlert } from "../../store/alert/action";
 import DialogForm from "../dialog/dialog.component";
 import { User } from "../../interfaces/user.interface";
 import UserForm from "./user-form";
-import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import {
   useActivateUser,
   useDesactivateUser,
 } from "../../hooks/user/useUpdateAccessToLogin";
 import { loadAccess } from "../acceso/filter-access.component";
 import { PERMIT_FOUR, PERMIT_TWO, ROLSA } from "../../const";
-import LockRoundedIcon from "@material-ui/icons/LockRounded";
+import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import PasswordForm from "../password/password-form";
 import { findError } from "../../helpers/control-errors";
 

@@ -1,24 +1,19 @@
 import React from "react";
 //dialog
-import {
-  withStyles,
-  WithStyles,
-  Theme,
-  createStyles,
-} from "@material-ui/core/styles";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import Typography from "@material-ui/core/Typography";
+import { withStyles, Theme, createStyles } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import Typography from "@mui/material/Typography";
 
 //fullscreen
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { useTheme } from "@material-ui/core/styles";
-import Alert from "@material-ui/lab/Alert";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+import Alert from "@mui/lab/Alert";
 import { useSelector } from "react-redux";
 //icons
-import IconButton from "@material-ui/core/IconButton";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import CloseIcon from "@material-ui/icons/Close";
+import IconButton from "@mui/material/IconButton";
+import MuiDialogTitle from "@mui/material/DialogTitle";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface DialogOption {
   open: boolean;
@@ -42,21 +37,21 @@ const styles = (theme: Theme) =>
     },
   });
 
-export interface DialogTitleProps extends WithStyles<typeof styles> {
+export interface DialogTitleProps {
   id: string;
   children: React.ReactNode;
   onClose: () => void;
 }
 
-const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
-  const { children, classes, onClose, ...other } = props;
+const DialogTitle = (props: DialogTitleProps) => {
+  const { children, onClose, ...other } = props;
   return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+    <MuiDialogTitle>
       <Typography variant="h6">{children}</Typography>
       {onClose ? (
         <IconButton
           aria-label="close"
-          className={classes.closeButton}
+          //className={classes.closeButton}
           onClick={onClose}
         >
           <CloseIcon />
@@ -64,7 +59,7 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
       ) : null}
     </MuiDialogTitle>
   );
-});
+};
 
 const DialogForm = ({
   open,
@@ -87,7 +82,6 @@ const DialogForm = ({
       fullScreen={fullScreen}
       open={open}
       aria-labelledby="idModal"
-      disableBackdropClick
       disableEscapeKeyDown
     >
       <DialogTitle id="idModal" onClose={handleClose}>

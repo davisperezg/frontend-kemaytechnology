@@ -1,6 +1,6 @@
 import React from "react";
 import { Menu } from "../../interfaces/menu.interface";
-import Chip from "@material-ui/core/Chip";
+import Chip from "@mui/material/Chip";
 import { MENU_FORBIDDEN } from "../../const";
 
 /**

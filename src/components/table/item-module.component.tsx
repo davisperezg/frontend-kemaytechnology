@@ -3,15 +3,15 @@ import { Module } from "../../interfaces/module.interface";
 import ItemModuleMenu from "./item-module-menu";
 import ItemModuleAccess from "./item-module-access";
 //tables
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 //button
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 //icon
-import IconButton from "@material-ui/core/IconButton";
-import MenuRoundedIcon from "@material-ui/icons/MenuRounded";
-import VerifiedUserRoundedIcon from "@material-ui/icons/VerifiedUserRounded";
-import EditRoundedIcon from "@material-ui/icons/EditRounded";
+import IconButton from "@mui/material/IconButton";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
 //dates
 import moment from "moment";
 import DialogForm from "../dialog/dialog.component";
@@ -21,7 +21,7 @@ import MenuForm from "../menu/menu-form.component";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/alert/action";
 import { MODULE_FORBIDDEN } from "../../const";
-import Chip from "@material-ui/core/Chip";
+import Chip from "@mui/material/Chip";
 
 interface Dialog {
   name: string;

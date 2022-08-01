@@ -4,8 +4,8 @@ import moment from "moment";
 
 import { PERMIT_FOUR, PERMIT_TREE, PERMIT_TWO } from "../../const";
 import { loadAccess } from "../acceso/filter-access.component";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 
 import { useState } from "react";
 
@@ -41,9 +41,9 @@ const VehicleConsult = ({ vehicle }: { vehicle: Vehicle }) => {
         <TableCell component="th" scope="row">
           {vehicle.customer.name} {vehicle.customer.lastName}
         </TableCell>
-         <TableCell component="th" scope="row" align="center">
+        <TableCell component="th" scope="row" align="center">
           {vehicle.customer.cellphone_1} {vehicle.customer.cellphone_2}
-        </TableCell> 
+        </TableCell>
         <TableCell component="th" scope="row" align="center">
           {moment(vehicle.createdAt).format("DD/MM/YYYY")}
         </TableCell>

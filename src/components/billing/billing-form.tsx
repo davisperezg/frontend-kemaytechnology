@@ -6,11 +6,11 @@ import { FormChange, InputChange } from "../../lib/types";
 import { useUpdateBilling } from "../../hooks/billing/useUpdateBilling";
 import { findError } from "../../helpers/control-errors";
 import { setAlert } from "../../store/alert/action";
-import Grid from "@material-ui/core/Grid";
-import RedditTextField from "../textfield/reddit";
-import Button from "@material-ui/core/Button";
-import DialogActions from "@material-ui/core/DialogActions";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import DialogActions from "@mui/material/DialogActions";
 import Progress from "../progress/progress";
+import { TextField } from "@mui/material";
 
 interface Option {
   handleClose?: () => void;
@@ -102,7 +102,7 @@ const BillingForm = ({ handleClose, billing }: Option) => {
       <form onSubmit={onSubmit}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <RedditTextField
+            <TextField
               fullWidth
               type="text"
               onChange={handleInput}
@@ -115,7 +115,7 @@ const BillingForm = ({ handleClose, billing }: Option) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <RedditTextField
+            <TextField
               fullWidth
               type="number"
               onChange={handleInput}

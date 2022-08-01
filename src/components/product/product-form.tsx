@@ -1,11 +1,11 @@
 import { Product } from "../../interfaces/product.interface";
 import { useState, useEffect, useCallback } from "react";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import Progress from "../progress/progress";
-import TextField from "@material-ui/core/TextField";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import TextField from "@mui/material/TextField";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import InputAdornment from "@mui/material/InputAdornment";
 import { findError } from "../../helpers/control-errors";
 import { setAlert } from "../../store/alert/action";
 import { FormChange, InputChange } from "../../lib/types";
@@ -14,7 +14,7 @@ import { useGetCategorys } from "../../hooks/category/useGetCategorys";
 import { useUpdateProduct } from "../../hooks/product/useUpdateProduct";
 import { useCreateProduct } from "../../hooks/product/useCreateProduct";
 import { Category } from "../../interfaces/category.interface";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import { Autocomplete } from "@mui/lab";
 import { Brand } from "../../interfaces/brand.interface";
 import { useGetBrandsByCategory } from "../../hooks/brand/useBrandsByCategory";
 import { useGetModelsByBrand } from "../../hooks/model/useGetModelsByBrand";
@@ -213,7 +213,7 @@ const ProductForm = ({ handleClose, product }: Options) => {
   return (
     <form onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Autocomplete
             id="idCategory"
             onChange={(event, value) => {
@@ -315,7 +315,7 @@ const ProductForm = ({ handleClose, product }: Options) => {
               />
             )}
           />
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={12}>
           <TextField

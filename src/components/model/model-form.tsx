@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import { Model } from "../../interfaces/model.interface";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/alert/action";
 import { findError } from "../../helpers/control-errors";
 import { FormChange, InputChange, SelectChange } from "../../lib/types";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import DialogActions from "@material-ui/core/DialogActions";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import DialogActions from "@mui/material/DialogActions";
 import Progress from "../progress/progress";
 import { useUpdateModel } from "../../hooks/model/useUpdateModel";
 import { useCreateModel } from "../../hooks/model/useCreateModel";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import { Brand } from "../../interfaces/brand.interface";
 import { useGetBrands } from "../../hooks/brand/useGetBrands";
 

@@ -1,24 +1,10 @@
-import FirstPageIcon from "@material-ui/icons/FirstPage";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import LastPageIcon from "@material-ui/icons/LastPage";
-import {
-  makeStyles,
-  useTheme,
-  Theme,
-  createStyles,
-} from "@material-ui/core/styles";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import { useTheme, Theme, createStyles } from "@mui/material/styles";
 import { MouseEvent } from "react";
-import IconButton from "@material-ui/core/IconButton";
-
-const useStyles1 = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexShrink: 0,
-      marginLeft: theme.spacing(2.5),
-    },
-  })
-);
+import IconButton from "@mui/material/IconButton";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -28,7 +14,7 @@ interface TablePaginationActionsProps {
 }
 
 export function TablePaginationActions(props: TablePaginationActionsProps) {
-  const classes = useStyles1();
+  //const classes = useStyles1();
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
@@ -49,7 +35,7 @@ export function TablePaginationActions(props: TablePaginationActionsProps) {
   };
 
   return (
-    <div className={classes.root}>
+    <div>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}

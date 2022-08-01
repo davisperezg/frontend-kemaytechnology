@@ -1,22 +1,22 @@
 import { Product } from "../../interfaces/product.interface";
 import ProductForm from "./product-form";
 import { useState } from "react";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Tooltip from "@material-ui/core/Tooltip";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Tooltip from "@mui/material/Tooltip";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import DialogForm from "../dialog/dialog.component";
 import { PERMIT_FOUR, PERMIT_TREE, PERMIT_TWO } from "../../const";
-import IconButton from "@material-ui/core/IconButton";
-import EditRoundedIcon from "@material-ui/icons/EditRounded";
+import IconButton from "@mui/material/IconButton";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Dialog } from "../../interfaces/dialog.interface";
 import moment from "moment";
 import { setAlert } from "../../store/alert/action";
 import { loadAccess } from "../acceso/filter-access.component";
 import { formatMoney } from "../../lib/currency/money";
 import { User } from "../../interfaces/user.interface";
-import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import { useDeleteProduct } from "../../hooks/product/useDeleteProduct";
 import { findError } from "../../helpers/control-errors";
 

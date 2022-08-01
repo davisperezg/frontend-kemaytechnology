@@ -3,14 +3,14 @@ import { useDispatch } from "react-redux";
 import { FormChange, InputChange } from "../../lib/types";
 import { findError } from "../../helpers/control-errors";
 import { setAlert } from "../../store/alert/action";
-import Grid from "@material-ui/core/Grid";
-import RedditTextField from "../textfield/reddit";
+import Grid from "@mui/material/Grid";
 import { Device } from "../../interfaces/device.interface";
 import { useUpdateDevice } from "../../hooks/device/useUpdateDevice";
 import { useCreateDevice } from "../../hooks/device/useCreateDevice";
-import Button from "@material-ui/core/Button";
-import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@mui/material/Button";
+import DialogActions from "@mui/material/DialogActions";
 import Progress from "../progress/progress";
+import { TextField } from "@mui/material";
 
 interface Option {
   handleClose?: () => void;
@@ -94,7 +94,7 @@ const DeviceForm = ({ handleClose, device }: Option) => {
       <form onSubmit={onSubmit}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <RedditTextField
+            <TextField
               fullWidth
               type="text"
               onChange={handleInput}

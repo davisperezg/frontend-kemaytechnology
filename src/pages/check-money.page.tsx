@@ -1,7 +1,5 @@
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import RedditTextField from "../components/textfield/reddit";
-import moment from "moment";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 import { InputChange } from "../lib/types";
 import { CheckMoney } from "../interfaces/check-money.interface";
 import { useState, useEffect } from "react";
@@ -14,9 +12,10 @@ import { useGetEgressByDate } from "../hooks/summary-box/useGetEgerssByDates";
 import { useGetIngressByDate } from "../hooks/summary-box/useGetIngressByDates";
 import { Ingress } from "../interfaces/ingress.interface";
 import { Egress } from "../interfaces/egress.interface";
+import { TextField } from "@mui/material";
 
 const CheckMoneyPage = () => {
-  const now = moment().utc().local().format("YYYY-MM-DD");
+  const now = new Date();
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const { module, page } = useSelector((state: any) => {
     return state.page.user;
@@ -80,7 +79,7 @@ const CheckMoneyPage = () => {
     <>
       <Grid container spacing={3}>
         <Grid item xs={3}>
-          <RedditTextField
+          <TextField
             fullWidth
             type="date"
             onChange={handleInput}
@@ -93,7 +92,7 @@ const CheckMoneyPage = () => {
           />
         </Grid>
         <Grid item xs={3}>
-          <RedditTextField
+          <TextField
             fullWidth
             type="date"
             onChange={handleInput}
