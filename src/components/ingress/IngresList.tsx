@@ -1,12 +1,12 @@
 import moment from "moment";
 import { Ingress } from "../../interfaces/ingress.interface";
 import { formatMoney } from "../../lib/currency/money";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Tooltip from "@material-ui/core/Tooltip";
-import EditRoundedIcon from "@material-ui/icons/EditRounded";
-import IconButton from "@material-ui/core/IconButton";
-import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Tooltip from "@mui/material/Tooltip";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import IconButton from "@mui/material/IconButton";
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import { Dialog } from "../../interfaces/dialog.interface";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/alert/action";
@@ -19,7 +19,6 @@ import { User } from "../../interfaces/user.interface";
 import { useSelector } from "react-redux";
 import { loadAccess } from "../acceso/filter-access.component";
 import { PERMIT_FOUR, PERMIT_TREE, PERMIT_TWO } from "../../const";
-import { makeStyles } from "@material-ui/core/styles";
 
 const initialAlert = {
   type: "",
@@ -31,32 +30,8 @@ const initialDialog = {
   active: false,
 };
 
-const useStyles = makeStyles((theme) => ({
-  row: {
-    width: 700,
-    backgroundColor: "grey",
-  },
-  cell_long: {
-    fontSize: "10px",
-    width: 150,
-    minWidth: 1,
-    backgroundColor: "#ee82ee",
-  },
-  cell_default: {
-    fontSize: "10px",
-    width: 200,
-    minWidth: 1,
-    backgroundColor: "#ee82ee",
-  },
-  cell_short: {
-    fontSize: "10px",
-    width: 80,
-    backgroundColor: "yellow",
-  },
-}));
-
 const IngressList = ({ ingres }: { ingres: Ingress }) => {
-  const classes = useStyles();
+  //const classes = useStyles();
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
   const { module, page } = useSelector((state: any) => {
     return state.page.user;

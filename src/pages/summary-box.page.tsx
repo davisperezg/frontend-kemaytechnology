@@ -1,12 +1,12 @@
 import EgressPage from "./egress.page";
 import IngressPage from "./ingress.page";
 import "./css/summary-box.css";
-import TableContainer from "@material-ui/core/TableContainer";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
 import { PagoProvider } from "../context/caja-context";
 import { useState } from "react";
 import { formatMoney } from "../lib/currency/money";

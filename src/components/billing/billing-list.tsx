@@ -2,9 +2,9 @@ import { findError } from "../../helpers/control-errors";
 import { useDeleteBilling } from "../../hooks/billing/useDeleteBilling";
 import { Billing } from "../../interfaces/billing.interface";
 import BillingForm from "./billing-form";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Tooltip from "@material-ui/core/Tooltip";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Tooltip from "@mui/material/Tooltip";
 import DialogForm from "../dialog/dialog.component";
 import { useState } from "react";
 import { setAlert } from "../../store/alert/action";
@@ -13,9 +13,9 @@ import { User } from "../../interfaces/user.interface";
 import { PERMIT_FOUR, PERMIT_TREE, PERMIT_TWO } from "../../const";
 import { loadAccess } from "../acceso/filter-access.component";
 import moment from "moment";
-import EditRoundedIcon from "@material-ui/icons/EditRounded";
-import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
-import IconButton from "@material-ui/core/IconButton";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
+import IconButton from "@mui/material/IconButton";
 import { Dialog } from "../../interfaces/dialog.interface";
 
 const initialAlert = {

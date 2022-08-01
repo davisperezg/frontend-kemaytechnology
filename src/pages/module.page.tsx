@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useGetModules } from "../hooks/module/useGetModules";
 import { Module } from "../interfaces/module.interface";
-//css library materialui
-import { makeStyles } from "@material-ui/core/styles";
 //tables
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Paper from "@material-ui/core/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Paper from "@mui/material/Paper";
 //end tables
 import ItemModule from "../components/table/item-module.component";
 import DialogForm from "../components/dialog/dialog.component";
-import Tooltip from "@material-ui/core/Tooltip";
-import AddRoundedIcon from "@material-ui/icons/AddRounded";
-import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import IconButton from "@mui/material/IconButton";
 import ModuleForm from "../components/module/module-form.component";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../store/alert/action";
@@ -24,12 +22,6 @@ import { useSelector } from "react-redux";
 import { User } from "../interfaces/user.interface";
 import { ROLSA } from "../const";
 import { findError } from "../helpers/control-errors";
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-});
 
 interface Dialog {
   name: string;
@@ -46,7 +38,6 @@ const ModulePage = () => {
   const { data, loading, error } = useGetModules();
   const [dialog, setDialog] = useState<Dialog>(initialValueButton);
   const dispatch = useDispatch();
-  const classes = useStyles();
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
 
   const handleClose = () => {
@@ -105,7 +96,7 @@ const ModulePage = () => {
           </Tooltip>
           <TableContainer style={{ whiteSpace: "nowrap" }} component={Paper}>
             <Table
-              className={classes.table}
+              //className={classes.table}
               size="small"
               aria-label="a dense table"
             >

@@ -1,10 +1,10 @@
-import Table from "@material-ui/core/Table";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import Paper from "@material-ui/core/Paper";
+import Table from "@mui/material/Table";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import Paper from "@mui/material/Paper";
 
 import { User } from "../interfaces/user.interface";
 import { Vehicle } from "../interfaces/vehicle.interface";
@@ -24,11 +24,9 @@ import { setAlert } from "../store/alert/action";
 import { Dialog } from "../interfaces/dialog.interface";
 
 import DialogForm from "../components/dialog/dialog.component";
-import TablePagination from "@material-ui/core/TablePagination";
+import TablePagination from "@mui/material/TablePagination";
 import { TablePaginationActions } from "../components/table/table-pagination";
-import { TextField } from "@material-ui/core";
-import SearchBar from "material-ui-search-bar";
-import moment from "moment";
+import { TextField } from "@mui/material";
 
 import { Consulta } from "../interfaces/consulta.interface";
 import { InputChange } from "../lib/types";
@@ -39,7 +37,7 @@ import { useGetVehicles } from "../hooks/vehicle/useGetVehicle";
 import { useGetRenews } from "../hooks/renew/useGetRenew";
 
 const ConsultaRenovaciones = () => {
-  const now = moment().utc().local().format("YYYY-MM-DD");
+  const now = new Date();
   const initialDialog = {
     name: "",
     active: false,
@@ -156,7 +154,6 @@ const ConsultaRenovaciones = () => {
         component={component(dialog.name)}
         handleClose={handleClose}
       />
-
       <div style={{ width: "100%", display: "flex" }}>
         <TextField
           value={consulta.desde}
@@ -179,7 +176,6 @@ const ConsultaRenovaciones = () => {
           variant="outlined"
         />
       </div>
-
       {/* Generar PDF */}
       <div
         style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
@@ -190,13 +186,14 @@ const ConsultaRenovaciones = () => {
           fileName={`Vehiculos renovados desde ${consulta.desde} hasta ${consulta.hasta}`}
         />
       </div>
-      <SearchBar
+      aqui search
+      {/* <SearchBar
         style={{ width: "100%" }}
         placeholder="Puede buscar por ID de transacción, placa o nro de gps"
         value={searched}
         onChange={(searchVal) => requestSearch(searchVal)}
         onCancelSearch={() => cancelSearch()}
-      />
+      /> */}
       {optionsConsulta.loading ? (
         <h1>Cargando...</h1>
       ) : (

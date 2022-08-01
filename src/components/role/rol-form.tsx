@@ -1,26 +1,21 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/alert/action";
 import { Role } from "../../interfaces/role.interface";
 import { useUpdateRole } from "../../hooks/role/useUpdateRole";
 import { useCreateRole } from "../../hooks/role/useCreateRole";
 import Progress from "../progress/progress";
-import FormControl from "@material-ui/core/FormControl";
-import Chip from "@material-ui/core/Chip";
-import Input from "@material-ui/core/Input";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
-import {
-  createStyles,
-  makeStyles,
-  useTheme,
-  Theme,
-} from "@material-ui/core/styles";
+import FormControl from "@mui/material/FormControl";
+import Chip from "@mui/material/Chip";
+import Input from "@mui/material/Input";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import { createStyles, useTheme, Theme } from "@mui/material/styles";
 import { Module } from "../../interfaces/module.interface";
 import { useGetModules } from "../../hooks/module/useGetModules";
 import { MODULE_FORBIDDEN, ROLSA } from "../../const";
@@ -31,26 +26,6 @@ import { findError } from "../../helpers/control-errors";
 type InputChange = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 type FormChange = FormEvent<HTMLFormElement>;
 type SelectChange = ChangeEvent<{ value: unknown } | any | HTMLSelectElement>;
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-      maxWidth: 300,
-    },
-    chips: {
-      display: "flex",
-      flexWrap: "wrap",
-    },
-    chip: {
-      margin: 2,
-    },
-    noLabel: {
-      marginTop: theme.spacing(3),
-    },
-  })
-);
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -91,7 +66,7 @@ const RoleForm = ({
   const [listModules, setListModules] = useState<Module[]>([]);
   const theme = useTheme();
   const dispatch = useDispatch();
-  const classes = useStyles();
+  //const classes = useStyles();
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
 
   const handleInput = (e: InputChange) => {
@@ -219,7 +194,7 @@ const RoleForm = ({
             <Grid item xs={12}>
               <FormControl variant="outlined" fullWidth>
                 <InputLabel id="module-mutiple-chip-label">Modulos</InputLabel>
-                <Select
+                {/* <Select
                   labelId="module-mutiple-chip-label"
                   id="module-mutiple-chip"
                   multiple
@@ -270,7 +245,7 @@ const RoleForm = ({
                       )
                     )
                   )}
-                </Select>
+                </Select> */}
               </FormControl>
             </Grid>
           )}

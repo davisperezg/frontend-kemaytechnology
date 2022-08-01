@@ -1,10 +1,10 @@
-import Table from "@material-ui/core/Table";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import Paper from "@material-ui/core/Paper";
+import Table from "@mui/material/Table";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import Paper from "@mui/material/Paper";
 import { User } from "../interfaces/user.interface";
 import { Vehicle } from "../interfaces/vehicle.interface";
 import { useGetVehicles } from "../hooks/vehicle/useGetVehicle";
@@ -18,16 +18,14 @@ import {
   ChangeEvent,
   MouseEvent,
 } from "react";
-import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import { useSelector, useDispatch } from "react-redux";
 import { setAlert } from "../store/alert/action";
 import { Dialog } from "../interfaces/dialog.interface";
 import { PERMIT_ONE } from "../const";
 import DialogForm from "../components/dialog/dialog.component";
-import TablePagination from "@material-ui/core/TablePagination";
+import TablePagination from "@mui/material/TablePagination";
 import { TablePaginationActions } from "../components/table/table-pagination";
-import { Button, TextField } from "@material-ui/core";
-import moment from "moment";
+import { Button, TextField } from "@mui/material";
 import { InputChange } from "../lib/types";
 import { Consulta } from "../interfaces/consulta.interface";
 import { useConsultaVencidos } from "../hooks/vehicle/useConsultaVencidos";
@@ -35,7 +33,7 @@ import VehicleConsultVencidos from "../components/consultas/consulta_vencidos";
 import { ExportCSV } from "../helpers/exports/csv";
 
 const ConsultaVencidos = () => {
-  const now = moment().utc().local().format("YYYY-MM-DD");
+  const now = new Date();
   const initialDialog = {
     name: "",
     active: false,

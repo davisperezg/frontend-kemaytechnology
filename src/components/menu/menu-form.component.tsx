@@ -1,12 +1,12 @@
 import React, { useState, useEffect, FormEvent, useCallback } from "react";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 import { Module } from "../../interfaces/module.interface";
 import { Menu } from "../../interfaces/menu.interface";
 import { useGetMenus } from "../../hooks/menu/useGetMenus";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/alert/action";
-import DialogActions from "@material-ui/core/DialogActions";
+import DialogActions from "@mui/material/DialogActions";
 import { useUpdateModule } from "../../hooks/module/useUpdateModule";
 import { useSelector } from "react-redux";
 import TrasnferList from "../../lib/transfer-list-component";

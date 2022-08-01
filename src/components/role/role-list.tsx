@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 //tables
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 //button
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 //icon
-import IconButton from "@material-ui/core/IconButton";
-import EditRoundedIcon from "@material-ui/icons/EditRounded";
+import IconButton from "@mui/material/IconButton";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Role } from "../../interfaces/role.interface";
 import { useDispatch } from "react-redux";
 //dates
@@ -16,7 +16,7 @@ import RoleModuleItem from "./role-module-item";
 import DialogForm from "../dialog/dialog.component";
 import RoleForm from "./rol-form";
 import ModuleTransferList from "../module/module-transfer-list";
-import ViewModuleRoundedIcon from "@material-ui/icons/ViewModuleRounded";
+import ViewModuleRoundedIcon from "@mui/icons-material/ViewModuleRounded";
 import { PERMIT_FOUR, PERMIT_TWO, ROLSA } from "../../const";
 import { loadAccess } from "../acceso/filter-access.component";
 import { useSelector } from "react-redux";

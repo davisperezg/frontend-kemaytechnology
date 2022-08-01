@@ -1,28 +1,22 @@
-import Table from "@material-ui/core/Table";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import Paper from "@material-ui/core/Paper";
+import Table from "@mui/material/Table";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import Paper from "@mui/material/Paper";
 import VehicleList from "../components/vehicle/vehicle-list";
 import { User } from "../interfaces/user.interface";
 import { Vehicle } from "../interfaces/vehicle.interface";
 import { useGetVehicles } from "../hooks/vehicle/useGetVehicle";
-import VehicleForm from "../components/vehicle/vehicle-form";
+import VehicleForm from "../components/vehicle/VehicleForm";
 import { findError } from "../helpers/control-errors";
-import { loadAccess } from "../components/acceso/filter-access.component";
 import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
-import AddRoundedIcon from "@material-ui/icons/AddRounded";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { useSelector, useDispatch } from "react-redux";
-import { setAlert } from "../store/alert/action";
-import { Dialog } from "../interfaces/dialog.interface";
-import { PERMIT_ONE } from "../const";
-import DialogForm from "../components/dialog/dialog.component";
-import TablePagination from "@material-ui/core/TablePagination";
+import TablePagination from "@mui/material/TablePagination";
 import { TablePaginationActions } from "../components/table/table-pagination";
-import { Button } from "@material-ui/core";
-import SearchBar from "material-ui-search-bar";
+import { Button } from "@mui/material";
 
 const initialDialog = {
   name: "",
@@ -39,9 +33,6 @@ let contXVencerGlobal = 0;
 let contActivosGlobal = 0;
 
 const VehiclesPage = () => {
-  const auth: User = useSelector((state: any) => state.authReducer.authUser);
-  const page = useSelector((state: any) => state.page.user.module);
-  const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [contVencidos, setContVencidos] = useState<number>(0);
@@ -52,6 +43,7 @@ const VehiclesPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [pagex, setPage] = useState(0);
   const [searched, setSearched] = useState<string>("");
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, vehicles.length - pagex * rowsPerPage);
@@ -70,20 +62,6 @@ const VehiclesPage = () => {
     setPage(0);
   };
   //TABLE FIN
-  const handleClose = () => {
-    setDialog(initialDialog);
-    dispatch(setAlert(initialAlert));
-  };
-
-  const component = (name: string) => {
-    switch (name) {
-      case "Crear":
-        return <VehicleForm handleClose={handleClose} />;
-
-      default:
-        break;
-    }
-  };
 
   const buscarCantVehiculosXtipo = (array: Vehicle[]) => {
     setContVencidos(0);
@@ -161,6 +139,9 @@ const VehiclesPage = () => {
     //calc cant vehiculos
   }, [data]);
 
+  const handleOpenModalForm = () => setOpenModal(true);
+  const handleCloseModalForm = () => setOpenModal(false);
+
   if (loading) {
     return <h1>Cargando...</h1>;
   }
@@ -169,42 +150,26 @@ const VehiclesPage = () => {
     return <h1>{findError(error)}</h1>;
   }
 
-  const showDialogToCreate = () => (
-    <>
-      <Button
-        onClick={() => setDialog({ name: "Crear", active: true })}
-        variant="contained"
-        color="primary"
-        endIcon={<AddRoundedIcon />}
-      >
-        Crear vehiculo
-      </Button>
-
-      {/* <Tooltip title="Crear vehiculo">
-        <IconButton
-          aria-label="add"
-          size="small"
-          onClick={() => setDialog({ name: "Crear", active: true })}
-        >
-          <AddRoundedIcon />
-        </IconButton>
-      </Tooltip> */}
-    </>
-  );
-
   return (
     <>
-      <DialogForm
+      {/* <DialogForm
         open={dialog.active}
         title={`${dialog.name} Vehiculo`}
         component={component(dialog.name)}
         handleClose={handleClose}
-      />
+      /> */}
+      <VehicleForm open={openModal} handleClose={handleCloseModalForm} />
 
       <div style={{ width: "100%", display: "flex" }}>
         <div style={{ width: "200px" }}>
-          {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)}
-          {/* {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)} */}
+          <Button
+            onClick={handleOpenModalForm}
+            variant="contained"
+            color="primary"
+            endIcon={<AddRoundedIcon />}
+          >
+            Crear vehiculo
+          </Button>
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <label>Vehiculos activos</label>
@@ -255,13 +220,14 @@ const VehiclesPage = () => {
         }}
       >
         {/* documentacion https://www.npmjs.com/package/material-ui-search-bar */}
-        <SearchBar
+        aqui search
+        {/* <SearchBar
           style={{ width: "100%" }}
           placeholder="Puede buscar por nombres, apellidos, placa, plan de facturación, tipo de plataforma o nro de gps"
           value={searched}
           onChange={(searchVal) => requestSearch(searchVal)}
           onCancelSearch={() => cancelSearch()}
-        />
+        /> */}
       </div>
       <TableContainer
         component={Paper}
@@ -283,7 +249,7 @@ const VehiclesPage = () => {
               <TableCell>Registrado por</TableCell>
               <TableCell>Actualizado por</TableCell>
               <TableCell>Fecha Creada</TableCell>
-            <TableCell>Fecha Modificada</TableCell>
+              <TableCell>Fecha Modificada</TableCell>
               <TableCell align="right">Opciones</TableCell>
             </TableRow>
           </TableHead>

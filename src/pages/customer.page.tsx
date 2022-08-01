@@ -1,16 +1,16 @@
-import Table from "@material-ui/core/Table";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import Paper from "@material-ui/core/Paper";
+import Table from "@mui/material/Table";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import Paper from "@mui/material/Paper";
 import DialogForm from "../components/dialog/dialog.component";
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 import { useSelector, useDispatch } from "react-redux";
 import CustomerForm from "../components/customer/customer-form";
-import IconButton from "@material-ui/core/IconButton";
-import AddRoundedIcon from "@material-ui/icons/AddRounded";
+import IconButton from "@mui/material/IconButton";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { Dialog } from "../interfaces/dialog.interface";
 import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
 import { User } from "../interfaces/user.interface";
@@ -22,9 +22,8 @@ import { loadAccess } from "../components/acceso/filter-access.component";
 import { findError } from "../helpers/control-errors";
 import { useGetCustomers } from "../hooks/customer/useGetCustomer";
 import { TablePaginationActions } from "../components/table/table-pagination";
-import TablePagination from "@material-ui/core/TablePagination";
-import SearchBar from "material-ui-search-bar";
-import { Button } from "@material-ui/core";
+import TablePagination from "@mui/material/TablePagination";
+import { Button } from "@mui/material";
 
 const initialDialog = {
   name: "",
@@ -166,13 +165,14 @@ const CustomerPage = () => {
         }}
       >
         {/* documentacion https://www.npmjs.com/package/material-ui-search-bar */}
-        <SearchBar
+        {/* <SearchBar
           style={{ width: "100%" }}
           placeholder="Puede buscar por nombres, apellidos, documento, nro de documento, usuario o contraseña"
           value={searched}
           onChange={(searchVal) => requestSearch(searchVal)}
           onCancelSearch={() => cancelSearch()}
-        />
+        /> */}
+        aqui search
       </div>
       <TableContainer
         component={Paper}

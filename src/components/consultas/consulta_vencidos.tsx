@@ -4,8 +4,8 @@ import moment from "moment";
 
 import { PERMIT_FOUR } from "../../const";
 import { loadAccess } from "../acceso/filter-access.component";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 
 import { useState } from "react";
 

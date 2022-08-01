@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from "react";
-//css library materialui
-import { makeStyles } from "@material-ui/core/styles";
 //tables
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Paper from "@material-ui/core/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Paper from "@mui/material/Paper";
 import { Role } from "../interfaces/role.interface";
 import { useGetRoles } from "../hooks/role/useGetRoles";
 //end tables
 import DialogForm from "../components/dialog/dialog.component";
-import Tooltip from "@material-ui/core/Tooltip";
-import AddRoundedIcon from "@material-ui/icons/AddRounded";
+import Tooltip from "@mui/material/Tooltip";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import RoleList from "../components/role/role-list";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
 import RoleForm from "../components/role/rol-form";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../store/alert/action";
@@ -25,12 +23,6 @@ import { loadAccess } from "../components/acceso/filter-access.component";
 import { useSelector } from "react-redux";
 import { User } from "../interfaces/user.interface";
 import { findError } from "../helpers/control-errors";
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-});
 
 interface Dialog {
   name: string;
@@ -50,7 +42,7 @@ const RolePage = () => {
   const dispatch = useDispatch();
 
   const { data, loading, error } = useGetRoles();
-  const classes = useStyles();
+  //const classes = useStyles();
 
   const handleClose = () => {
     setDialog({ ...dialog, active: false });
@@ -116,7 +108,7 @@ const RolePage = () => {
       {loadAccess(PERMIT_ONE, auth, page, showDialog)}
       <TableContainer style={{ whiteSpace: "nowrap" }} component={Paper}>
         <Table
-          className={classes.table}
+          //className={classes.table}
           size="small"
           aria-label="a dense table"
         >

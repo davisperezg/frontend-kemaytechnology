@@ -1,16 +1,16 @@
 import { Ingress } from "../../interfaces/ingress.interface";
 import { FormChange, InputChange } from "../../lib/types";
 import { useState, useCallback, useEffect } from "react";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import Progress from "../progress/progress";
-import DialogActions from "@material-ui/core/DialogActions";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import DialogActions from "@mui/material/DialogActions";
+import Autocomplete from "@mui/lab/Autocomplete";
 import { findError } from "../../helpers/control-errors";
 import { setAlert } from "../../store/alert/action";
 import { useDispatch, useSelector } from "react-redux";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import InputAdornment from "@mui/material/InputAdornment";
 import { useUpdateIngress } from "../../hooks/ingress/useUpdateIngress";
 import { useCreateIngress } from "../../hooks/ingress/useCreateIngress";
 import { useGetCategorys } from "../../hooks/category/useGetCategorys";
@@ -139,7 +139,7 @@ const IngressForm = ({ handleClose, ingres }: Options) => {
   return (
     <form onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Autocomplete
             id="idCategory"
             value={ingressForm.category}
@@ -171,7 +171,7 @@ const IngressForm = ({ handleClose, ingres }: Options) => {
               />
             )}
           />
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={4}>
           <TextField

@@ -1,10 +1,10 @@
 import { useState } from "react";
 
 import { Category } from "../../interfaces/category.interface";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import DialogActions from "@material-ui/core/DialogActions";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import DialogActions from "@mui/material/DialogActions";
 import Progress from "../progress/progress";
 import { FormChange, InputChange } from "../../lib/types";
 import { useDispatch } from "react-redux";

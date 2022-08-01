@@ -1,10 +1,10 @@
-import Table from "@material-ui/core/Table";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import Paper from "@material-ui/core/Paper";
+import Table from "@mui/material/Table";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import Paper from "@mui/material/Paper";
 
 import { Vehicle } from "../interfaces/vehicle.interface";
 
@@ -22,11 +22,10 @@ import {
 import { setAlert } from "../store/alert/action";
 import { Dialog } from "../interfaces/dialog.interface";
 
-import TablePagination from "@material-ui/core/TablePagination";
+import TablePagination from "@mui/material/TablePagination";
 import { TablePaginationActions } from "../components/table/table-pagination";
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField } from "@mui/material";
 
-import moment from "moment";
 import VehicleConsult from "../components/consultas/consultas_instalaciones";
 import { InputChange } from "../lib/types";
 import { Consulta } from "../interfaces/consulta.interface";
@@ -36,7 +35,7 @@ import DialogForm from "../components/dialog/dialog.component";
 import { ExportCSV } from "../helpers/exports/csv";
 
 const ConsultaInstalaciones = () => {
-  const now = moment().utc().local().format("YYYY-MM-DD");
+  const now = new Date();
 
   const initialDialog = {
     name: "",

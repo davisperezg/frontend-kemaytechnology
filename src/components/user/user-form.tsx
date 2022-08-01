@@ -2,17 +2,17 @@ import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { User } from "../../interfaces/user.interface";
 import { setAlert } from "../../store/alert/action";
 import { useDispatch } from "react-redux";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 import { useUpdateUser } from "../../hooks/user/useUpdateUser";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
 import { useGetRoles } from "../../hooks/role/useGetRoles";
 import { Role } from "../../interfaces/role.interface";
-import MenuItem from "@material-ui/core/MenuItem";
+import MenuItem from "@mui/material/MenuItem";
 import { useCreateUser } from "../../hooks/user/useCreateUser";
 import Progress from "../progress/progress";
 import { ROLSA } from "../../const";
@@ -171,7 +171,7 @@ const UserForm = ({
               <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth>
                   <InputLabel id="idRole">Rol</InputLabel>
-                  <Select
+                  {/* <Select
                     labelId="Rol"
                     id="idRole"
                     value={userForm.role?.name}
@@ -192,7 +192,7 @@ const UserForm = ({
                         )
                       )
                     )}
-                  </Select>
+                  </Select> */}
                 </FormControl>
               </Grid>
             </>

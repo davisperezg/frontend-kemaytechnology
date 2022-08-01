@@ -5,23 +5,21 @@ import { Vehicle } from "../../interfaces/vehicle.interface";
 import { FormChange, InputChange, SelectChange } from "../../lib/types";
 import { findError } from "../../helpers/control-errors";
 import { setAlert } from "../../store/alert/action";
-import moment from "moment";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import Grid from "@material-ui/core/Grid";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import TextField from "@material-ui/core/TextField";
+import Grid from "@mui/material/Grid";
+import { Autocomplete } from "@mui/lab";
+import TextField from "@mui/material/TextField";
 import { Customer } from "../../interfaces/customer.interface";
 import { useGetCustomers } from "../../hooks/customer/useGetCustomer";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import Progress from "../progress/progress";
-import DialogActions from "@material-ui/core/DialogActions";
+import DialogActions from "@mui/material/DialogActions";
 import { Device } from "../../interfaces/device.interface";
 import { Billing } from "../../interfaces/billing.interface";
 import { useGetDevices } from "../../hooks/device/useGetDevice";
 import { useGetBilling } from "../../hooks/billing/useGetBilling";
-import RedditTextField from "../textfield/reddit";
-import { MenuItem } from "@material-ui/core";
+import { MenuItem } from "@mui/material";
 import { GenerarGuiaUSua } from "../../helpers/pdf/guia_usuario";
 import { useGetCustomerById } from "../../hooks/customer/useGetCustomerById";
 
@@ -214,7 +212,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     <>
       <form onSubmit={onSubmit}>
         <Grid container spacing={3}>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Autocomplete
               id="idCustomer"
               value={{
@@ -273,8 +271,8 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
                 />
               )}
             />
-          </Grid>
-          <Grid item xs={12}>
+          </Grid> */}
+          {/* <Grid item xs={12}>
             <Autocomplete
               id="idDevice"
               value={{
@@ -361,7 +359,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
                 )}
               />
             </Grid>
-          )}
+          )} */}
           <Grid item xs={12}>
             <TextField
               id="idPlatform"
@@ -380,7 +378,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
             </TextField>
           </Grid>
           <Grid item xs={12}>
-            <RedditTextField
+            <TextField
               fullWidth
               type="text"
               onChange={handleInput}
@@ -410,7 +408,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
             </TextField>
           </Grid>
           <Grid item xs={6}>
-            <RedditTextField
+            <TextField
               fullWidth
               type="text"
               onChange={handleInput}
@@ -424,7 +422,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
           </Grid>
           {/**
              *  vehicleForm.id ? "" : <Grid item xs={12}>
-            <RedditTextField
+            <TextField
               fullWidth
               type="date"
               onChange={handleInput}

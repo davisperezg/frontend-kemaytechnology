@@ -1,11 +1,11 @@
 import { Egress } from "../../interfaces/egress.interface";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 import { formatMoney } from "../../lib/currency/money";
-import Tooltip from "@material-ui/core/Tooltip";
-import EditRoundedIcon from "@material-ui/icons/EditRounded";
-import IconButton from "@material-ui/core/IconButton";
-import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
+import Tooltip from "@mui/material/Tooltip";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import IconButton from "@mui/material/IconButton";
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/alert/action";
 import { useState } from "react";

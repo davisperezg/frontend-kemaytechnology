@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import RedditTextField from "../components/textfield/reddit";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import { loadAccess } from "../components/acceso/filter-access.component";
 import { PERMIT_FOUR } from "../const";
 import { useSelector } from "react-redux";
@@ -9,9 +9,9 @@ import { User } from "../interfaces/user.interface";
 import { CheckProduct } from "../interfaces/check-product.interface";
 import { InputChange } from "../lib/types";
 import { useState, useCallback, useEffect } from "react";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import { Autocomplete } from "@mui/lab";
 import { AutoCompleteInput } from "../interfaces/autocompleteinput.interface";
-import TextField from "@material-ui/core/TextField";
+import TextField from "@mui/material/TextField";
 import { Model } from "../interfaces/model.interface";
 import { useGetCategorys } from "../hooks/category/useGetCategorys";
 import { useGetBrandsByCategory } from "../hooks/brand/useBrandsByCategory";
@@ -23,9 +23,9 @@ import { Product } from "../interfaces/product.interface";
 import { useGetProductByName } from "../hooks/product/useProductByName";
 import Progress from "../components/progress/progress";
 import { formatMoney } from "../lib/currency/money";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { Service } from "../interfaces/service.interface";
 import { useGetServicesByCategory } from "../hooks/service/useGetServicesByCategory";
 import { useGetServiceByName } from "../hooks/service/useServiceByName";
@@ -199,7 +199,7 @@ const CheckProducts = () => {
                 flexDirection: "column",
               }}
             >
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Autocomplete
                   id="idCategory"
                   onChange={(event, value) => {
@@ -233,9 +233,9 @@ const CheckProducts = () => {
                     />
                   )}
                 />
-              </Grid>
+              </Grid> */}
 
-              {isActiveRadio.product ? (
+              {/* {isActiveRadio.product ? (
                 <>
                   <Grid item xs={12}>
                     <Autocomplete
@@ -394,7 +394,7 @@ const CheckProducts = () => {
                     </Button>
                   )}
                 </Grid>
-              )}
+              )} */}
             </Grid>
           </div>
           <div

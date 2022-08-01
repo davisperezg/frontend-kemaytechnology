@@ -1,27 +1,22 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import TextField from "@material-ui/core/TextField";
+import TextField from "@mui/material/TextField";
 import { Module } from "../../interfaces/module.interface";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import { useUpdateModule } from "../../hooks/module/useUpdateModule";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/alert/action";
 import { Menu } from "../../interfaces/menu.interface";
 import { Access } from "../../interfaces/access.interface";
-import FormControl from "@material-ui/core/FormControl";
+import FormControl from "@mui/material/FormControl";
 import Progress from "../progress/progress";
-import Input from "@material-ui/core/Input";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
-import Chip from "@material-ui/core/Chip";
-import {
-  createStyles,
-  makeStyles,
-  useTheme,
-  Theme,
-} from "@material-ui/core/styles";
+import Input from "@mui/material/Input";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import Chip from "@mui/material/Chip";
+import { createStyles, useTheme, Theme } from "@mui/material/styles";
 import { useCreateModule } from "../../hooks/module/useCreateModule";
 import { useGetAllAccess } from "../../hooks/access/useGetAllAceess";
 import { useGetMenus } from "../../hooks/menu/useGetMenus";
@@ -31,26 +26,6 @@ import { findError } from "../../helpers/control-errors";
 type InputChange = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 type FormChange = FormEvent<HTMLFormElement>;
 type SelectChange = ChangeEvent<{ value: unknown } | any | HTMLSelectElement>;
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-      maxWidth: 300,
-    },
-    chips: {
-      display: "flex",
-      flexWrap: "wrap",
-    },
-    chip: {
-      margin: 2,
-    },
-    noLabel: {
-      marginTop: theme.spacing(3),
-    },
-  })
-);
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -93,7 +68,7 @@ const ModuleForm = ({
     initialValueUpdate.id ? initialValueUpdate : initialValueCreate
   );
   const dispatch = useDispatch();
-  const classes = useStyles();
+  //const classes = useStyles();
   const theme = useTheme();
 
   const handleInput = (e: InputChange) => {
@@ -241,7 +216,7 @@ const ModuleForm = ({
               <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth>
                   <InputLabel id="menus-mutiple-chip-label">Menus</InputLabel>
-                  <Select
+                  {/* <Select
                     labelId="menus-mutiple-chip-label"
                     id="menus-mutiple-chip"
                     multiple
@@ -249,7 +224,7 @@ const ModuleForm = ({
                     onChange={handleSelectMenus}
                     input={<Input id="select-multiple-chip" />}
                     renderValue={(selected) => (
-                      <div className={classes.chips}>
+                      <div>
                         {(selected as any[]).map((menu) => {
                           return (
                             <Chip
@@ -276,7 +251,7 @@ const ModuleForm = ({
                         {menu.name}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </Select> */}
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
@@ -284,7 +259,7 @@ const ModuleForm = ({
                   <InputLabel id="access-mutiple-chip-label">
                     Accesos
                   </InputLabel>
-                  <Select
+                  {/* <Select
                     labelId="access-mutiple-chip-label"
                     id="access-mutiple-chip"
                     multiple
@@ -292,7 +267,7 @@ const ModuleForm = ({
                     onChange={handleSelectAccess}
                     input={<Input id="select-multiple-chip" />}
                     renderValue={(selected) => (
-                      <div className={classes.chips}>
+                      <div>
                         {(selected as any[]).map((access) => {
                           return (
                             <Chip
@@ -319,7 +294,7 @@ const ModuleForm = ({
                         {access.name}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </Select> */}
                 </FormControl>
               </Grid>
             </>
