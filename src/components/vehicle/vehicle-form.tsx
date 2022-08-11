@@ -42,14 +42,26 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     //billigStart: now,
   };
 
+  // const initialStateUpdate: Vehicle = {
+  //   id: vehicle?.id || "",
+  //   customer: vehicle?.customer?.id || "",
+  //   device: vehicle?.device?.name || "",
+  //   billing: vehicle?.billing?.name || "",
+  //   plate: vehicle?.plate || "",
+  //   nroGPS: vehicle?.nroGPS || "",
+  //   platform: vehicle?.platform || "",
+  //   sim: vehicle?.sim || "",
+  //   //billigStart: moment(vehicle?.billigStart).format("YYYY-MM-DD") || now,
+  // };
+
   const initialStateUpdate: Vehicle = {
     id: vehicle?.id || "",
-    customer: vehicle?.customer?.id || "",
-    device: vehicle?.device?.name || "",
-    billing: vehicle?.billing?.name || "",
+    customer: "",
+    device: "",
+    billing: "",
     plate: vehicle?.plate || "",
     nroGPS: vehicle?.nroGPS || "",
-    platform: vehicle?.platform || "",
+    platform: "",
     sim: vehicle?.sim || "",
     //billigStart: moment(vehicle?.billigStart).format("YYYY-MM-DD") || now,
   };
@@ -169,35 +181,35 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
       setBillings(optionBilling?.data?.getBillings);
     }
     if (customers[0]?.name) {
-      setCustomer({
-        ...customer,
-        name: vehicleForm.id ? vehicle?.customer.name : customers[0]?.name,
-        lastName: vehicleForm.id
-          ? vehicle?.customer.lastName
-          : customers[0]?.lastName,
-        username: vehicleForm.id
-          ? vehicle?.customer.username
-          : customers[0]?.username,
-        password: vehicleForm.id
-          ? vehicle?.customer.password
-          : customers[0]?.password,
-      });
-      setDevice({
-        ...device,
-        name: vehicleForm.id ? vehicle?.device.name : devices[0]?.name,
-      });
-      setBilling({
-        ...billing,
-        name: vehicleForm.id ? vehicle?.billing.name : billings[0]?.name,
-      });
-      setVehicleForm({
-        ...vehicleForm,
-        customer: vehicleForm.id ? vehicle?.customer.id : customers[0]?.id,
-        device: vehicleForm.id ? vehicle?.device.name : devices[0]?.name,
-        billing: vehicleForm.id ? vehicle?.billing.name : billings[0]?.name,
-        platform: vehicleForm.id ? vehicle!.platform : "PREMIUM",
-        sim: vehicleForm.id ? vehicle!.sim : "MOVISTAR",
-      });
+      // setCustomer({
+      //   ...customer,
+      //   name: vehicleForm.id ? vehicle?.customer.name : customers[0]?.name,
+      //   lastName: vehicleForm.id
+      //     ? vehicle?.customer.lastName
+      //     : customers[0]?.lastName,
+      //   username: vehicleForm.id
+      //     ? vehicle?.customer.username
+      //     : customers[0]?.username,
+      //   password: vehicleForm.id
+      //     ? vehicle?.customer.password
+      //     : customers[0]?.password,
+      // });
+      // setDevice({
+      //   ...device,
+      //   name: vehicleForm.id ? vehicle?.device.name : devices[0]?.name,
+      // });
+      // setBilling({
+      //   ...billing,
+      //   name: vehicleForm.id ? vehicle?.billing.name : billings[0]?.name,
+      // });
+      // setVehicleForm({
+      //   ...vehicleForm,
+      //   customer: vehicleForm.id ? vehicle?.customer.id : customers[0]?.id,
+      //   device: vehicleForm.id ? vehicle?.device.name : devices[0]?.name,
+      //   billing: vehicleForm.id ? vehicle?.billing.name : billings[0]?.name,
+      //   platform: vehicleForm.id ? vehicle!.platform : "PREMIUM",
+      //   sim: vehicleForm.id ? vehicle!.sim : "MOVISTAR",
+      // });
     }
   }, [
     optionCustomer.data,

@@ -78,7 +78,7 @@ const LoginPage: React.FC = ({ loading, setLoading }: any) => {
       setLocal("refreshToken", refresh_token);
       client.resetStore();
       window.location.href = "/";
-    } catch (e) {
+    } catch (e: any) {
       if (e.graphQLErrors[0].extensions.exception.status === 401) {
         dispatch(
           setAlert({

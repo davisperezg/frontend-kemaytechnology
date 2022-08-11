@@ -33,7 +33,7 @@ const BillingList = ({ billing }: { billing: Billing }) => {
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
-  const optionsBilling = useDeleteBilling();
+  //const optionsBilling = useDeleteBilling();
 
   const handleClose = () => {
     setDialog(initialDialog);
@@ -50,34 +50,34 @@ const BillingList = ({ billing }: { billing: Billing }) => {
     }
   };
 
-  const deleteBilling = async (id: string | undefined) => {
-    try {
-      await optionsBilling.deleteBilling({
-        variables: {
-          id,
-        },
-      });
-    } catch (e) {
-      setDialog({ name: "error", active: true });
-      dispatch(
-        setAlert({
-          type: "error",
-          text: findError(e),
-        })
-      );
-      <DialogForm
-        open={dialog.active}
-        title={dialog.name}
-        handleClose={handleClose}
-      />;
-    }
-  };
+  // const deleteBilling = async (id: string | undefined) => {
+  //   try {
+  //     await optionsBilling.deleteBilling({
+  //       variables: {
+  //         id,
+  //       },
+  //     });
+  //   } catch (e) {
+  //     setDialog({ name: "error", active: true });
+  //     dispatch(
+  //       setAlert({
+  //         type: "error",
+  //         text: findError(e),
+  //       })
+  //     );
+  //     <DialogForm
+  //       open={dialog.active}
+  //       title={dialog.name}
+  //       handleClose={handleClose}
+  //     />;
+  //   }
+  // };
 
   const showOptionsForDelete = () => (
     <>
       <Tooltip
         title="Eliminar Cliente"
-        onClick={() => deleteBilling(billing.id)}
+        //onClick={() => deleteBilling(billing.id)}
       >
         <IconButton aria-label="egress" size="small">
           <HighlightOffRoundedIcon />

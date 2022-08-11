@@ -10,7 +10,7 @@ import { setContext } from "@apollo/client/link/context";
 import { getLocal, setLocal } from "./lib/local-storage";
 import { onError } from "@apollo/client/link/error";
 import { POST_REFRESH } from "./hooks/login/useRefreshToken";
-import { URLC } from "./config/config";
+import { URL_GQL } from "./config/config";
 
 let isRefreshing = false;
 let pendingRequests: any = [];
@@ -83,9 +83,8 @@ const errorLink = onError(
   }
 );
 
-console.log(URLC);
 const httpLink = createHttpLink({
-  uri: URLC,
+  uri: URL_GQL,
 });
 
 const authLink = setContext((_, { headers }) => {

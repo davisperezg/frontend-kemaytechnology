@@ -37,7 +37,7 @@ export const whoisme = (payload: any) => async (dispatch: any) => {
       payload: payload.me,
     });
     await dispatch(setLoading(false));
-  } catch (e) {
+  } catch (e: any) {
     await dispatch({
       type: ERROR_USER,
       payload: e.message,

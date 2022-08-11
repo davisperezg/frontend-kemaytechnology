@@ -1,0 +1,11 @@
+.search-vehicle {
+  width: 465px;
+  padding: 5px;
+  border: 1px solid #d0cecf;
+  text-transform: uppercase;
+}
+
+.search-vehicle:focus-visible {
+  outline: none;
+  border-color: #1976d2;
+}

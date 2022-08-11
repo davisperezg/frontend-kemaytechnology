@@ -1,19 +1,24 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
+import { useQuery } from "@tanstack/react-query";
+import { graphQLClient } from "../../config/config";
 
 export const GET_BILLINGS = gql`
-  query getBillings {
+  query {
     getBillings {
       id
       name
       day
       createdAt
       updatedAt
+      price
     }
   }
 `;
 
 export const useGetBilling = () => {
-  const { data, error, loading } = useQuery(GET_BILLINGS);
+  return useQuery(["billings"], async () => {
+    const { getBillings } = await graphQLClient.request(GET_BILLINGS);
 
-  return { data, error, loading };
+    return getBillings;
+  });
 };

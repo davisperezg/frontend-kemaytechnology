@@ -1,6 +1,5 @@
 /* eslint-disable no-use-before-define */
 import Grid from "@mui/material/Grid";
-import RedditTextField from "../components/textfield/reddit";
 import Button from "@mui/material/Button";
 import { loadAccess } from "../components/acceso/filter-access.component";
 import { PERMIT_FOUR } from "../const";

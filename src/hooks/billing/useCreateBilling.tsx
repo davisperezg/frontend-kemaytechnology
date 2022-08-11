@@ -1,11 +1,16 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { graphQLClient } from "../../config/config";
 import { Billing } from "../../interfaces/billing.interface";
-import { GET_BILLINGS } from "./useGetBilling";
 
-interface CreateBillingInput {
-  variables: {
-    billingInput: Billing;
+interface IError {
+  request: {
+    response: string;
   };
+}
+
+interface ICreateParams {
+  variables: { billingInput: Billing };
 }
 
 const CREATE_BILLING = gql`
@@ -21,13 +26,17 @@ const CREATE_BILLING = gql`
 `;
 
 export const useCreateBilling = () => {
-  const [registerBilling, { error, loading }] = useMutation(CREATE_BILLING, {
-    refetchQueries: () => [
-      {
-        query: GET_BILLINGS,
-      },
-    ],
-  });
+  const queryClient = useQueryClient();
 
-  return { registerBilling, error, loading };
+  return useMutation<Billing, IError, ICreateParams>(["billings"], {
+    mutationFn: async ({ variables }) =>
+      await graphQLClient.request(CREATE_BILLING, variables),
+    onSuccess(data: any) {
+      const { registerBilling } = data;
+      queryClient.setQueryData(["billings"], (prevBillings: any) =>
+        prevBillings.concat(registerBilling)
+      );
+      queryClient.invalidateQueries(["billings"]);
+    },
+  });
 };

@@ -57,7 +57,7 @@ const ConsultaRenovaciones = () => {
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const { data, loading, error } = useGetVehicles();
+  //const { data, loading, error } = useGetVehicles();
   const optionsConsulta = useConsultaRenovaciones();
   const optionListado = useGetRenews();
   const [renews, setRenews] = useState<any[]>([]);
@@ -133,15 +133,15 @@ const ConsultaRenovaciones = () => {
     });
   }, [consulta.desde, consulta.hasta]);
 
-  useEffect(() => {
-    memoizedResult();
-    if (optionsConsulta.data) {
-      setVehicles(optionsConsulta.data.getVehiculosRenovadosXFecha || []);
-    }
-    if (optionListado.data) {
-      setRenews(optionListado.data.getRenews);
-    }
-  }, [memoizedResult, optionsConsulta.data, optionListado.data]);
+  // useEffect(() => {
+  //   memoizedResult();
+  //   if (optionsConsulta.data) {
+  //     setVehicles(optionsConsulta.data.getVehiculosRenovadosXFecha || []);
+  //   }
+  //   if (optionListado.data) {
+  //     setRenews(optionListado.data.getRenews);
+  //   }
+  // }, [memoizedResult, optionsConsulta.data, optionListado.data]);
 
   if (optionsConsulta.error) {
     return <h1>{findError(optionsConsulta.error)}</h1>;
