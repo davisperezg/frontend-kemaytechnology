@@ -2,6 +2,7 @@ export interface Billing {
   id?: string;
   name: string;
   day?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  price?: number;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }

@@ -29,21 +29,21 @@ import {
 } from "../images_data64/data64";
 import moment from "moment";
 
-const checkPlatform = (vehicle: Vehicle, customer: Customer) => {
-  let message = "";
-  if (vehicle!.platform === "STANDAR") {
-    message = `kemay/${vehicle.customer.username || customer.username}/${
-      vehicle.customer.password || customer.password
-    }`;
-  } else if (vehicle!.platform === "PREMIUM") {
-    message = `${vehicle.customer.username || customer.username}/${
-      vehicle.customer.password || customer.password
-    }`;
-  } else {
-    message = "SIN PLATAFORMA";
-  }
-  return message;
-};
+// const checkPlatform = (vehicle: Vehicle, customer: Customer) => {
+//   let message = "";
+//   if (vehicle!.platform === "STANDAR") {
+//     message = `kemay/${vehicle.customer.username || customer.username}/${
+//       vehicle.customer.password || customer.password
+//     }`;
+//   } else if (vehicle!.platform === "PREMIUM") {
+//     message = `${vehicle.customer.username || customer.username}/${
+//       vehicle.customer.password || customer.password
+//     }`;
+//   } else {
+//     message = "SIN PLATAFORMA";
+//   }
+//   return message;
+// };
 
 const checkPage = (vehicle: Vehicle) => {
   let message = "";
@@ -73,12 +73,12 @@ export const GenerarGuiaUSua = (vehicle: Vehicle, customer?: any) => {
   const step2 =
     "2. Ingresar sus credenciales (Las credenciales son las mismas para el aplicativo móvil)";
 
-  const nameCustomer = `SR(A): ${vehicle.customer.name || customer.name} ${
-    vehicle.customer.lastName || customer.lastName
-  }`;
-  const plan = vehicle!.platform;
-  const account = `${checkPlatform(vehicle, customer)}`;
-  const linkPage = `${checkPage(vehicle)}`;
+  // const nameCustomer = `SR(A): ${vehicle.customer.name || customer.name} ${
+  //   vehicle.customer.lastName || customer.lastName
+  // }`;
+  // const plan = vehicle!.platform;
+  // const account = `${checkPlatform(vehicle, customer)}`;
+  // const linkPage = `${checkPage(vehicle)}`;
 
   const step3 = `3. Verificar vehiculos agregados a su cuenta`;
   const step3steps1 = `3.1 Ir a la pestaña "Unidades"`;
@@ -104,7 +104,7 @@ export const GenerarGuiaUSua = (vehicle: Vehicle, customer?: any) => {
   const SeleccionIncio = `Seleccionar añadir a pantalla de inicio`;
   const CambioNombre = `Cambiar nombre a "GPS" y Añadir`;
   const IrAtuPantalla = `Listo. Ir a tu pantalla de inicio`;
-  const Comandos = `Comandos para ${vehicle.device.name || vehicle.device}`;
+  //const Comandos = `Comandos para ${vehicle.device.name || vehicle.device}`;
 
   //logo
   doc.addImage(logo, "JPG", left + 153, 5, 35, 30);
@@ -116,26 +116,26 @@ export const GenerarGuiaUSua = (vehicle: Vehicle, customer?: any) => {
   doc.text(title, left + 55, top);
   doc.setTextColor(0, 0, 0);
   doc.setFont("courier", "normal");
-  const subtitle_message = doc.splitTextToSize(subtitle + " - " + plan, 192);
-  doc.text(subtitle_message, left, top + 10);
+  //const subtitle_message = doc.splitTextToSize(subtitle + " - " + plan, 192);
+  //doc.text(subtitle_message, left, top + 10);
 
   doc.setFontSize(12);
   doc.setFont("helvetica", "normal");
   const message = doc.splitTextToSize(messageCustomer, 192);
-  doc.text(nameCustomer, left + 55, top + 35);
+  //doc.text(nameCustomer, left + 55, top + 35);
   //doc.text(plan, left, top + 45);
   doc.text(message, left, top + 45);
 
   const step1_message = doc.splitTextToSize(step1, 192);
   doc.text(step1_message, left, top + 55);
   doc.setFont("helvetica", "bold");
-  doc.text(linkPage, left + 55, top + 65);
+  //doc.text(linkPage, left + 55, top + 65);
   doc.setFont("helvetica", "normal");
 
   const step2_message = doc.splitTextToSize(step2, 192);
   doc.text(step2_message, left, top + 75);
   doc.setFont("helvetica", "bold");
-  doc.text(account, left + 55, top + 85);
+  //doc.text(account, left + 55, top + 85);
   doc.setFont("helvetica", "normal");
 
   if (vehicle!.platform === "STANDAR") {
@@ -166,153 +166,154 @@ export const GenerarGuiaUSua = (vehicle: Vehicle, customer?: any) => {
     );
     doc.text(IrAtuPantalla, left, top);
     doc.setFont("helvetica", "bold");
-    doc.text(Comandos, left, top + 90);
+    //doc.text(Comandos, left, top + 90);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(12);
 
-    if (vehicle.device.name === "SUNTECH ST340LC") {
-      doc.text("ID:", left, top + 100);
-      doc.text("Apagado: ST300CMD;(ID);02;Disable1", left, top + 110);
-      doc.text("Encendido: ST300CMD;(ID);02;Enable1", left, top + 120);
-    } else if (vehicle.device.name === "TELTONIKA FMB920") {
-      doc.text(
-        "Apagado: (espacio)(espacio)setdigout(espacio)1",
-        left,
-        top + 100
-      );
-      doc.text(
-        "Encendido: (espacio)(espacio)setdigout(espacio)0",
-        left,
-        top + 110
-      );
-    } else {
-      doc.text("Apagado: stopelec123456", left, top + 100);
-      doc.text("Encendido: supplyelect123456", left, top + 110);
-    }
-    if (vehicle!.sim === "MULTIOPERADOR") {
-      //imagenes pltaforma cecsar
-    } else {
-      //fin
-      doc.text(
-        `Enviar comandos via SMS al ${vehicle!.nroGPS}`,
-        left,
-        top + 130
-      );
-    }
-  } else {
-    //imagenes y comentarios del pdf guia
-    doc.addImage(wialon_login, "PNG", left, top + 95, 190, 120);
-    doc.addPage();
-    doc.text(step3, left, top - 30);
-    doc.text(step3steps1, left + 5, top - 25);
-    doc.text(step3steps2, left + 5, top - 20);
+    //   if (vehicle.device.name === "SUNTECH ST340LC") {
+    //     doc.text("ID:", left, top + 100);
+    //     doc.text("Apagado: ST300CMD;(ID);02;Disable1", left, top + 110);
+    //     doc.text("Encendido: ST300CMD;(ID);02;Enable1", left, top + 120);
+    //   } else if (vehicle.device.name === "TELTONIKA FMB920") {
+    //     doc.text(
+    //       "Apagado: (espacio)(espacio)setdigout(espacio)1",
+    //       left,
+    //       top + 100
+    //     );
+    //     doc.text(
+    //       "Encendido: (espacio)(espacio)setdigout(espacio)0",
+    //       left,
+    //       top + 110
+    //     );
+    //   } else {
+    //     doc.text("Apagado: stopelec123456", left, top + 100);
+    //     doc.text("Encendido: supplyelect123456", left, top + 110);
+    //   }
+    //   if (vehicle!.sim === "MULTIOPERADOR") {
+    //     //imagenes pltaforma cecsar
+    //   } else {
+    //     //fin
+    //     doc.text(
+    //       `Enviar comandos via SMS al ${vehicle!.nroGPS}`,
+    //       left,
+    //       top + 130
+    //     );
+    //   }
+    // } else {
+    //   //imagenes y comentarios del pdf guia
+    //   doc.addImage(wialon_login, "PNG", left, top + 95, 190, 120);
+    //   doc.addPage();
+    //   doc.text(step3, left, top - 30);
+    //   doc.text(step3steps1, left + 5, top - 25);
+    //   doc.text(step3steps2, left + 5, top - 20);
 
-    doc.addImage(wialon_unidades, "PNG", left, top - 15, 190, 40);
-    doc.text(step4, left, top + 30);
-    doc.addImage(wialon_configuracion, "PNG", left, top + 40, 190, 200);
+    //   doc.addImage(wialon_unidades, "PNG", left, top - 15, 190, 40);
+    //   doc.text(step4, left, top + 30);
+    //   doc.addImage(wialon_configuracion, "PNG", left, top + 40, 190, 200);
 
-    doc.addPage();
-    const step5_message = doc.splitTextToSize(step5, 192);
-    doc.text(step5_message, left, top - 30);
-    doc.addImage(wialon_seguimiento, "PNG", left, top - 20, 190, 200);
-    doc.addPage();
+    //   doc.addPage();
+    //   const step5_message = doc.splitTextToSize(step5, 192);
+    //   doc.text(step5_message, left, top - 30);
+    //   doc.addImage(wialon_seguimiento, "PNG", left, top - 20, 190, 200);
+    //   doc.addPage();
 
-    const step6_message = doc.splitTextToSize(step6, 192);
-    doc.text(step6_message, left, top - 30);
-    doc.addImage(wialon_mapa, "PNG", left, top - 20, 190, 100);
-    doc.text(step7, left, top + 90);
-    doc.text(step7_message, left, top + 95);
-    doc.addImage(wialon_cel_uso, "PNG", left, top + 100, 190, 150);
+    //   const step6_message = doc.splitTextToSize(step6, 192);
+    //   doc.text(step6_message, left, top - 30);
+    //   doc.addImage(wialon_mapa, "PNG", left, top - 20, 190, 100);
+    //   doc.text(step7, left, top + 90);
+    //   doc.text(step7_message, left, top + 95);
+    //   doc.addImage(wialon_cel_uso, "PNG", left, top + 100, 190, 150);
 
-    doc.addPage();
-    doc.addImage(wialon_cel2, "PNG", left, top - 40, 210, 120);
-    doc.addPage();
+    //   doc.addPage();
+    //   doc.addImage(wialon_cel2, "PNG", left, top - 40, 210, 120);
+    //   doc.addPage();
 
-    doc.text(step8, left, top - 30);
-    doc.addImage(wialon_extra, "PNG", left, top - 20, 200, 150);
-    doc.setFont("helvetica", "bold");
-    doc.text(titulo_datos_instalacion, left, top + 150);
-    doc.setFont("helvetica", "normal");
-    doc.text(inifin, left, top + 160);
-    doc.text(placa, left, top + 170);
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.text(Comandos, left, top + 190);
-    doc.setFont("helvetica", "normal");
+    //   doc.text(step8, left, top - 30);
+    //   doc.addImage(wialon_extra, "PNG", left, top - 20, 200, 150);
+    //   doc.setFont("helvetica", "bold");
+    //   doc.text(titulo_datos_instalacion, left, top + 150);
+    //   doc.setFont("helvetica", "normal");
+    //   doc.text(inifin, left, top + 160);
+    //   doc.text(placa, left, top + 170);
+    //   doc.setFontSize(12);
+    //   doc.setFont("helvetica", "bold");
+    //   doc.text(Comandos, left, top + 190);
+    //   doc.setFont("helvetica", "normal");
 
-    if (vehicle.device.name === "SUNTECH ST340LC") {
-      doc.text("ID:", left, top + 200);
-      doc.text("Apagado: ST300CMD;(ID);02;Disable1", left, top + 210);
-      doc.text("Encendido: ST300CMD;(ID);02;Enable1", left, top + 220);
-    } else if (vehicle.device.name === "TELTONIKA FMB920") {
-      doc.text(
-        "Apagado: (espacio)(espacio)setdigout(espacio)1",
-        left,
-        top + 200
-      );
-      doc.text(
-        "Encendido: (espacio)(espacio)setdigout(espacio)0",
-        left,
-        top + 210
-      );
-    } else {
-      doc.text("Apagado: stopelec123456", left, top + 200);
-      doc.text("Encendido: supplyelect123456", left, top + 210);
-    }
-    if (vehicle!.sim === "MULTIOPERADOR") {
-      //imagenes pltaforma cecsar
-      doc.addPage();
-      doc.setFont("helvetica", "bold");
-      doc.text(
-        "GUIA PARA EL APAGADO Y ENCENDIDO DEL VEHICULO",
-        left + 45,
-        top - 30
-      );
+    //   if (vehicle.device.name === "SUNTECH ST340LC") {
+    //     doc.text("ID:", left, top + 200);
+    //     doc.text("Apagado: ST300CMD;(ID);02;Disable1", left, top + 210);
+    //     doc.text("Encendido: ST300CMD;(ID);02;Enable1", left, top + 220);
+    //   } else if (vehicle.device.name === "TELTONIKA FMB920") {
+    //     doc.text(
+    //       "Apagado: (espacio)(espacio)setdigout(espacio)1",
+    //       left,
+    //       top + 200
+    //     );
+    //     doc.text(
+    //       "Encendido: (espacio)(espacio)setdigout(espacio)0",
+    //       left,
+    //       top + 210
+    //     );
+    //   } else {
+    //     doc.text("Apagado: stopelec123456", left, top + 200);
+    //     doc.text("Encendido: supplyelect123456", left, top + 210);
+    //   }
+    //   if (vehicle!.sim === "MULTIOPERADOR") {
+    //     //imagenes pltaforma cecsar
+    //     doc.addPage();
+    //     doc.setFont("helvetica", "bold");
+    //     doc.text(
+    //       "GUIA PARA EL APAGADO Y ENCENDIDO DEL VEHICULO",
+    //       left + 45,
+    //       top - 30
+    //     );
 
-      doc.text(
-        "Link para los comandos: http://dcsm2m.net/login",
-        left,
-        top - 20
-      );
+    //     doc.text(
+    //       "Link para los comandos: http://dcsm2m.net/login",
+    //       left,
+    //       top - 20
+    //     );
 
-      doc.text(
-        `Cuenta: ${vehicle.customer.username || customer.username}@ktech.com`,
-        left,
-        top - 10
-      );
-      doc.text(
-        `Contraseña: ${vehicle.customer.password || customer.password}`,
-        left,
-        top
-      );
-      doc.setFont("helvetica", "normal");
-      doc.text(`1. Selecciona la pestaña SIMS`, left, top + 10);
-      doc.addImage(dashboard_cesar, "PNG", left, top + 20, 180, 100);
-      doc.text(
-        `2.  Seleccionar el icono de mensajes al vehículo que desea apagar.`,
-        left,
-        top + 130
-      );
-      doc.addImage(sim_cesar, "PNG", left, top + 140, 180, 60);
-      doc.addPage();
-      doc.text(
-        `3. Escribir el comando y seleccionar en "Enviar SMS"`,
-        left,
-        top - 30
-      );
-      doc.addImage(sms_cesar, "PNG", left, top - 20, 180, 100);
-    } else {
-      //fin
-      doc.text(
-        `Enviar comandos via SMS al ${vehicle!.nroGPS}`,
-        left,
-        top + 240
-      );
-    }
+    //     doc.text(
+    //       `Cuenta: ${vehicle.customer.username || customer.username}@ktech.com`,
+    //       left,
+    //       top - 10
+    //     );
+    //     doc.text(
+    //       `Contraseña: ${vehicle.customer.password || customer.password}`,
+    //       left,
+    //       top
+    //     );
+    //     doc.setFont("helvetica", "normal");
+    //     doc.text(`1. Selecciona la pestaña SIMS`, left, top + 10);
+    //     doc.addImage(dashboard_cesar, "PNG", left, top + 20, 180, 100);
+    //     doc.text(
+    //       `2.  Seleccionar el icono de mensajes al vehículo que desea apagar.`,
+    //       left,
+    //       top + 130
+    //     );
+    //     doc.addImage(sim_cesar, "PNG", left, top + 140, 180, 60);
+    //     doc.addPage();
+    //     doc.text(
+    //       `3. Escribir el comando y seleccionar en "Enviar SMS"`,
+    //       left,
+    //       top - 30
+    //     );
+    //     doc.addImage(sms_cesar, "PNG", left, top - 20, 180, 100);
+    //   } else {
+    //     //fin
+    //     doc.text(
+    //       `Enviar comandos via SMS al ${vehicle!.nroGPS}`,
+    //       left,
+    //       top + 240
+    //     );
+    //   }
+    // }
+    // doc.save(
+    //   `MANUA DE ${vehicle.customer.name || customer.name} ${
+    //     vehicle.customer.lastName || customer.lastName
+    //   }.pdf`
+    // );
   }
-  doc.save(
-    `MANUA DE ${vehicle.customer.name || customer.name} ${
-      vehicle.customer.lastName || customer.lastName
-    }.pdf`
-  );
 };

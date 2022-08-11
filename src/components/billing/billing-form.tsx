@@ -43,63 +43,63 @@ const BillingForm = ({ handleClose, billing }: Option) => {
     });
   };
 
-  const onSubmit = async (e: FormChange) => {
-    e.preventDefault();
+  // const onSubmit = async (e: FormChange) => {
+  //   e.preventDefault();
 
-    if (billingForm.id) {
-      try {
-        await optionsUpdate.updateBilling({
-          variables: {
-            billingInput: {
-              ...billingForm,
-              day: Number(billingForm.day),
-            },
-          },
-        });
-        dispatch(
-          setAlert({
-            type: "success",
-            text: "El plan se actualizó correctamente.",
-          })
-        );
-      } catch (e) {
-        dispatch(
-          setAlert({
-            type: "error",
-            text: findError(e),
-          })
-        );
-      }
-    } else {
-      try {
-        await optionsCreate.registerBilling({
-          variables: {
-            billingInput: {
-              ...billingForm,
-              day: Number(billingForm.day),
-            },
-          },
-        });
-        dispatch(
-          setAlert({
-            type: "success",
-            text: "La plan ha sido registrado correctamente.",
-          })
-        );
-      } catch (e) {
-        dispatch(
-          setAlert({
-            type: "error",
-            text: findError(e),
-          })
-        );
-      }
-    }
-  };
+  //   if (billingForm.id) {
+  //     try {
+  //       await optionsUpdate.updateBilling({
+  //         variables: {
+  //           billingInput: {
+  //             ...billingForm,
+  //             day: Number(billingForm.day),
+  //           },
+  //         },
+  //       });
+  //       dispatch(
+  //         setAlert({
+  //           type: "success",
+  //           text: "El plan se actualizó correctamente.",
+  //         })
+  //       );
+  //     } catch (e) {
+  //       dispatch(
+  //         setAlert({
+  //           type: "error",
+  //           text: findError(e),
+  //         })
+  //       );
+  //     }
+  //   } else {
+  //     try {
+  //       await optionsCreate.registerBilling({
+  //         variables: {
+  //           billingInput: {
+  //             ...billingForm,
+  //             day: Number(billingForm.day),
+  //           },
+  //         },
+  //       });
+  //       dispatch(
+  //         setAlert({
+  //           type: "success",
+  //           text: "La plan ha sido registrado correctamente.",
+  //         })
+  //       );
+  //     } catch (e) {
+  //       dispatch(
+  //         setAlert({
+  //           type: "error",
+  //           text: findError(e),
+  //         })
+  //       );
+  //     }
+  //   }
+  // };
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <form>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <TextField
@@ -127,7 +127,7 @@ const BillingForm = ({ handleClose, billing }: Option) => {
               value={billingForm.day}
             />
           </Grid>
-          <DialogActions style={{ width: "100%" }}>
+          {/* <DialogActions style={{ width: "100%" }}>
             <Button onClick={handleClose} color="primary">
               Cancelar
             </Button>
@@ -156,7 +156,7 @@ const BillingForm = ({ handleClose, billing }: Option) => {
                 Registrar
               </Button>
             )}
-          </DialogActions>
+          </DialogActions> */}
         </Grid>
       </form>
     </>

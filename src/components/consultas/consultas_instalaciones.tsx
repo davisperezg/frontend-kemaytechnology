@@ -38,7 +38,7 @@ const VehicleConsult = ({ vehicle }: { vehicle: Vehicle }) => {
     <>
       {isActive && <BackDrop state={isActive} />}
       <TableRow>
-        <TableCell component="th" scope="row">
+        {/* <TableCell component="th" scope="row">
           {vehicle.customer.name} {vehicle.customer.lastName}
         </TableCell>
         <TableCell component="th" scope="row" align="center">
@@ -64,7 +64,7 @@ const VehicleConsult = ({ vehicle }: { vehicle: Vehicle }) => {
         </TableCell>
         <TableCell component="th" scope="row">
           {vehicle.nroGPS}
-        </TableCell>
+        </TableCell> */}
       </TableRow>
     </>
   );

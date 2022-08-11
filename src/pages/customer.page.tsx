@@ -41,7 +41,7 @@ const CustomerPage = () => {
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const { data, loading, error } = useGetCustomers();
+  const { data, isLoading, isError, isFetching } = useGetCustomers();
   //TABLE OPTIONS
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [pagex, setPage] = useState(0);
@@ -121,14 +121,6 @@ const CustomerPage = () => {
       setCustomers(allCustomers);
     }
   }, [data]);
-
-  if (loading) {
-    return <h1>Cargando...</h1>;
-  }
-
-  if (error) {
-    return <h1>{findError(error)}</h1>;
-  }
 
   const showDialogToCreate = () => (
     <>

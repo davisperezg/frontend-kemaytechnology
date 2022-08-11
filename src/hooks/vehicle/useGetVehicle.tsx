@@ -1,7 +1,9 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
+import { useQuery } from "@tanstack/react-query";
+import { graphQLClient } from "../../config/config";
 
 export const GET_VEHICLES = gql`
-  query getVehicles {
+  query {
     getVehicles {
       id
       customer {
@@ -45,7 +47,9 @@ export const GET_VEHICLES = gql`
 `;
 
 export const useGetVehicles = () => {
-  const { data, error, loading } = useQuery(GET_VEHICLES);
+  return useQuery(["vehicles"], async () => {
+    const { getVehicles } = await graphQLClient.request(GET_VEHICLES);
 
-  return { data, error, loading };
+    return getVehicles;
+  });
 };

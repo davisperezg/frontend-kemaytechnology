@@ -2,6 +2,7 @@ header {
   text-align: right;
   padding: 10px;
   background-color: white;
+  flex: 0 1 auto;
 }
 
 .title-logo {

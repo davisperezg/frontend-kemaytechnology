@@ -54,7 +54,7 @@ const ConsultaVencidos = () => {
   const dispatch = useDispatch();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
 
-  const { data, loading, error } = useGetVehicles();
+  //const { data, loading, error } = useGetVehicles();
   const optionsConsulta = useConsultaVencidos();
 
   //TABLE OPTIONS
@@ -116,16 +116,16 @@ const ConsultaVencidos = () => {
     });
   }, [consulta.desde, consulta.hasta]);
 
-  useEffect(() => {
-    memoizedResult();
-    if (optionsConsulta.data) {
-      setVehicles(optionsConsulta.data.getVehiculosVencidosXFecha);
-    }
-  }, [memoizedResult, optionsConsulta.data]);
+  // useEffect(() => {
+  //   memoizedResult();
+  //   if (optionsConsulta.data) {
+  //     setVehicles(optionsConsulta.data.getVehiculosVencidosXFecha);
+  //   }
+  // }, [memoizedResult, optionsConsulta.data]);
 
-  if (optionsConsulta.error) {
-    return <h1>{findError(optionsConsulta.error)}</h1>;
-  }
+  // if (optionsConsulta.error) {
+  //   return <h1>{findError(optionsConsulta.error)}</h1>;
+  // }
 
   return (
     <>

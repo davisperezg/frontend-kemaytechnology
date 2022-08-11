@@ -32,14 +32,14 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
   const [isActive, setActive] = useState<boolean>(false);
   const [billings, setBillings] = useState<Billing[]>([]);
   const dispatch = useDispatch();
-  const [renew, setRenew] = useState<Renew>({
-    vehicle: vehicle.plate,
-    billing: vehicle.billing.name,
-  });
+  // const [renew, setRenew] = useState<Renew>({
+  //   vehicle: vehicle.plate,
+  //   billing: vehicle.billing.name,
+  // });
 
-  const [state, setState] = useState({
-    day: vehicle.billing.day,
-  });
+  // const [state, setState] = useState({
+  //   day: vehicle.billing.day,
+  // });
 
   const optionsBillings = useGetBilling();
   const optionBilling = useBillingByName();
@@ -52,13 +52,13 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
   let newDate: Date;
   let fechaDesde: any;
 
-  if (getTimeStart >= getTimeEnd) {
-    newDate = add(dateStart, { days: state.day });
-    fechaDesde = moment().format("DD/MM/YYYY");
-  } else {
-    newDate = add(dateEnd, { days: state.day });
-    fechaDesde = moment(dateEnd).format("DD/MM/YYYY");
-  }
+  // if (getTimeStart >= getTimeEnd) {
+  //   newDate = add(dateStart, { days: state.day });
+  //   fechaDesde = moment().format("DD/MM/YYYY");
+  // } else {
+  //   newDate = add(dateEnd, { days: state.day });
+  //   fechaDesde = moment(dateEnd).format("DD/MM/YYYY");
+  // }
 
   const getBilling = async (name: string) => {
     try {
@@ -77,9 +77,9 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
     }
   };
 
-  const handleChange = (event: SelectChange) => {
-    setRenew({ ...renew, billing: event.target.value });
-  };
+  // const handleChange = (event: SelectChange) => {
+  //   setRenew({ ...renew, billing: event.target.value });
+  // };
 
   const registerRenew = async () => {
     const confirm = window.confirm(
@@ -87,26 +87,26 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
     );
 
     if (confirm) {
-      try {
-        await optionsCreate.registerRenew({
-          variables: {
-            renewInput: renew,
-          },
-        });
-        dispatch(
-          setAlert({
-            type: "success",
-            text: "Se ha renovado correctamente.",
-          })
-        );
-      } catch (e) {
-        dispatch(
-          setAlert({
-            type: "error",
-            text: findError(e),
-          })
-        );
-      }
+      // try {
+      //   await optionsCreate.registerRenew({
+      //     variables: {
+      //       renewInput: renew,
+      //     },
+      //   });
+      //   dispatch(
+      //     setAlert({
+      //       type: "success",
+      //       text: "Se ha renovado correctamente.",
+      //     })
+      //   );
+      // } catch (e) {
+      //   dispatch(
+      //     setAlert({
+      //       type: "error",
+      //       text: findError(e),
+      //     })
+      //   );
+      // }
     }
   };
 
@@ -115,18 +115,17 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
       setBillings(optionsBillings.data.getBillings);
     }
     if (optionBilling.data) {
-      setState({ ...state, day: optionBilling.data.getBillingByName.day });
+      //setState({ ...state, day: optionBilling.data.getBillingByName.day });
     }
     if (optionsCreate.data) {
       //Generacion de pdf
-      GenerarComprobante(
-        vehicle,
-        newDate,
-        fechaDesde,
-        renew,
-        optionsCreate.data.registerRenew.id
-      );
-
+      // GenerarComprobante(
+      //   vehicle,
+      //   newDate,
+      //   fechaDesde,
+      //   renew,
+      //   optionsCreate.data.registerRenew.id
+      // );
       // const imgqr=<QRCode value={optionsCreate.data.registerRenew.id} />
     }
   }, [optionsBillings.data, optionBilling.data, optionsCreate.data]);
@@ -136,11 +135,11 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
       <p>
         Estas apunto de renovar su inscripción del vehiculo{" "}
         <strong>{vehicle.plate}</strong> que pertenece a{" "}
-        <strong>
+        {/* <strong>
           {vehicle.customer.name} {vehicle.customer.lastName}
-        </strong>{" "}
-        con número de <strong>{vehicle.customer.document}</strong>,{" "}
-        <strong>{vehicle.customer.numDocument}</strong>.
+        </strong>{" "} */}
+        {/* con número de <strong>{vehicle.customer.document}</strong>,{" "}
+        <strong>{vehicle.customer.numDocument}</strong>. */}
       </p>
       <br />
       <Divider />
@@ -151,8 +150,8 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
           <Select
             labelId="idBilling-label"
             id="idBilling"
-            value={renew.billing}
-            onChange={handleChange}
+            //value={renew.billing}
+            // onChange={handleChange}
             label="Age"
           >
             {billings.map((billing) => (
@@ -164,21 +163,21 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
         </FormControl>
       ) : (
         <>
-          <label>
+          {/* <label>
             {renew.billing !== vehicle.billing.name ? (
               <label style={{ background: "yellow" }}>Cambiado a</label>
             ) : (
               "Actualmente tiene"
             )}
           </label>{" "}
-          {renew.billing}
+          {renew.billing} */}
         </>
       )}{" "}
       <Tooltip
         title="Editar plan de facturación"
         onClick={() => {
           setActive(!isActive);
-          getBilling(renew.billing);
+          //getBilling(renew.billing);
         }}
       >
         <IconButton aria-label="vehicle" size="small" style={{ color: "blue" }}>
@@ -217,7 +216,7 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
             &nbsp;
           </div>
           <div style={{ width: "50%", float: "left" }}>
-            <strong>+</strong> {state.day} días
+            {/* <strong>+</strong> {state.day} días */}
           </div>
         </div>
         <div style={{ width: "100%", height: "auto" }}>
@@ -225,7 +224,7 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
             Renovando hasta:
           </div>
           <div style={{ width: "50%", float: "left" }}>
-            {moment(newDate).format("DD/MM/YYYY")}
+            {/* {moment(newDate).format("DD/MM/YYYY")} */}
           </div>
 
           {/* <div>Codigo QR :</div>

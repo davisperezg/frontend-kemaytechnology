@@ -123,7 +123,7 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
             hoy > fechaFin ? "#fc553f" : calcDiff <= 10 ? "#f7e160" : "#5bc959",
         }}
       >
-        <TableCell component="th" scope="row">
+        {/* <TableCell component="th" scope="row">
           {vehicle.customer.name} {vehicle.customer.lastName}
         </TableCell>
         <TableCell component="th" scope="row">
@@ -175,7 +175,7 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
             </IconButton>
           </Tooltip>
           {/* boton para pdf guia de usuario */}
-          <Tooltip
+        {/*<Tooltip
             title="Generar guia de Usuario"
             onClick={() => {
               GenerarGuiaUSua(vehicle);
@@ -185,7 +185,7 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
               <PictureAsPdfIcon />
             </IconButton>
           </Tooltip>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
     </>
   );

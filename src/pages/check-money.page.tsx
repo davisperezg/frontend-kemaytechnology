@@ -106,10 +106,10 @@ const CheckMoneyPage = () => {
         </Grid>
         <Grid item xs={3} style={{ display: "flex", alignItems: "center" }}>
           <Button
-            onClick={() =>
-              getIngress(checkMoney.dateStart, checkMoney.dateEnd) &&
-              getEgress(checkMoney.dateStart, checkMoney.dateEnd)
-            }
+            // onClick={() =>
+            //   getIngress(checkMoney.dateStart, checkMoney.dateEnd) &&
+            //   getEgress(checkMoney.dateStart, checkMoney.dateEnd)
+            // }
             variant="contained"
             size="large"
             color="primary"

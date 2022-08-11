@@ -5,17 +5,17 @@ import { User } from "./user.interface";
 
 export interface Vehicle {
   id?: string;
-  customer: Customer | any;
-  device: Device | any;
-  billing: Billing | any;
+  customer: Customer | string;
+  device: Device | string;
+  billing: Billing | string;
   plate: string;
   nroGPS: string;
   platform: string;
   sim: string;
   billigStart?: string | Date;
   billigEnd?: string | Date;
-  createdBy?: User | any;
-  updatedBy?: User | any;
+  createdBy?: User | string;
+  updatedBy?: User | string;
   createdAt?: Date;
   updatedAt?: Date;
 }

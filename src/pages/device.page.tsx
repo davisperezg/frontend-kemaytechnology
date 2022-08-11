@@ -38,7 +38,7 @@ const DevicePage = () => {
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
   const [devices, setDevices] = useState<Billing[]>([]);
-  const { data, loading, error } = useGetDevices();
+  const { data, isLoading, isError } = useGetDevices();
 
   const handleClose = () => {
     setDialog(initialDialog);
@@ -61,13 +61,13 @@ const DevicePage = () => {
     }
   }, [data]);
 
-  if (loading) {
-    return <h1>Cargando...</h1>;
-  }
+  // if (loading) {
+  //   return <h1>Cargando...</h1>;
+  // }
 
-  if (error) {
-    return <h1>{findError(error)}</h1>;
-  }
+  // if (error) {
+  //   return <h1>{findError(error)}</h1>;
+  // }
 
   const showDialogToCreate = () => (
     <>
@@ -85,7 +85,7 @@ const DevicePage = () => {
 
   return (
     <>
-      <DialogForm
+      {/* <DialogForm
         open={dialog.active}
         title={`${dialog.name} Dispositivo`}
         component={component(dialog.name)}
@@ -111,7 +111,7 @@ const DevicePage = () => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer> */}
     </>
   );
 };

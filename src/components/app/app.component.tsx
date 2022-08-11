@@ -3,12 +3,16 @@ import { Redirect, BrowserRouter as Router } from "react-router-dom";
 import { getLocal } from "../../lib/local-storage";
 import Home from "../../pages/home.page";
 import LoginPage from "../../pages/login.page";
+import { ToastContainer } from "react-toastify";
 
 const App: React.FC = () => {
   return (
     <Router>
       {getLocal("accessToken") ? (
-        <Home />
+        <>
+          <Home />
+          <ToastContainer />
+        </>
       ) : (
         <>
           <LoginPage />
