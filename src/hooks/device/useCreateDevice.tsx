@@ -1,11 +1,16 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { graphQLClient } from "../../config/config";
 import { Device } from "../../interfaces/device.interface";
-import { GET_DEVICES } from "./useGetDevice";
 
-interface CreateDeviceInput {
-  variables: {
-    deviceInput: Device;
+interface IError {
+  request: {
+    response: string;
   };
+}
+
+interface ICreateParams {
+  variables: { deviceInput: Device };
 }
 
 const CREATE_DEVICE = gql`
@@ -13,20 +18,27 @@ const CREATE_DEVICE = gql`
     registerDevice(deviceInput: $deviceInput) {
       id
       name
+      reference
       createdAt
       updatedAt
+      commands
+      commandsclient
     }
   }
 `;
 
 export const useCreateDevice = () => {
-  const [registerDevice, { error, loading }] = useMutation(CREATE_DEVICE, {
-    refetchQueries: () => [
-      {
-        query: GET_DEVICES,
-      },
-    ],
-  });
+  const queryClient = useQueryClient();
 
-  return { registerDevice, error, loading };
+  return useMutation<Device, IError, ICreateParams>(["devices"], {
+    mutationFn: async ({ variables }) =>
+      await graphQLClient.request(CREATE_DEVICE, variables),
+    onSuccess(data: any) {
+      const { registerDevice } = data;
+      queryClient.setQueryData(["devices"], (prevDevices: any) =>
+        prevDevices.concat(registerDevice)
+      );
+      queryClient.invalidateQueries(["devices"]);
+    },
+  });
 };

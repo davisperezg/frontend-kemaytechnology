@@ -32,7 +32,7 @@ const DeviceForm = ({ handleClose, device }: Option) => {
   );
   const dispatch = useDispatch();
   const optionsUpdate = useUpdateDevice();
-  const optionsCreate = useCreateDevice();
+  //const optionsCreate = useCreateDevice();
 
   const handleInput = (e: InputChange) => {
     setDeviceForm({
@@ -45,47 +45,47 @@ const DeviceForm = ({ handleClose, device }: Option) => {
     e.preventDefault();
 
     if (deviceForm.id) {
-      try {
-        await optionsUpdate.updateDevice({
-          variables: {
-            deviceInput: deviceForm,
-          },
-        });
-        dispatch(
-          setAlert({
-            type: "success",
-            text: "El dispositivo se actualizó correctamente.",
-          })
-        );
-      } catch (e) {
-        dispatch(
-          setAlert({
-            type: "error",
-            text: findError(e),
-          })
-        );
-      }
+      // try {
+      //   await optionsUpdate.updateDevice({
+      //     variables: {
+      //       deviceInput: deviceForm,
+      //     },
+      //   });
+      //   dispatch(
+      //     setAlert({
+      //       type: "success",
+      //       text: "El dispositivo se actualizó correctamente.",
+      //     })
+      //   );
+      // } catch (e) {
+      //   dispatch(
+      //     setAlert({
+      //       type: "error",
+      //       text: findError(e),
+      //     })
+      //   );
+      // }
     } else {
-      try {
-        await optionsCreate.registerDevice({
-          variables: {
-            deviceInput: deviceForm,
-          },
-        });
-        dispatch(
-          setAlert({
-            type: "success",
-            text: "La dispositivo ha sido registrado correctamente.",
-          })
-        );
-      } catch (e) {
-        dispatch(
-          setAlert({
-            type: "error",
-            text: findError(e),
-          })
-        );
-      }
+      // try {
+      //   await optionsCreate.registerDevice({
+      //     variables: {
+      //       deviceInput: deviceForm,
+      //     },
+      //   });
+      //   dispatch(
+      //     setAlert({
+      //       type: "success",
+      //       text: "La dispositivo ha sido registrado correctamente.",
+      //     })
+      //   );
+      // } catch (e) {
+      //   dispatch(
+      //     setAlert({
+      //       type: "error",
+      //       text: findError(e),
+      //     })
+      //   );
+      // }
     }
   };
 
@@ -106,7 +106,7 @@ const DeviceForm = ({ handleClose, device }: Option) => {
               value={deviceForm.name}
             />
           </Grid>
-          <DialogActions style={{ width: "100%" }}>
+          {/* <DialogActions style={{ width: "100%" }}>
             <Button onClick={handleClose} color="primary">
               Cancelar
             </Button>
@@ -135,7 +135,7 @@ const DeviceForm = ({ handleClose, device }: Option) => {
                 Registrar
               </Button>
             )}
-          </DialogActions>
+          </DialogActions> */}
         </Grid>
       </form>
     </>

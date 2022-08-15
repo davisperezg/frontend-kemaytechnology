@@ -1,11 +1,16 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { Customer } from "../../interfaces/customer.interface";
-import { GET_CUSTOMERS } from "./useGetCustomer";
+import { graphQLClient } from "../../config/config";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 
-interface UpdateCustomerInput {
-  variables: {
-    customerInput: Customer;
+interface IError {
+  request: {
+    response: string;
   };
+}
+
+interface IUpdateParams {
+  variables: { customerInput: Customer };
 }
 
 const UPDATE_CUSTOMER = gql`
@@ -28,13 +33,13 @@ const UPDATE_CUSTOMER = gql`
 `;
 
 export const useUpdateCustomer = () => {
-  const [updateCustomer, { error, loading }] = useMutation(UPDATE_CUSTOMER, {
-    refetchQueries: () => [
-      {
-        query: GET_CUSTOMERS,
-      },
-    ],
-  });
+  const queryClient = useQueryClient();
 
-  return { updateCustomer, error, loading };
+  return useMutation<Customer, IError, IUpdateParams>(["customers"], {
+    mutationFn: async ({ variables }) =>
+      await graphQLClient.request(UPDATE_CUSTOMER, variables),
+    onSuccess() {
+      queryClient.invalidateQueries(["customers"]);
+    },
+  });
 };

@@ -7,6 +7,7 @@ export const GET_DEVICES = gql`
     getDevices {
       id
       name
+      reference
       createdAt
       updatedAt
     }

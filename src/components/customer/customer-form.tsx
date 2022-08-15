@@ -72,8 +72,8 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
   );
   const [isActive, setActive] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const optionsUpdate = useUpdateCustomer();
-  const optionsCreate = useCreateCustomer();
+  //const optionsUpdate = useUpdateCustomer();
+  //const optionsCreate = useCreateCustomer();
 
   const handleInput = (e: InputChange) => {
     if (e.target.name === "direction" || e.target.name === "cellphone_2") {
@@ -105,49 +105,49 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
   const onSubmit = async (e: FormChange) => {
     e.preventDefault();
 
-    if (customerForm.id) {
-      try {
-        await optionsUpdate.updateCustomer({
-          variables: {
-            customerInput: customerForm,
-          },
-        });
-        dispatch(
-          setAlert({
-            type: "success",
-            text: "La cliente se actualizó correctamente.",
-          })
-        );
-      } catch (e) {
-        dispatch(
-          setAlert({
-            type: "error",
-            text: findError(e),
-          })
-        );
-      }
-    } else {
-      try {
-        await optionsCreate.registerCustomer({
-          variables: {
-            customerInput: customerForm,
-          },
-        });
-        dispatch(
-          setAlert({
-            type: "success",
-            text: "La cliente ha sido registrado correctamente.",
-          })
-        );
-      } catch (e) {
-        dispatch(
-          setAlert({
-            type: "error",
-            text: findError(e),
-          })
-        );
-      }
-    }
+    // if (customerForm.id) {
+    //   try {
+    //     await optionsUpdate.updateCustomer({
+    //       variables: {
+    //         customerInput: customerForm,
+    //       },
+    //     });
+    //     dispatch(
+    //       setAlert({
+    //         type: "success",
+    //         text: "La cliente se actualizó correctamente.",
+    //       })
+    //     );
+    //   } catch (e) {
+    //     dispatch(
+    //       setAlert({
+    //         type: "error",
+    //         text: findError(e),
+    //       })
+    //     );
+    //   }
+    // } else {
+    //   try {
+    //     await optionsCreate.registerCustomer({
+    //       variables: {
+    //         customerInput: customerForm,
+    //       },
+    //     });
+    //     dispatch(
+    //       setAlert({
+    //         type: "success",
+    //         text: "La cliente ha sido registrado correctamente.",
+    //       })
+    //     );
+    //   } catch (e) {
+    //     dispatch(
+    //       setAlert({
+    //         type: "error",
+    //         text: findError(e),
+    //       })
+    //     );
+    //   }
+    // }
   };
 
   const findRucbyType = (e: any) => {
@@ -436,7 +436,7 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
             <Button onClick={handleClose} color="primary">
               Cancelar
             </Button>
-            {customerForm.id ? (
+            {/* {customerForm.id ? (
               optionsUpdate.loading ? (
                 <Progress />
               ) : (
@@ -460,7 +460,7 @@ const CustomerForm = ({ handleClose, customer }: Option) => {
               >
                 Registrar
               </Button>
-            )}
+            )} */}
           </DialogActions>
         </Grid>
       </form>

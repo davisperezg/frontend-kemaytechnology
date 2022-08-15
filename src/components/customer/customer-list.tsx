@@ -34,7 +34,7 @@ const CustomerList = ({ customer }: { customer: Customer }) => {
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
-  const optionsCustomer = useDeleteCustomer();
+  //const optionsCustomer = useDeleteCustomer();
 
   const handleClose = () => {
     setDialog(initialDialog);
@@ -51,34 +51,34 @@ const CustomerList = ({ customer }: { customer: Customer }) => {
     }
   };
 
-  const deleteCustomer = async (id: string | undefined) => {
-    try {
-      await optionsCustomer.deleteCustomer({
-        variables: {
-          id,
-        },
-      });
-    } catch (e) {
-      setDialog({ name: "error", active: true });
-      dispatch(
-        setAlert({
-          type: "error",
-          text: findError(e),
-        })
-      );
-      <DialogForm
-        open={dialog.active}
-        title={dialog.name}
-        handleClose={handleClose}
-      />;
-    }
-  };
+  // const deleteCustomer = async (id: string | undefined) => {
+  //   try {
+  //     await optionsCustomer.deleteCustomer({
+  //       variables: {
+  //         id,
+  //       },
+  //     });
+  //   } catch (e) {
+  //     setDialog({ name: "error", active: true });
+  //     dispatch(
+  //       setAlert({
+  //         type: "error",
+  //         text: findError(e),
+  //       })
+  //     );
+  //     <DialogForm
+  //       open={dialog.active}
+  //       title={dialog.name}
+  //       handleClose={handleClose}
+  //     />;
+  //   }
+  // };
 
   const showOptionsForDelete = () => (
     <>
       <Tooltip
         title="Eliminar Cliente"
-        onClick={() => deleteCustomer(customer.id)}
+        //onClick={() => deleteCustomer(customer.id)}
       >
         <IconButton aria-label="customer" size="small">
           <HighlightOffRoundedIcon />
@@ -91,7 +91,7 @@ const CustomerList = ({ customer }: { customer: Customer }) => {
     <>
       <Tooltip
         title="Editar Cliente"
-        onClick={() => setDialog({ name: "Cliente", active: true })}
+        //onClick={() => setDialog({ name: "Cliente", active: true })}
       >
         <IconButton aria-label="customer" size="small">
           <EditRoundedIcon />

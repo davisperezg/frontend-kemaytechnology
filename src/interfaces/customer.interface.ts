@@ -6,10 +6,10 @@ export interface Customer {
   numDocument: string;
   cellphone_1: string;
   cellphone_2?: string;
-  direction?: string;
+  direction?: string | undefined;
   username: string;
   password: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
   fecha_nac?: Date | string;
 }
