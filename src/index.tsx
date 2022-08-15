@@ -23,7 +23,7 @@ ReactDOM.render(
           </PersistGate>
         </Provider>
       </ApolloProvider>
-      <ReactQueryDevtools />
+      {/* <ReactQueryDevtools /> */}
     </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById("root")

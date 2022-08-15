@@ -4,6 +4,7 @@ import { getLocal } from "../../lib/local-storage";
 import Home from "../../pages/home.page";
 import LoginPage from "../../pages/login.page";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App: React.FC = () => {
   return (

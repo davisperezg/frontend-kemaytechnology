@@ -38,62 +38,63 @@ const BillingEdit = ({ open, handleClose, entity }: IModal) => {
       <MyDialogTitleMUI id="scroll-dialog-title">
         Plan de facturación - {entity.name}
       </MyDialogTitleMUI>
-      <Formik
-        initialValues={{
-          id: entity.id,
-          name: entity.name || "",
-          day: entity.day || 0,
-          price: entity.price || 0,
-        }}
-        validate={(valores) => {
-          let errores: any = {};
+      <DialogContent dividers>
+        <Formik
+          initialValues={{
+            id: entity.id,
+            name: entity.name || "",
+            day: entity.day || 0,
+            price: entity.price || 0,
+          }}
+          validate={(valores) => {
+            let errores: any = {};
 
-          // Validacion nombre
-          if (!valores.name) {
-            errores.name = "Por favor ingresa un nombre";
-          } else if (!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.name)) {
-            errores.name = "El nombre solo puede contener letras y espacios";
-          }
+            // Validacion nombre
+            if (!valores.name) {
+              errores.name = "Por favor ingresa un nombre";
+            } else if (!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.name)) {
+              errores.name = "El nombre solo puede contener letras y espacios";
+            }
 
-          // Validacion dias
-          if (!valores.day) {
-            errores.day =
-              "Por favor ingresa los días que contara con el plan de facturación";
-          } else if (valores.day < 0) {
-            errores.day = "Los días de facturación no debe ser negativos";
-          }
+            // Validacion dias
+            if (!valores.day) {
+              errores.day =
+                "Por favor ingresa los días que contara con el plan de facturación";
+            } else if (valores.day < 0) {
+              errores.day = "Los días de facturación no debe ser negativos";
+            }
 
-          // Validacion precio
-          if (!valores.price) {
-            errores.price =
-              "Por favor ingresa el precio que tendra el plan de facturación";
-          } else if (valores.price < 0) {
-            errores.price = "El precio de facturación no debe ser negativos";
-          }
+            // Validacion precio
+            if (!valores.price) {
+              errores.price =
+                "Por favor ingresa el precio que tendra el plan de facturación";
+            } else if (valores.price < 0) {
+              errores.price = "El precio de facturación no debe ser negativos";
+            }
 
-          return errores;
-        }}
-        onSubmit={async (values, { resetForm }) => {
-          try {
-            await mutateAsync({
-              variables: {
-                billingInput: values,
-              },
-            });
-            handleCloseLocal();
-          } catch (e: any) {
-            const myErrors = JSON.parse(JSON.stringify(e)).response.errors.map(
-              (a: any) =>
+            return errores;
+          }}
+          onSubmit={async (values, { resetForm }) => {
+            try {
+              await mutateAsync({
+                variables: {
+                  billingInput: values,
+                },
+              });
+              handleCloseLocal();
+            } catch (e: any) {
+              const myErrors = JSON.parse(
+                JSON.stringify(e)
+              ).response.errors.map((a: any) =>
                 a.extensions.exception.response.message.map((b: any) => b)
-            );
-            setErrorLocal(myErrors);
-          }
-        }}
-      >
-        {({ errors, values, handleChange, handleBlur, touched }) => {
-          return (
-            <Form>
-              <DialogContent sx={{ marginTop: 4 }}>
+              );
+              setErrorLocal(myErrors);
+            }
+          }}
+        >
+          {({ errors, values, handleChange, handleBlur, touched }) => {
+            return (
+              <Form>
                 <Grid container spacing={2}>
                   {errorLocal.length > 0 && (
                     <Grid item xs={12}>
@@ -234,22 +235,22 @@ const BillingEdit = ({ open, handleClose, entity }: IModal) => {
                     </div>
                   </Grid>
                 </Grid>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleCloseLocal}>Cancelar</Button>
-                <Button
-                  disabled={isLoading}
-                  type="submit"
-                  color="primary"
-                  variant="contained"
-                >
-                  OK
-                </Button>
-              </DialogActions>
-            </Form>
-          );
-        }}
-      </Formik>
+                <DialogActions>
+                  <Button onClick={handleCloseLocal}>Cancelar</Button>
+                  <Button
+                    disabled={isLoading}
+                    type="submit"
+                    color="primary"
+                    variant="contained"
+                  >
+                    OK
+                  </Button>
+                </DialogActions>
+              </Form>
+            );
+          }}
+        </Formik>
+      </DialogContent>
     </MyDialogMUI>
   );
 };

@@ -1,153 +1,281 @@
-import Table from "@mui/material/Table";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import Paper from "@mui/material/Paper";
-import DialogForm from "../components/dialog/dialog.component";
-import Tooltip from "@mui/material/Tooltip";
-import { useSelector, useDispatch } from "react-redux";
-import CustomerForm from "../components/customer/customer-form";
-import IconButton from "@mui/material/IconButton";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import { Dialog } from "../interfaces/dialog.interface";
-import { useState, useEffect, ChangeEvent, MouseEvent } from "react";
-import { User } from "../interfaces/user.interface";
-import { PERMIT_ONE } from "../const";
-import { setAlert } from "../store/alert/action";
+import {
+  useState,
+  useEffect,
+  ChangeEvent,
+  MouseEvent,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from "react";
 import { Customer } from "../interfaces/customer.interface";
-import CustomerList from "../components/customer/customer-list";
-import { loadAccess } from "../components/acceso/filter-access.component";
-import { findError } from "../helpers/control-errors";
 import { useGetCustomers } from "../hooks/customer/useGetCustomer";
-import { TablePaginationActions } from "../components/table/table-pagination";
-import TablePagination from "@mui/material/TablePagination";
 import { Button } from "@mui/material";
+import SearchTable from "../components/table/search/SearchTable";
+import TableContainer from "../components/table/TableContainer";
+import { useDeleteCustomer } from "../hooks/customer/useDeleteCustomer";
+import { InputChange } from "../lib/types";
+import { toast } from "react-toastify";
+import {
+  createColumnHelper,
+  DisplayColumnDef,
+  IdentifiedColumnDef,
+} from "@tanstack/react-table";
+import CloseIcon from "@mui/icons-material/Close";
+import CustomerForm from "../components/customer/CustomerForm";
+import CustomerEdit from "../components/customer/CustomerEdit";
 
-const initialDialog = {
+const columnHelper = createColumnHelper<Customer>();
+
+const defaultColumns = [
+  columnHelper.display({
+    id: "index",
+    cell: (props) => Number(props.row.id) + 1,
+    header: () => "#",
+    classNameHeader: "div text-center",
+    classNameBody: "div-row text-center",
+    size: 28,
+    minSize: 28,
+  } as DisplayColumnDef<Customer, unknown>),
+  columnHelper.accessor((row) => `${row.name} ${row.lastName}`, {
+    id: "customer",
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Cliente",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Customer, string>),
+  columnHelper.accessor("document", {
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Documento",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Customer, string>),
+  columnHelper.accessor("numDocument", {
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Nro de documento",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Customer, string>),
+  columnHelper.accessor(
+    (row) => `${row.cellphone_1} ${row.cellphone_2 ? row.cellphone_2 : ""}`,
+    {
+      id: "cellphones",
+      cell: (info) => info.getValue(),
+      classNameBody: "div-row",
+      header: () => "Contacto",
+      classNameHeader: "div",
+      size: 100,
+      minSize: 31,
+    } as DisplayColumnDef<Customer, string>
+  ),
+  columnHelper.accessor("direction", {
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Dirección",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Customer, string>),
+  columnHelper.accessor("fecha_nac", {
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Fecha de nacimiento",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Customer, string>),
+  columnHelper.accessor((row) => `${row.username}/${row.password}`, {
+    id: "credentials",
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Credenciales",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Customer, string>),
+  columnHelper.accessor("createdAt", {
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Fecha creada",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Customer, Date | string>),
+  columnHelper.accessor("updatedAt", {
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Fecha actualizada",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Customer, Date | string>),
+  columnHelper.display({
+    id: "delete",
+    cell: (props) => {
+      return <CloseIcon sx={{ fontSize: 18 }} htmlColor="red" />;
+    },
+    classNameBody: "div-row text-center",
+    header: () => "Eliminar",
+    classNameHeader: "div text-center",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Customer, unknown>),
+  columnHelper.display({
+    id: "actions",
+    cell: (props) => "",
+    header: () => "...",
+    classNameHeader: "div text-center",
+    size: 28,
+    minSize: 28,
+    enableResizing: false,
+    enableSorting: false,
+  } as DisplayColumnDef<Customer, unknown>),
+];
+
+const initialValueEdit: Customer = {
+  id: "",
   name: "",
-  active: false,
-};
-
-const initialAlert = {
-  type: "",
-  text: "",
+  lastName: "",
+  document: "",
+  numDocument: "",
+  cellphone_1: "",
+  cellphone_2: "",
+  direction: "",
+  username: "",
+  password: "",
+  fecha_nac: "",
 };
 
 const CustomerPage = () => {
-  const auth: User = useSelector((state: any) => state.authReducer.authUser);
-  const page = useSelector((state: any) => state.page.user.module);
-  const [dialog, setDialog] = useState<Dialog>(initialDialog);
-  const dispatch = useDispatch();
-  const [customers, setCustomers] = useState<Customer[]>([]);
-  const { data, isLoading, isError, isFetching } = useGetCustomers();
-  //TABLE OPTIONS
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [pagex, setPage] = useState(0);
+  const { data, isLoading, isError, error, isFetching } = useGetCustomers();
+  const searchComponent = useRef<HTMLInputElement>(null);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
+  const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
+  const [customerEdit, setCustomerEdit] = useState<Customer>(initialValueEdit);
+  const { mutateAsync, isLoading: isLoadingDelete } = useDeleteCustomer();
 
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, customers.length - pagex * rowsPerPage);
+  const handleOpenModalForm = () => setOpenModal(true);
+  const handleCloseModalForm = () => setOpenModal(false);
 
-  const [searched, setSearched] = useState<string>("");
+  const customers = useMemo(() => {
+    let arrayCustomers: Customer[] = data;
 
-  const requestSearch = (searchedVal: string) => {
-    const filteredRows = data.getCustomer.filter((row: any) => {
-      return (
-        row.name.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
-        row.lastName.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
-        row.numDocument
-          .toLowerCase()
-          .includes(searchedVal.trim().toLowerCase()) ||
-        row.username.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
-        row.password.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
-        row.document.toLowerCase().includes(searchedVal.trim().toLowerCase())
-      );
-    });
-    setCustomers(filteredRows);
-  };
-
-  const cancelSearch = () => {
-    setSearched("");
-    requestSearch(searched);
-  };
-
-  const handleChangePage = (
-    event: MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-  //TABLE FIN
-  const handleClose = () => {
-    setDialog(initialDialog);
-    dispatch(setAlert(initialAlert));
-  };
-
-  const component = (name: string) => {
-    switch (name) {
-      case "Crear":
-        return <CustomerForm handleClose={handleClose} />;
-
-      default:
-        break;
-    }
-  };
-
-  useEffect(() => {
-    if (data) {
-      const allCustomers = data.getCustomer
-        .map((customer: any) => {
+    if (search !== "") {
+      const dataCustomers = arrayCustomers
+        .map((f) => {
           return {
-            ...customer,
-            createdAt: customer.createdAt
-              ? new Date(customer.createdAt)
-              : new Date(),
-            updatedAt: customer.updatedAt
-              ? new Date(customer.updatedAt)
-              : new Date(),
+            ...f,
+            customerFullname: f.name + " " + f.lastName,
           };
         })
-        .sort(
-          (a: any, b: any) => b.createdAt.getTime() - a.createdAt.getTime()
+        .filter(
+          (v) =>
+            v.customerFullname
+              .toLowerCase()
+              .includes(search.trim().toLowerCase()) ||
+            v.numDocument.toLowerCase().includes(search.trim().toLowerCase()) ||
+            v.username.toLowerCase().includes(search.trim().toLowerCase()) ||
+            v.password.toLowerCase().includes(search.trim().toLowerCase()) ||
+            v.document.toLowerCase().includes(search.trim().toLowerCase())
         );
-      setCustomers(allCustomers);
-    }
-  }, [data]);
 
-  const showDialogToCreate = () => (
-    <>
-      <Button
-        onClick={() => setDialog({ name: "Crear", active: true })}
-        variant="contained"
-        color="primary"
-        endIcon={<AddRoundedIcon />}
-      >
-        Crear Cliente
-      </Button>
-    </>
-  );
+      return dataCustomers;
+    }
+
+    return arrayCustomers;
+  }, [data, search]);
+
+  const handleSearch = (e: InputChange) => {
+    const value: string = (
+      searchComponent.current?.value as string
+    ).toUpperCase();
+    setSearch(value);
+  };
+
+  useLayoutEffect(() => {
+    if (searchComponent.current) {
+      searchComponent.current.focus();
+    }
+  }, []);
+
+  const handleDelete = async (row: any) => {
+    const confirmAlert = window.confirm(
+      `¿Estas seguro que deseas eliminar ${row.original.name}?`
+    );
+
+    if (confirmAlert) {
+      try {
+        await mutateAsync({
+          variables: {
+            id: row.original.id,
+          },
+        });
+      } catch (e) {
+        const myErrors = JSON.parse(JSON.stringify(e)).response.errors.map(
+          (a: any) => a.extensions.exception.response.message.map((b: any) => b)
+        );
+        toast.error(myErrors.map((a: any) => a));
+      }
+    }
+  };
+
+  const handleCloseModalEdit = () => {
+    setOpenModalEdit(false);
+    setCustomerEdit(initialValueEdit);
+  };
+
+  const handleClick = (row: any) => {
+    setOpenModalEdit(true);
+    setCustomerEdit(row.original);
+  };
+
+  // const requestSearch = (searchedVal: string) => {
+  //   const filteredRows = data.getCustomer.filter((row: any) => {
+  //     return (
+  //       row.name.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
+  //       row.lastName.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
+  //       row.numDocument
+  //         .toLowerCase()
+  //         .includes(searchedVal.trim().toLowerCase()) ||
+  //       row.username.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
+  //       row.password.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
+  //       row.document.toLowerCase().includes(searchedVal.trim().toLowerCase())
+  //     );
+  //   });
+  //   setCustomers(filteredRows);
+  // };
 
   return (
     <>
-      <DialogForm
-        open={dialog.active}
-        title={`${dialog.name} Cliente`}
-        component={component(dialog.name)}
-        handleClose={handleClose}
-      />
-      <div style={{ width: "100%", display: "flex" }}>
-        <div style={{ width: "200px" }}>
-          {loadAccess(PERMIT_ONE, auth, page, showDialogToCreate)}
+      {/* documentacion https://www.npmjs.com/package/material-ui-search-bar */}
+      <CustomerForm open={openModal} handleClose={handleCloseModalForm} />
+      {openModalEdit && (
+        <CustomerEdit
+          open={openModalEdit}
+          handleClose={handleCloseModalEdit}
+          entity={customerEdit}
+        />
+      )}
+
+      <div style={{ width: "100%" }}>
+        <div style={{ float: "left" }}>
+          <Button
+            onClick={handleOpenModalForm}
+            color="primary"
+            variant="contained"
+            size="small"
+          >
+            Crear Cliente
+          </Button>
         </div>
       </div>
+
       <div
         style={{
           marginTop: 10,
@@ -156,74 +284,50 @@ const CustomerPage = () => {
           display: "flex",
         }}
       >
-        {/* documentacion https://www.npmjs.com/package/material-ui-search-bar */}
-        {/* <SearchBar
-          style={{ width: "100%" }}
-          placeholder="Puede buscar por nombres, apellidos, documento, nro de documento, usuario o contraseña"
-          value={searched}
-          onChange={(searchVal) => requestSearch(searchVal)}
-          onCancelSearch={() => cancelSearch()}
-        /> */}
-        aqui search
-      </div>
-      <TableContainer
-        component={Paper}
-        style={{ whiteSpace: "nowrap", marginTop: 10 }}
-      >
-        <Table stickyHeader size="small" aria-label="a dense table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Nombres</TableCell>
-              <TableCell>Documento</TableCell>
-              <TableCell>Nro. Documento</TableCell>
-              <TableCell>Contacto</TableCell>
-              <TableCell>Dirección</TableCell>
-              <TableCell>Fecha de nacimiento</TableCell>
-              <TableCell align="center">Credenciales</TableCell>
-              <TableCell>Fecha creada</TableCell>
-              <TableCell>Fecha modificada</TableCell>
-              <TableCell>Opciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(rowsPerPage > 0
-              ? customers.slice(
-                  pagex * rowsPerPage,
-                  pagex * rowsPerPage + rowsPerPage
-                )
-              : customers
-            ).map((customer) => (
-              <CustomerList key={customer.id} customer={customer} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <div>
-        <TablePagination
-          rowsPerPageOptions={[
-            5,
-            10,
-            25,
-            { label: "Todos los registros", value: -1 },
-          ]}
-          //colSpan={3}
-          style={{ borderBottom: "none" }}
-          count={customers.length}
-          rowsPerPage={rowsPerPage}
-          page={pagex}
-          SelectProps={{
-            inputProps: { "aria-label": "filas por página" },
-            native: true,
-          }}
-          labelRowsPerPage="filas por página"
-          labelDisplayedRows={({ from, to, count }) =>
-            `${from}-${to} de ${count}`
-          }
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          ActionsComponent={TablePaginationActions}
+        <SearchTable
+          handleSearch={handleSearch}
+          searchComponent={searchComponent}
+          placeholder="Buscar cliente, documento, nro de documento, usuario o contraseña"
         />
+
+        {(isFetching || isLoadingDelete) && (
+          <div
+            style={{ display: "flex", marginLeft: 10, alignItems: "flex-end" }}
+          >
+            <label style={{ fontSize: 12 }}>
+              {isLoadingDelete
+                ? "Eliminando objeto..."
+                : "Refrescando lista..."}
+            </label>
+          </div>
+        )}
       </div>
+
+      {isError ? (
+        JSON.parse(JSON.stringify(error))
+          .response.errors.map((a: any) =>
+            a.extensions.exception.response.message.map((b: any) => b)
+          )
+          .map((b: any, i: number) => (
+            <>
+              <div
+                key={i + 1}
+                style={{ background: "red", color: "#fff", padding: 10 }}
+              >
+                {i + 1}.- {b}
+              </div>
+              <br />
+            </>
+          ))
+      ) : (
+        <TableContainer
+          loading={isLoading}
+          data={customers}
+          columns={defaultColumns}
+          onClickTr={handleClick}
+          handleDelete={handleDelete}
+        />
+      )}
     </>
   );
 };

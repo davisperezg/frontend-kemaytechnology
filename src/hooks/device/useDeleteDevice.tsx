@@ -1,5 +1,6 @@
-import { gql, useMutation } from "@apollo/client";
-import { GET_DEVICES } from "./useGetDevice";
+import { gql } from "@apollo/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { graphQLClient } from "../../config/config";
 
 const DELETE_DEVICE = gql`
   mutation deleteDevice($id: String!) {
@@ -7,14 +8,24 @@ const DELETE_DEVICE = gql`
   }
 `;
 
-export const useDeleteDevice = () => {
-  const [deleteDevice, { error, loading }] = useMutation(DELETE_DEVICE, {
-    refetchQueries: () => [
-      {
-        query: GET_DEVICES,
-      },
-    ],
-  });
+interface IError {
+  request: {
+    response: string;
+  };
+}
 
-  return { deleteDevice, error, loading };
+interface IDelteParams {
+  variables: { id: string };
+}
+
+export const useDeleteDevice = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<Boolean, IError, IDelteParams>({
+    mutationFn: async ({ variables }) =>
+      await graphQLClient.request(DELETE_DEVICE, variables),
+    onSuccess() {
+      queryClient.invalidateQueries(["devices"]);
+    },
+  });
 };

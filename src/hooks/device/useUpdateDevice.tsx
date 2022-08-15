@@ -1,11 +1,16 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { Device } from "../../interfaces/device.interface";
-import { GET_DEVICES } from "./useGetDevice";
+import { graphQLClient } from "../../config/config";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 
-interface UpdateDeviceInput {
-  variables: {
-    deviceInput: Device;
+interface IError {
+  request: {
+    response: string;
   };
+}
+
+interface IUpdateParams {
+  variables: { deviceInput: Device };
 }
 
 const UPDATE_DEVICE = gql`
@@ -13,20 +18,23 @@ const UPDATE_DEVICE = gql`
     updateDevice(deviceInput: $deviceInput) {
       id
       name
+      reference
       createdAt
       updatedAt
+      commands
+      commandsclient
     }
   }
 `;
 
 export const useUpdateDevice = () => {
-  const [updateDevice, { error, loading }] = useMutation(UPDATE_DEVICE, {
-    refetchQueries: () => [
-      {
-        query: GET_DEVICES,
-      },
-    ],
-  });
+  const queryClient = useQueryClient();
 
-  return { updateDevice, error, loading };
+  return useMutation<Device, IError, IUpdateParams>(["devices"], {
+    mutationFn: async ({ variables }) =>
+      await graphQLClient.request(UPDATE_DEVICE, variables),
+    onSuccess() {
+      queryClient.invalidateQueries(["devices"]);
+    },
+  });
 };

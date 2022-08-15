@@ -33,7 +33,7 @@ const DeviceList = ({ device }: { device: Device }) => {
   const page = useSelector((state: any) => state.page.user.module);
   const [dialog, setDialog] = useState<Dialog>(initialDialog);
   const dispatch = useDispatch();
-  const optionsCustomer = useDeleteDevice();
+  //const optionsCustomer = useDeleteDevice();
 
   const handleClose = () => {
     setDialog(initialDialog);
@@ -50,34 +50,34 @@ const DeviceList = ({ device }: { device: Device }) => {
     }
   };
 
-  const deleteDevice = async (id: string | undefined) => {
-    try {
-      await optionsCustomer.deleteDevice({
-        variables: {
-          id,
-        },
-      });
-    } catch (e) {
-      setDialog({ name: "error", active: true });
-      dispatch(
-        setAlert({
-          type: "error",
-          text: findError(e),
-        })
-      );
-      <DialogForm
-        open={dialog.active}
-        title={dialog.name}
-        handleClose={handleClose}
-      />;
-    }
-  };
+  // const deleteDevice = async (id: string | undefined) => {
+  //   try {
+  //     await optionsCustomer.deleteDevice({
+  //       variables: {
+  //         id,
+  //       },
+  //     });
+  //   } catch (e) {
+  //     setDialog({ name: "error", active: true });
+  //     dispatch(
+  //       setAlert({
+  //         type: "error",
+  //         text: findError(e),
+  //       })
+  //     );
+  //     <DialogForm
+  //       open={dialog.active}
+  //       title={dialog.name}
+  //       handleClose={handleClose}
+  //     />;
+  //   }
+  // };
 
   const showOptionsForDelete = () => (
     <>
       <Tooltip
         title="Eliminar dispositivo"
-        onClick={() => deleteDevice(device.id)}
+        //onClick={() => deleteDevice(device.id)}
       >
         <IconButton aria-label="device" size="small">
           <HighlightOffRoundedIcon />
@@ -90,7 +90,7 @@ const DeviceList = ({ device }: { device: Device }) => {
     <>
       <Tooltip
         title="Editar dispositivo"
-        onClick={() => setDialog({ name: "Device", active: true })}
+        //onClick={() => setDialog({ name: "Device", active: true })}
       >
         <IconButton aria-label="device" size="small">
           <EditRoundedIcon />

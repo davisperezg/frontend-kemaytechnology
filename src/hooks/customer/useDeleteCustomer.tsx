@@ -1,5 +1,16 @@
-import { gql, useMutation } from "@apollo/client";
-import { GET_CUSTOMERS } from "./useGetCustomer";
+import { gql } from "@apollo/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { graphQLClient } from "../../config/config";
+
+interface IError {
+  request: {
+    response: string;
+  };
+}
+
+interface IDelteParams {
+  variables: { id: string };
+}
 
 const DELETE_CUSTOMER = gql`
   mutation deleteCustomer($id: String!) {
@@ -8,13 +19,13 @@ const DELETE_CUSTOMER = gql`
 `;
 
 export const useDeleteCustomer = () => {
-  const [deleteCustomer, { error, loading }] = useMutation(DELETE_CUSTOMER, {
-    refetchQueries: () => [
-      {
-        query: GET_CUSTOMERS,
-      },
-    ],
-  });
+  const queryClient = useQueryClient();
 
-  return { deleteCustomer, error, loading };
+  return useMutation<Boolean, IError, IDelteParams>({
+    mutationFn: async ({ variables }) =>
+      await graphQLClient.request(DELETE_CUSTOMER, variables),
+    onSuccess() {
+      queryClient.invalidateQueries(["customers"]);
+    },
+  });
 };
