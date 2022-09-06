@@ -39,6 +39,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     nroGPS: "",
     platform: "",
     sim: "",
+    retired: false,
     //billigStart: now,
   };
 
@@ -63,6 +64,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     nroGPS: vehicle?.nroGPS || "",
     platform: "",
     sim: vehicle?.sim || "",
+    retired: false,
     //billigStart: moment(vehicle?.billigStart).format("YYYY-MM-DD") || now,
   };
 
@@ -108,67 +110,67 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
     setVehicleForm({ ...vehicleForm, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = async (e: FormChange) => {
-    e.preventDefault();
+  // const onSubmit = async (e: FormChange) => {
+  //   e.preventDefault();
 
-    if (vehicleForm.id) {
-      try {
-        await optionsUpdate.updateVehicle({
-          variables: {
-            vehicleInput: vehicleForm,
-          },
-        });
-        dispatch(
-          setAlert({
-            type: "success",
-            text: "El vehiculo se actualizó correctamente.",
-          })
-        );
-      } catch (e) {
-        dispatch(
-          setAlert({
-            type: "error",
-            text: findError(e),
-          })
-        );
-      }
-    } else {
-      try {
-        const res = await optionsCreate.registerVehicle({
-          variables: {
-            vehicleInput: vehicleForm,
-          },
-        });
+  //   if (vehicleForm.id) {
+  //     try {
+  //       await optionsUpdate.updateVehicle({
+  //         variables: {
+  //           vehicleInput: vehicleForm,
+  //         },
+  //       });
+  //       dispatch(
+  //         setAlert({
+  //           type: "success",
+  //           text: "El vehiculo se actualizó correctamente.",
+  //         })
+  //       );
+  //     } catch (e) {
+  //       dispatch(
+  //         setAlert({
+  //           type: "error",
+  //           text: findError(e),
+  //         })
+  //       );
+  //     }
+  //   } else {
+  //     try {
+  //       const res = await optionsCreate.registerVehicle({
+  //         variables: {
+  //           vehicleInput: vehicleForm,
+  //         },
+  //       });
 
-        dispatch(
-          setAlert({
-            type: "success",
-            text: "El vehiculo ha sido registrado correctamente.",
-          })
-        );
+  //       dispatch(
+  //         setAlert({
+  //           type: "success",
+  //           text: "El vehiculo ha sido registrado correctamente.",
+  //         })
+  //       );
 
-        //Alerta para el registro automatico hacia la caja y marcar como ingreso
-        const resAlert = window.confirm(
-          "¿ Deseas registrarlo como ingreso ? 🤔"
-        );
+  //       //Alerta para el registro automatico hacia la caja y marcar como ingreso
+  //       const resAlert = window.confirm(
+  //         "¿ Deseas registrarlo como ingreso ? 🤔"
+  //       );
 
-        if (resAlert) {
-        } else {
-        }
+  //       if (resAlert) {
+  //       } else {
+  //       }
 
-        //Generacion de pdf
-        GenerarGuiaUSua(res.data.registerVehicle, customer);
-      } catch (e) {
-        console.log(e);
-        dispatch(
-          setAlert({
-            type: "error",
-            text: findError(e),
-          })
-        );
-      }
-    }
-  };
+  //       //Generacion de pdf
+  //       GenerarGuiaUSua(res.data.registerVehicle, customer);
+  //     } catch (e) {
+  //       console.log(e);
+  //       dispatch(
+  //         setAlert({
+  //           type: "error",
+  //           text: findError(e),
+  //         })
+  //       );
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     if (optionCustomer.data) {
@@ -222,7 +224,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <form>
         <Grid container spacing={3}>
           {/* <Grid item xs={12}>
             <Autocomplete
@@ -448,7 +450,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
           </Grid>
              * 
              */}
-          <DialogActions style={{ width: "100%" }}>
+          {/* <DialogActions style={{ width: "100%" }}>
             <Button onClick={handleClose} color="primary">
               Cancelar
             </Button>
@@ -477,7 +479,7 @@ const VehicleForm = ({ handleClose, vehicle }: Option) => {
                 Registrar
               </Button>
             )}
-          </DialogActions>
+          </DialogActions> */}
         </Grid>
       </form>
     </>

@@ -1,12 +1,4 @@
-import {
-  useState,
-  useEffect,
-  ChangeEvent,
-  MouseEvent,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-} from "react";
+import { useState, useLayoutEffect, useMemo, useRef } from "react";
 import { Customer } from "../interfaces/customer.interface";
 import { useGetCustomers } from "../hooks/customer/useGetCustomer";
 import { Button } from "@mui/material";
@@ -62,7 +54,8 @@ const defaultColumns = [
     minSize: 31,
   } as IdentifiedColumnDef<Customer, string>),
   columnHelper.accessor(
-    (row) => `${row.cellphone_1} ${row.cellphone_2 ? row.cellphone_2 : ""}`,
+    (row) =>
+      `${row.cellphone_1} ${row.cellphone_2 ? " - " + row.cellphone_2 : ""}`,
     {
       id: "cellphones",
       cell: (info) => info.getValue(),
@@ -234,22 +227,6 @@ const CustomerPage = () => {
     setOpenModalEdit(true);
     setCustomerEdit(row.original);
   };
-
-  // const requestSearch = (searchedVal: string) => {
-  //   const filteredRows = data.getCustomer.filter((row: any) => {
-  //     return (
-  //       row.name.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
-  //       row.lastName.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
-  //       row.numDocument
-  //         .toLowerCase()
-  //         .includes(searchedVal.trim().toLowerCase()) ||
-  //       row.username.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
-  //       row.password.toLowerCase().includes(searchedVal.trim().toLowerCase()) ||
-  //       row.document.toLowerCase().includes(searchedVal.trim().toLowerCase())
-  //     );
-  //   });
-  //   setCustomers(filteredRows);
-  // };
 
   return (
     <>

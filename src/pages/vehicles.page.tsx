@@ -1,38 +1,12 @@
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import Paper from "@mui/material/Paper";
-import VehicleList from "../components/vehicle/vehicle-list";
 import { Vehicle } from "../interfaces/vehicle.interface";
 import { useGetVehicles } from "../hooks/vehicle/useGetVehicle";
 import VehicleForm from "../components/vehicle/VehicleForm";
-import { findError } from "../helpers/control-errors";
-import {
-  useState,
-  useEffect,
-  ChangeEvent,
-  MouseEvent,
-  useRef,
-  useLayoutEffect,
-  useMemo,
-} from "react";
+import { useState, useRef, useLayoutEffect, useMemo } from "react";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { useDispatch } from "react-redux";
 import { Button } from "@mui/material";
 import {
-  ColumnDef,
-  ColumnResizeMode,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  Header,
-  PaginationState,
   createColumnHelper,
-  AccessorFn,
   DisplayColumnDef,
   IdentifiedColumnDef,
 } from "@tanstack/react-table";
@@ -44,1693 +18,16 @@ import { Billing } from "../interfaces/billing.interface";
 import "./css/vehicle.css";
 import { InputChange } from "../lib/types";
 import SearchTable from "../components/table/search/SearchTable";
+import VehicleEdit from "../components/vehicle/VehicleEdit";
+import { toast } from "react-toastify";
+import { useDeleteVehicle } from "../hooks/vehicle/useDeleteVehicle";
+import CloseIcon from "@mui/icons-material/Close";
+import VehicleStatus from "../components/vehicle/VehicleStatus";
+import { differenceInDays } from "date-fns";
 
 let contVencidosGlobal = 0;
 let contXVencerGlobal = 0;
 let contActivosGlobal = 0;
-
-interface Person {
-  firstName: string;
-  lastName: string;
-  age: number;
-}
-
-const datax: Vehicle[] = [
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA PEREZ",
-      name: "DAVIS OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-  {
-    billigEnd: new Date(),
-    billigStart: new Date(),
-    billing: {
-      id: "6110df5dd210dfccd3152f21",
-      name: "PLAN ANUAL",
-      day: 365,
-    },
-    createdAt: new Date(),
-    customer: {
-      cellphone_1: "931432440",
-      cellphone_2: "",
-      document: "DNI",
-      id: "6116b2dc81a2e01024da1427",
-      lastName: "LAGUNA RAMIREZ",
-      name: "NAUFTUHIM OBAL",
-      numDocument: "40681485",
-      password: "nastuin",
-      username: "nastuin",
-    },
-    device: {
-      id: "6110dfbad210dfccd3152f23",
-      name: "TELTONIKA FMB920",
-    },
-    id: "6116b38981a2e01024da1428",
-    nroGPS: "8934076400005364354",
-    plate: "H1V279",
-    platform: "PREMIUM",
-    sim: "MULTIOPERADOR",
-    updatedAt: new Date(),
-  },
-];
 
 const columnHelper = createColumnHelper<Vehicle>();
 
@@ -1761,9 +58,16 @@ const defaultColumns = [
   ),
   columnHelper.accessor(
     (row) =>
-      `${(row.customer as Customer).cellphone_1} ${
+      `${(row.customer as Customer).cellphone_1} 
+      ${
         (row.customer as Customer).cellphone_2
-      } ${(row.customer as Customer).direction}`,
+          ? " - " + (row.customer as Customer).cellphone_2
+          : ""
+      } ${
+        (row.customer as Customer).direction
+          ? " - " + (row.customer as Customer).direction
+          : ""
+      }`,
     {
       id: "info",
       cell: (info) => info.getValue(),
@@ -1827,7 +131,7 @@ const defaultColumns = [
   columnHelper.accessor("billigStart", {
     cell: (info) => String(info.getValue()),
     classNameBody: "div-row",
-    header: () => "Nro de chip",
+    header: () => "Fecha de inicio",
     classNameHeader: "div",
     size: 100,
     minSize: 31,
@@ -1835,11 +139,51 @@ const defaultColumns = [
   columnHelper.accessor("billigEnd", {
     cell: (info) => String(info.getValue()),
     classNameBody: "div-row",
-    header: () => "Nro de chip",
+    header: () => "Fecha de termino",
     classNameHeader: "div",
     size: 100,
     minSize: 31,
   } as IdentifiedColumnDef<Vehicle, string>),
+  columnHelper.accessor("retired", {
+    cell: (info) => (info.getValue() ? "SI" : "NO"),
+    classNameBody: "div-row text-center",
+    header: () => "Retirado",
+    classNameHeader: "div text-center",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Vehicle, boolean>),
+  columnHelper.display({
+    id: "delete",
+    cell: (props) => {
+      return <CloseIcon sx={{ fontSize: 18 }} htmlColor="red" />;
+    },
+    classNameBody: "div-row text-center",
+    header: () => "Eliminar",
+    classNameHeader: "div text-center",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Vehicle, unknown>),
+  // columnHelper.display({
+  //   id: "status",
+  //   cell: (props) => {
+  //     return <VehicleStatus row={props.row} />;
+  //   },
+  //   classNameBody: "div-row text-center",
+  //   header: () => "Estado",
+  //   classNameHeader: "div text-center",
+  //   size: 100,
+  //   minSize: 31,
+  // } as DisplayColumnDef<Vehicle, unknown>),
+  columnHelper.accessor("status", {
+    cell: (props) => {
+      return <VehicleStatus row={props.row} />;
+    },
+    classNameBody: "div-row text-center",
+    header: () => "Estado",
+    classNameHeader: "div text-center",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Vehicle, any>),
   columnHelper.display({
     id: "actions",
     cell: (props) => "",
@@ -1852,16 +196,27 @@ const defaultColumns = [
   } as DisplayColumnDef<Vehicle, unknown>),
 ];
 
+const initialValueEdit: Vehicle = {
+  customer: "",
+  device: "",
+  billing: "",
+  plate: "",
+  nroGPS: "",
+  platform: "",
+  sim: "",
+  retired: false,
+};
+
 const VehiclesPage = () => {
-  const dispatch = useDispatch();
-  const [vehicles, setVehicles] = useState<any[]>(datax);
   const [contVencidos, setContVencidos] = useState<number>(0);
   const [contActivos, setContActivos] = useState<number>(0);
   const [contPorVencer, setContXVencer] = useState<number>(0);
-  const { data, isLoading, isError, isFetching } = useGetVehicles();
-
+  const { data, isLoading, isError, isFetching, error } = useGetVehicles();
+  const [vehicleEdit, setVehicleEdit] = useState<Vehicle>(initialValueEdit);
+  const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const { mutateAsync, isLoading: isLoadingDelete } = useDeleteVehicle();
 
   const searchComponent = useRef<HTMLInputElement>(null);
 
@@ -1895,44 +250,59 @@ const VehiclesPage = () => {
   };
 
   const memoVehicles = useMemo(() => {
-    let arrayVehicles = datax;
-
-    if (search !== "") {
-      const data = arrayVehicles
-        .map((v) => {
-          return {
-            ...v,
-            customerFullname:
-              (v.customer as Customer).name +
-              " " +
-              (v.customer as Customer).lastName,
-          };
-        })
-        .filter(
-          (vv) =>
-            vv.customerFullname
-              .toLowerCase()
-              .includes(search.trim().toLowerCase()) ||
-            vv.plate.toLowerCase().includes(search.trim().toLowerCase()) ||
-            (vv.billing as Billing).name
-              .toLowerCase()
-              .includes(search.trim().toLowerCase()) ||
-            vv.nroGPS.toLowerCase().includes(search.trim().toLowerCase()) ||
-            vv.platform.toLowerCase().includes(search.trim().toLowerCase())
-        );
-
-      arrayVehicles = data.map((x) => ({
-        ...x,
-        customer: {
-          ...(x.customer as Customer),
-          name: (x.customer as Customer).name,
-          lastName: (x.customer as Customer).lastName,
-        },
-      }));
+    const colorsError = ["VENCIDO", "ACTIVO", "POR VENCER"];
+    let arrayVehicles: Vehicle[] = [];
+    if (data) {
+      arrayVehicles = data.map((add: Vehicle) => {
+        const billingEnd = new Date(String(add.billigEnd));
+        const diffDays = differenceInDays(billingEnd, new Date());
+        return {
+          ...add,
+          status:
+            diffDays > 7
+              ? colorsError[1]
+              : diffDays <= 7 && diffDays >= 0
+              ? colorsError[2]
+              : colorsError[0],
+        };
+      });
+      if (search !== "") {
+        const data = arrayVehicles
+          .map((v) => {
+            return {
+              ...v,
+              customerFullname:
+                (v.customer as Customer).name +
+                " " +
+                (v.customer as Customer).lastName,
+            };
+          })
+          .filter(
+            (vv) =>
+              vv.customerFullname
+                .toLowerCase()
+                .includes(search.trim().toLowerCase()) ||
+              vv.plate.toLowerCase().includes(search.trim().toLowerCase()) ||
+              (vv.billing as Billing).name
+                .toLowerCase()
+                .includes(search.trim().toLowerCase()) ||
+              vv.nroGPS.toLowerCase().includes(search.trim().toLowerCase()) ||
+              vv.platform.toLowerCase().includes(search.trim().toLowerCase())
+          );
+        arrayVehicles = data.map((x) => ({
+          ...x,
+          customer: {
+            ...(x.customer as Customer),
+            name: (x.customer as Customer).name,
+            lastName: (x.customer as Customer).lastName,
+          },
+        }));
+      }
+      return arrayVehicles;
     }
 
     return arrayVehicles;
-  }, [search]);
+  }, [data, search]);
 
   const handleSearch = (e: InputChange) => {
     const value: string = (
@@ -1944,6 +314,37 @@ const VehiclesPage = () => {
   const handleOpenModalForm = () => setOpenModal(true);
   const handleCloseModalForm = () => setOpenModal(false);
 
+  const handleCloseModalEdit = () => {
+    setOpenModalEdit(false);
+    setVehicleEdit(initialValueEdit);
+  };
+
+  const handleClick = (row: any) => {
+    setOpenModalEdit(true);
+    setVehicleEdit(row.original);
+  };
+
+  const handleDelete = async (row: any) => {
+    const confirmAlert = window.confirm(
+      `¿Estas seguro que deseas eliminar ${row.original.plate}?`
+    );
+
+    if (confirmAlert) {
+      try {
+        await mutateAsync({
+          variables: {
+            id: row.original.id,
+          },
+        });
+      } catch (e) {
+        const myErrors = JSON.parse(JSON.stringify(e)).response.errors.map(
+          (a: any) => a.extensions.exception.response.message.map((b: any) => b)
+        );
+        toast.error(myErrors.map((a: any) => a));
+      }
+    }
+  };
+
   useLayoutEffect(() => {
     if (searchComponent.current) {
       searchComponent.current.focus();
@@ -1952,13 +353,15 @@ const VehiclesPage = () => {
 
   return (
     <>
-      {/* <DialogForm
-        open={dialog.active}
-        title={`${dialog.name} Vehiculo`}
-        component={component(dialog.name)}
-        handleClose={handleClose}
-      /> */}
       <VehicleForm open={openModal} handleClose={handleCloseModalForm} />
+
+      {openModalEdit && (
+        <VehicleEdit
+          open={openModalEdit}
+          handleClose={handleCloseModalEdit}
+          entity={vehicleEdit}
+        />
+      )}
 
       <div style={{ width: "100%", display: "flex" }}>
         <div style={{ width: "200px" }}>
@@ -2026,15 +429,44 @@ const VehiclesPage = () => {
           searchComponent={searchComponent}
           placeholder="Buscar cliente, placa, plan de facturación, tipo de plataforma o nro de gps..."
         />
-        {/* <SearchBar
-          style={{ width: "100%" }}
-          placeholder="Puede buscar por nombres, apellidos, placa, plan de facturación, tipo de plataforma o nro de gps"
-          value={searched}
-          onChange={(searchVal) => requestSearch(searchVal)}
-          onCancelSearch={() => cancelSearch()}
-        /> */}
+        {(isFetching || isLoadingDelete) && (
+          <div
+            style={{ display: "flex", marginLeft: 10, alignItems: "flex-end" }}
+          >
+            <label style={{ fontSize: 12 }}>
+              {isLoadingDelete
+                ? "Eliminando objeto..."
+                : "Refrescando lista..."}
+            </label>
+          </div>
+        )}
       </div>
-      <TableContainer data={memoVehicles} columns={defaultColumns} />
+      {isError ? (
+        JSON.parse(JSON.stringify(error))
+          .response.errors.map((a: any) =>
+            a.extensions.exception.response.message.map((b: any) => b)
+          )
+          .map((b: any, i: number) => (
+            <>
+              <div
+                key={i + 1}
+                style={{ background: "red", color: "#fff", padding: 10 }}
+              >
+                {i + 1}.- {b}
+              </div>
+              <br />
+            </>
+          ))
+      ) : (
+        <TableContainer
+          data={memoVehicles}
+          columns={defaultColumns}
+          loading={isLoading}
+          onClickTr={handleClick}
+          handleDelete={handleDelete}
+        />
+      )}
+
       {/* <TableContainer
         component={Paper}
         style={{ whiteSpace: "nowrap", marginTop: 10 }}

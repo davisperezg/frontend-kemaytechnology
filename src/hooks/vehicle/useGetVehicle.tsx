@@ -16,6 +16,7 @@ export const GET_VEHICLES = gql`
         cellphone_2
         username
         password
+        direction
       }
       createdBy {
         id
@@ -33,6 +34,7 @@ export const GET_VEHICLES = gql`
         id
         name
         day
+        price
       }
       sim
       platform
@@ -42,6 +44,7 @@ export const GET_VEHICLES = gql`
       billigEnd
       createdAt
       updatedAt
+      retired
     }
   }
 `;

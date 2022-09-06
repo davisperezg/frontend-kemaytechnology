@@ -59,34 +59,34 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
     }
   };
 
-  const deleteVehicle = async (id: string | undefined) => {
-    try {
-      await optionsVehicle.deleteVehicle({
-        variables: {
-          id,
-        },
-      });
-    } catch (e) {
-      setDialog({ name: "error", active: true });
-      dispatch(
-        setAlert({
-          type: "error",
-          text: findError(e),
-        })
-      );
-      <DialogForm
-        open={dialog.active}
-        title={dialog.name}
-        handleClose={handleClose}
-      />;
-    }
-  };
+  // const deleteVehicle = async (id: string | undefined) => {
+  //   try {
+  //     await optionsVehicle.deleteVehicle({
+  //       variables: {
+  //         id,
+  //       },
+  //     });
+  //   } catch (e) {
+  //     setDialog({ name: "error", active: true });
+  //     dispatch(
+  //       setAlert({
+  //         type: "error",
+  //         text: findError(e),
+  //       })
+  //     );
+  //     <DialogForm
+  //       open={dialog.active}
+  //       title={dialog.name}
+  //       handleClose={handleClose}
+  //     />;
+  //   }
+  // };
 
   const showOptionsForDelete = () => (
     <>
       <Tooltip
         title="Eliminar vehiculo"
-        onClick={() => deleteVehicle(vehicle.id)}
+        //onClick={() => deleteVehicle(vehicle.id)}
       >
         <IconButton aria-label="vehicle" size="small">
           <HighlightOffRoundedIcon />
@@ -98,7 +98,7 @@ const VehicleList = ({ vehicle }: { vehicle: Vehicle }) => {
     <>
       <Tooltip
         title="Editar vehiclo"
-        onClick={() => setDialog({ name: "Vehiculo", active: true })}
+        //onClick={() => setDialog({ name: "Vehiculo", active: true })}
       >
         <IconButton aria-label="vehicle" size="small">
           <EditRoundedIcon />

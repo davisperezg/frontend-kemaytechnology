@@ -1,11 +1,16 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { Vehicle } from "../../interfaces/vehicle.interface";
-import { GET_VEHICLES } from "./useGetVehicle";
+import { graphQLClient } from "../../config/config";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 
-interface UpdateVehicleInput {
-  variables: {
-    vehicleInput: Vehicle;
+interface IError {
+  request: {
+    response: string;
   };
+}
+
+interface IUpdateParams {
+  variables: { vehicleInput: Vehicle };
 }
 
 const UPDATE_DEVICE = gql`
@@ -43,18 +48,19 @@ const UPDATE_DEVICE = gql`
       billigEnd
       createdAt
       updatedAt
+      retired
     }
   }
 `;
 
 export const useUpdateVehicle = () => {
-  const [updateVehicle, { error, loading }] = useMutation(UPDATE_DEVICE, {
-    refetchQueries: () => [
-      {
-        query: GET_VEHICLES,
-      },
-    ],
-  });
+  const queryClient = useQueryClient();
 
-  return { updateVehicle, error, loading };
+  return useMutation<Vehicle, IError, IUpdateParams>(["vehicles"], {
+    mutationFn: async ({ variables }) =>
+      await graphQLClient.request(UPDATE_DEVICE, variables),
+    onSuccess() {
+      queryClient.invalidateQueries(["vehicles"]);
+    },
+  });
 };
