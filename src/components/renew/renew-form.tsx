@@ -41,16 +41,16 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
   //   day: vehicle.billing.day,
   // });
 
-  const optionsBillings = useGetBilling();
-  const optionBilling = useBillingByName();
-  const optionsCreate = useCreateRenew();
+  // const optionsBillings = useGetBilling();
+  // const optionBilling = useBillingByName();
+  // const optionsCreate = useCreateRenew();
 
-  const dateEnd = startOfDay(new Date(vehicle.billigEnd || ""));
-  const dateStart = startOfDay(new Date());
-  const getTimeStart = dateStart.getTime();
-  const getTimeEnd = new Date(vehicle.billigEnd || "").getTime();
-  let newDate: Date;
-  let fechaDesde: any;
+  // const dateEnd = startOfDay(new Date(vehicle.billigEnd || ""));
+  // const dateStart = startOfDay(new Date());
+  // const getTimeStart = dateStart.getTime();
+  // const getTimeEnd = new Date(vehicle.billigEnd || "").getTime();
+  // let newDate: Date;
+  // let fechaDesde: any;
 
   // if (getTimeStart >= getTimeEnd) {
   //   newDate = add(dateStart, { days: state.day });
@@ -60,75 +60,75 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
   //   fechaDesde = moment(dateEnd).format("DD/MM/YYYY");
   // }
 
-  const getBilling = async (name: string) => {
-    try {
-      await optionBilling.getBillingByName({
-        variables: {
-          name: name,
-        },
-      });
-    } catch (e) {
-      dispatch(
-        setAlert({
-          type: "error",
-          text: findError(e),
-        })
-      );
-    }
-  };
+  // const getBilling = async (name: string) => {
+  //   try {
+  //     await optionBilling.getBillingByName({
+  //       variables: {
+  //         name: name,
+  //       },
+  //     });
+  //   } catch (e) {
+  //     dispatch(
+  //       setAlert({
+  //         type: "error",
+  //         text: findError(e),
+  //       })
+  //     );
+  //   }
+  // };
 
   // const handleChange = (event: SelectChange) => {
   //   setRenew({ ...renew, billing: event.target.value });
   // };
 
-  const registerRenew = async () => {
-    const confirm = window.confirm(
-      "¿ Esta seguro que desea renovar el vehiculo ?"
-    );
+  // const registerRenew = async () => {
+  //   const confirm = window.confirm(
+  //     "¿ Esta seguro que desea renovar el vehiculo ?"
+  //   );
 
-    if (confirm) {
-      // try {
-      //   await optionsCreate.registerRenew({
-      //     variables: {
-      //       renewInput: renew,
-      //     },
-      //   });
-      //   dispatch(
-      //     setAlert({
-      //       type: "success",
-      //       text: "Se ha renovado correctamente.",
-      //     })
-      //   );
-      // } catch (e) {
-      //   dispatch(
-      //     setAlert({
-      //       type: "error",
-      //       text: findError(e),
-      //     })
-      //   );
-      // }
-    }
-  };
+  //   if (confirm) {
+  //     // try {
+  //     //   await optionsCreate.registerRenew({
+  //     //     variables: {
+  //     //       renewInput: renew,
+  //     //     },
+  //     //   });
+  //     //   dispatch(
+  //     //     setAlert({
+  //     //       type: "success",
+  //     //       text: "Se ha renovado correctamente.",
+  //     //     })
+  //     //   );
+  //     // } catch (e) {
+  //     //   dispatch(
+  //     //     setAlert({
+  //     //       type: "error",
+  //     //       text: findError(e),
+  //     //     })
+  //     //   );
+  //     // }
+  //   }
+  // };
 
-  useEffect(() => {
-    if (optionsBillings.data) {
-      setBillings(optionsBillings.data.getBillings);
-    }
-    if (optionBilling.data) {
-      //setState({ ...state, day: optionBilling.data.getBillingByName.day });
-    }
-    if (optionsCreate.data) {
-      //Generacion de pdf
-      // GenerarComprobante(
-      //   vehicle,
-      //   newDate,
-      //   fechaDesde,
-      //   renew,
-      //   optionsCreate.data.registerRenew.id
-      // );
-      // const imgqr=<QRCode value={optionsCreate.data.registerRenew.id} />
-    }
-  }, [optionsBillings.data, optionBilling.data, optionsCreate.data]);
+  // useEffect(() => {
+  //   if (optionsBillings.data) {
+  //     setBillings(optionsBillings.data.getBillings);
+  //   }
+  //   if (optionBilling.data) {
+  //     //setState({ ...state, day: optionBilling.data.getBillingByName.day });
+  //   }
+  //   if (optionsCreate.data) {
+  //     //Generacion de pdf
+  //     // GenerarComprobante(
+  //     //   vehicle,
+  //     //   newDate,
+  //     //   fechaDesde,
+  //     //   renew,
+  //     //   optionsCreate.data.registerRenew.id
+  //     // );
+  //     // const imgqr=<QRCode value={optionsCreate.data.registerRenew.id} />
+  //   }
+  // }, [optionsBillings.data, optionBilling.data, optionsCreate.data]);
 
   return (
     <>
@@ -209,7 +209,7 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
           <div style={{ width: "50%", float: "left", backgroundColor: "#fff" }}>
             Renueva desde:
           </div>
-          <div style={{ width: "50%", float: "left" }}>{fechaDesde}</div>
+          {/* <div style={{ width: "50%", float: "left" }}>{fechaDesde}</div> */}
         </div>
         <div style={{ width: "100%", height: "auto" }}>
           <div style={{ width: "50%", float: "left", backgroundColor: "#fff" }}>
@@ -234,7 +234,7 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
           </div> */}
         </div>
       </div>
-      <DialogActions style={{ width: "100%" }}>
+      {/* <DialogActions style={{ width: "100%" }}>
         <Button onClick={handleClose} color="primary">
           Cancelar
         </Button>
@@ -251,7 +251,7 @@ const RenewForm = ({ handleClose, vehicle }: Options) => {
             Aceptar
           </Button>
         )}
-      </DialogActions>
+      </DialogActions> */}
     </>
   );
 };

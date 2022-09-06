@@ -12,10 +12,12 @@ export interface Vehicle {
   nroGPS: string;
   platform: string;
   sim: string;
+  retired: boolean;
   billigStart?: string | Date;
   billigEnd?: string | Date;
   createdBy?: User | string;
   updatedBy?: User | string;
   createdAt?: Date;
   updatedAt?: Date;
+  status?: string;
 }

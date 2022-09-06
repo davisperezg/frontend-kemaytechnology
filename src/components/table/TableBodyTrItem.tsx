@@ -20,7 +20,7 @@ const TableBodyTrItem = ({
             }
       }
     >
-      {row.getVisibleCells().map((cell) => {
+      {row.getVisibleCells().map((cell, i) => {
         return (
           <TableBodyTdItem
             cell={cell}

@@ -1,12 +1,16 @@
 import { Renew } from "../../interfaces/renewinterface";
-import { gql, useMutation } from "@apollo/client";
-import { GET_RENEWS } from "./useGetRenew";
-import { GET_VEHICLES } from "../vehicle/useGetVehicle";
+import { gql } from "@apollo/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { graphQLClient } from "../../config/config";
 
-interface CreateRenewInput {
-  variables: {
-    renewInput: Renew;
+interface IError {
+  request: {
+    response: string;
   };
+}
+
+interface ICreateParams {
+  variables: { renewInput: Renew };
 }
 
 const CREATE_RENEW = gql`
@@ -41,13 +45,18 @@ const CREATE_RENEW = gql`
 `;
 
 export const useCreateRenew = () => {
-  const [registerRenew, { error, loading, data }] = useMutation(CREATE_RENEW, {
-    refetchQueries: () => [
-      {
-        query: GET_VEHICLES,
-      },
-    ],
-  });
+  const queryClient = useQueryClient();
 
-  return { registerRenew, error, loading, data };
+  return useMutation<Renew, IError, ICreateParams>(["renews"], {
+    mutationFn: async ({ variables }) =>
+      await graphQLClient.request(CREATE_RENEW, variables),
+    onSuccess(data: any) {
+      console.log(data);
+      const { registerRenew } = data;
+      queryClient.setQueryData(["renews"], (prevRenews: any) =>
+        prevRenews.concat(registerRenew)
+      );
+      queryClient.invalidateQueries(["renews"]);
+    },
+  });
 };

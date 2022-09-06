@@ -7,3 +7,183 @@
   line-height: 37px;
   font-size: 13px;
 }
+
+.flex-beetwen {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mt-div {
+  margin-top: 20px;
+}
+
+.flex-end {
+  display: flex;
+  align-items: end;
+}
+
+.icon-change {
+  margin-left: 5px;
+  padding-top: 4px;
+}
+
+.table-edit,
+.td-edit {
+  padding: 10px;
+  border: 1px solid #d0cecf;
+}
+
+.table-edit {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.input-radio {
+  position: relative;
+  top: 1.5px;
+}
+
+.content-inputCheck {
+  width: auto;
+  height: auto;
+  float: left;
+  margin-right: 10px;
+}
+
+.ym-div {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.year {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid;
+  margin-right: 5px;
+  padding-right: 5px;
+}
+
+.cred {
+  word-break: break-all;
+  user-select: none;
+}
+
+.content-tvm-div {
+  display: flex;
+  /* border-left: 1px solid #d0cecf;
+  border-top: 1px solid #d0cecf;
+  border-right: 1px solid #d0cecf; */
+}
+
+.content-tvd-div {
+  display: flex;
+  border: 1px solid #d0cecf;
+}
+
+.tv-item {
+  border-right: 1px solid #d0cecf;
+  padding: 5px;
+  width: 80px;
+}
+
+.result-tv-item {
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+}
+
+.mb-5 {
+  margin-bottom: 5px;
+}
+
+.line {
+  border-bottom: 1px solid #d0cecf;
+  margin-bottom: 5px;
+  margin-top: 20px;
+}
+
+.label-year {
+  cursor: pointer;
+  user-select: none;
+}
+
+.label-year:hover {
+  color: blue;
+  text-decoration: underline;
+}
+
+.label-month {
+  cursor: pointer;
+  user-select: none;
+  color: red;
+}
+
+.label-month-desactived {
+  cursor: default;
+  user-select: none;
+  color: #a3a0a0;
+}
+
+.label-month-selected {
+  color: green;
+}
+
+.pointer {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.comeback {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.label-year-selected {
+  color: green;
+  text-decoration: underline;
+}
+
+.label-month:hover {
+  color: blue;
+  text-decoration: underline;
+}
+
+.mt-5 {
+  margin-top: 5px;
+}
+
+.content-dscrp {
+  display: flex;
+  flex-direction: column;
+}
+
+.dscrp {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-dscrp {
+  display: flex;
+  justify-content: end;
+}
+
+.btn-dscrp__confirm {
+  width: 100%;
+}
+
+.dscrp--textarea:focus-visible {
+  outline: none;
+}
+
+.fieldset_content {
+  padding: 10px;
+  border: 1px solid #d0cecf;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.year_labelNot {
+  color: #d0cecf;
+  user-select: none;
+}
