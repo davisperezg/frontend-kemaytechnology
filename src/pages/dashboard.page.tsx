@@ -124,9 +124,10 @@ const Dashboard = () => {
           (prev, cur) => ((prev[cur] = prev[cur] + 1 || 1), prev),
           {}
         );
-        console.log(resultMonths);
+
         return {
-          size: formatedYearData.filter((a: any) => a === getYearNow).length,
+          size: formatedYearData.filter((a: any) => a.year === getYearNow)
+            .length,
           keys: Object.keys(resultMonths),
           values: Object.values(resultMonths),
         };
@@ -141,15 +142,20 @@ const Dashboard = () => {
     let formatedMonthData: any[] = [];
 
     if (dataRenews) {
-      formatedYearData = dataRenews.map((a: any) =>
-        format(new Date(String(a.createdAt)), "yyyy")
-      );
+      formatedYearData = dataRenews.map((a: any) => {
+        return {
+          ...a,
+          year: format(new Date(String(a.createdAt)), "yyyy"),
+        };
+      });
 
-      formatedMonthData = dataRenews.map((a: any) =>
-        format(new Date(String(a.createdAt)), "MMMM")
-      );
+      formatedMonthData = formatedYearData
+        .filter((a: any) => a.year === getYearNow)
+        .map((b: any) => format(new Date(String(b.createdAt)), "MMMM"));
 
-      const allUearNow = formatedYearData.some((a: any) => a === getYearNow);
+      const allUearNow = formatedYearData.some(
+        (a: any) => a.year === getYearNow
+      );
 
       if (allUearNow) {
         const resultMonths = formatedMonthData.reduce(
@@ -158,7 +164,8 @@ const Dashboard = () => {
         );
 
         return {
-          size: formatedYearData.filter((a: any) => a === getYearNow).length,
+          size: formatedYearData.filter((a: any) => a.year === getYearNow)
+            .length,
           keys: Object.keys(resultMonths),
           values: Object.values(resultMonths),
         };
@@ -167,34 +174,6 @@ const Dashboard = () => {
 
     return {};
   }, [dataRenews, getYearNow]);
-
-  console.log("memoVehiclesInsts", memoVehiclesInsts || []);
-  console.log(
-    "datavehicles-YY",
-    dataVechiles?.map(
-      (a: any) => format(new Date(String(a.createdAt)), "yyyy") || []
-    )
-  );
-  console.log(
-    "datavehicles-MM",
-    dataVechiles?.map(
-      (a: any) => format(new Date(String(a.createdAt)), "MMMM") || []
-    )
-  );
-
-  console.log("memoVehiclesRenews", memoVehiclesInsts || []);
-  console.log(
-    "dataRenews-YY",
-    dataRenews?.map(
-      (a: any) => format(new Date(String(a.createdAt)), "yyyy") || []
-    )
-  );
-  console.log(
-    "dataRenews-MM",
-    dataRenews?.map(
-      (a: any) => format(new Date(String(a.createdAt)), "MMMM") || []
-    )
-  );
 
   const validateColorsBg = (tip: string) => {
     if (tip === "A") {
