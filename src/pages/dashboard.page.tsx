@@ -47,7 +47,7 @@ const Dashboard = () => {
       );
 
       return {
-        size: statusVehicles.length,
+        size: statusVehicles.filter((a: any) => a === "ACTIVO").length,
         sizeDefead: statusVehicles.filter((a: any) => a === "VENCIDO").length,
         statusVehicles: Object.keys(resultStatus),
         cantVehicles: Object.values(resultStatus),
@@ -89,7 +89,7 @@ const Dashboard = () => {
       );
 
       return {
-        size: statusVehicles.length,
+        size: statusVehicles.filter((a: any) => a === "ACTIVO").length,
         sizeDefead: statusVehicles.filter((a: any) => a === "VENCIDO").length,
         statusVehicles: Object.keys(resultStatus),
         cantVehicles: Object.values(resultStatus),
@@ -162,6 +162,26 @@ const Dashboard = () => {
 
     return {};
   }, [dataRenews, getYearNow]);
+
+  console.log("memoVehiclesInsts", memoVehiclesInsts);
+  console.log(
+    "datavehicles-YY",
+    dataVechiles.map((a: any) => format(new Date(String(a.createdAt)), "yyyy"))
+  );
+  console.log(
+    "datavehicles-MM",
+    dataVechiles.map((a: any) => format(new Date(String(a.createdAt)), "MMMM"))
+  );
+
+  console.log("memoVehiclesRenews", memoVehiclesInsts);
+  console.log(
+    "dataRenews-YY",
+    dataRenews.map((a: any) => format(new Date(String(a.createdAt)), "yyyy"))
+  );
+  console.log(
+    "dataRenews-MM",
+    dataRenews.map((a: any) => format(new Date(String(a.createdAt)), "MMMM"))
+  );
 
   const validateColorsBg = (tip: string) => {
     if (tip === "A") {
