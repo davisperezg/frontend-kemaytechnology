@@ -104,13 +104,16 @@ const Dashboard = () => {
     let formatedMonthData: any[] = [];
 
     if (dataVechiles) {
-      formatedYearData = dataVechiles.map((a: any) =>
-        format(new Date(String(a.createdAt)), "yyyy")
-      );
+      formatedYearData = dataVechiles.map((a: any) => {
+        return {
+          ...a,
+          year: format(new Date(String(a.createdAt)), "yyyy"),
+        };
+      });
 
-      formatedMonthData = dataVechiles.map((a: any) =>
-        format(new Date(String(a.createdAt)), "MMMM")
-      );
+      formatedMonthData = formatedYearData
+        .filter((a: any) => a.year === getYearNow)
+        .map((b: any) => format(new Date(String(b.createdAt)), "MMMM"));
 
       const allUearNow = formatedYearData.some((a: any) => a === getYearNow);
 
@@ -119,7 +122,7 @@ const Dashboard = () => {
           (prev, cur) => ((prev[cur] = prev[cur] + 1 || 1), prev),
           {}
         );
-
+        console.log(resultMonths);
         return {
           size: formatedYearData.filter((a: any) => a === getYearNow).length,
           keys: Object.keys(resultMonths),
