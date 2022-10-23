@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.651765d2.css",
-    "main.js": "/static/js/main.f0482800.js",
+    "main.js": "/static/js/main.31894bcf.js",
     "static/js/498.bef6e47d.chunk.js": "/static/js/498.bef6e47d.chunk.js",
     "static/js/703.9f4353e4.chunk.js": "/static/js/703.9f4353e4.chunk.js",
     "static/js/278.c791d71e.chunk.js": "/static/js/278.c791d71e.chunk.js",
@@ -9,13 +9,13 @@
     "static/media/logo_kemay_antena.png": "/static/media/logo_kemay_antena.16ba1da397b54225d4ce.png",
     "index.html": "/index.html",
     "main.651765d2.css.map": "/static/css/main.651765d2.css.map",
-    "main.f0482800.js.map": "/static/js/main.f0482800.js.map",
+    "main.31894bcf.js.map": "/static/js/main.31894bcf.js.map",
     "498.bef6e47d.chunk.js.map": "/static/js/498.bef6e47d.chunk.js.map",
     "703.9f4353e4.chunk.js.map": "/static/js/703.9f4353e4.chunk.js.map",
     "278.c791d71e.chunk.js.map": "/static/js/278.c791d71e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.651765d2.css",
-    "static/js/main.f0482800.js"
+    "static/js/main.31894bcf.js"
   ]
 }
