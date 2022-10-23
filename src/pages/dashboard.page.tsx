@@ -115,7 +115,9 @@ const Dashboard = () => {
         .filter((a: any) => a.year === getYearNow)
         .map((b: any) => format(new Date(String(b.createdAt)), "MMMM"));
 
-      const allUearNow = formatedYearData.some((a: any) => a === getYearNow);
+      const allUearNow = formatedYearData.some(
+        (a: any) => a.year === getYearNow
+      );
 
       if (allUearNow) {
         const resultMonths = formatedMonthData.reduce(
