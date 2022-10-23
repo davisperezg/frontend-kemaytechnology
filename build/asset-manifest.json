@@ -1,31 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.2e74b7cb.chunk.css",
-    "main.js": "/static/js/main.d41ec504.chunk.js",
-    "main.js.map": "/static/js/main.d41ec504.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.e8f23eed.js",
-    "runtime-main.js.map": "/static/js/runtime-main.e8f23eed.js.map",
-    "static/js/2.a9dac909.chunk.js": "/static/js/2.a9dac909.chunk.js",
-    "static/js/2.a9dac909.chunk.js.map": "/static/js/2.a9dac909.chunk.js.map",
-    "static/js/3.88028b07.chunk.js": "/static/js/3.88028b07.chunk.js",
-    "static/js/3.88028b07.chunk.js.map": "/static/js/3.88028b07.chunk.js.map",
-    "static/js/4.9d4162fb.chunk.js": "/static/js/4.9d4162fb.chunk.js",
-    "static/js/4.9d4162fb.chunk.js.map": "/static/js/4.9d4162fb.chunk.js.map",
-    "static/js/5.395a06a8.chunk.js": "/static/js/5.395a06a8.chunk.js",
-    "static/js/5.395a06a8.chunk.js.map": "/static/js/5.395a06a8.chunk.js.map",
+    "main.css": "/static/css/main.733b5f7f.css",
+    "main.js": "/static/js/main.29943d7a.js",
+    "static/js/498.bef6e47d.chunk.js": "/static/js/498.bef6e47d.chunk.js",
+    "static/js/703.9f4353e4.chunk.js": "/static/js/703.9f4353e4.chunk.js",
+    "static/js/278.c791d71e.chunk.js": "/static/js/278.c791d71e.chunk.js",
+    "static/media/B_logo_kemay.png": "/static/media/B_logo_kemay.bec2fe6e94f33aaf73c4.png",
+    "static/media/logo_kemay_antena.png": "/static/media/logo_kemay_antena.16ba1da397b54225d4ce.png",
     "index.html": "/index.html",
-    "static/css/main.2e74b7cb.chunk.css.map": "/static/css/main.2e74b7cb.chunk.css.map",
-    "static/js/2.a9dac909.chunk.js.LICENSE.txt": "/static/js/2.a9dac909.chunk.js.LICENSE.txt",
-    "static/js/3.88028b07.chunk.js.LICENSE.txt": "/static/js/3.88028b07.chunk.js.LICENSE.txt",
-    "static/js/4.9d4162fb.chunk.js.LICENSE.txt": "/static/js/4.9d4162fb.chunk.js.LICENSE.txt",
-    "static/js/5.395a06a8.chunk.js.LICENSE.txt": "/static/js/5.395a06a8.chunk.js.LICENSE.txt",
-    "static/media/B_logo_kemay.bec2fe6e.png": "/static/media/B_logo_kemay.bec2fe6e.png",
-    "static/media/logo_kemay_antena.16ba1da3.png": "/static/media/logo_kemay_antena.16ba1da3.png"
+    "main.733b5f7f.css.map": "/static/css/main.733b5f7f.css.map",
+    "main.29943d7a.js.map": "/static/js/main.29943d7a.js.map",
+    "498.bef6e47d.chunk.js.map": "/static/js/498.bef6e47d.chunk.js.map",
+    "703.9f4353e4.chunk.js.map": "/static/js/703.9f4353e4.chunk.js.map",
+    "278.c791d71e.chunk.js.map": "/static/js/278.c791d71e.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.e8f23eed.js",
-    "static/js/3.88028b07.chunk.js",
-    "static/css/main.2e74b7cb.chunk.css",
-    "static/js/main.d41ec504.chunk.js"
+    "static/css/main.733b5f7f.css",
+    "static/js/main.29943d7a.js"
   ]
 }
