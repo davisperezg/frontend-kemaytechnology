@@ -163,24 +163,32 @@ const Dashboard = () => {
     return {};
   }, [dataRenews, getYearNow]);
 
-  console.log("memoVehiclesInsts", memoVehiclesInsts);
+  console.log("memoVehiclesInsts", memoVehiclesInsts || []);
   console.log(
     "datavehicles-YY",
-    dataVechiles.map((a: any) => format(new Date(String(a.createdAt)), "yyyy"))
+    dataVechiles?.map(
+      (a: any) => format(new Date(String(a.createdAt)), "yyyy") || []
+    )
   );
   console.log(
     "datavehicles-MM",
-    dataVechiles.map((a: any) => format(new Date(String(a.createdAt)), "MMMM"))
+    dataVechiles?.map(
+      (a: any) => format(new Date(String(a.createdAt)), "MMMM") || []
+    )
   );
 
-  console.log("memoVehiclesRenews", memoVehiclesInsts);
+  console.log("memoVehiclesRenews", memoVehiclesInsts || []);
   console.log(
     "dataRenews-YY",
-    dataRenews.map((a: any) => format(new Date(String(a.createdAt)), "yyyy"))
+    dataRenews?.map(
+      (a: any) => format(new Date(String(a.createdAt)), "yyyy") || []
+    )
   );
   console.log(
     "dataRenews-MM",
-    dataRenews.map((a: any) => format(new Date(String(a.createdAt)), "MMMM"))
+    dataRenews?.map(
+      (a: any) => format(new Date(String(a.createdAt)), "MMMM") || []
+    )
   );
 
   const validateColorsBg = (tip: string) => {
