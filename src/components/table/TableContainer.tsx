@@ -32,7 +32,7 @@ const TableContainer = ({
   const [leftTable, setLeftTable] = useState<number>(0);
   const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 20,
   });
 
   const pagination = useMemo(
