@@ -7,7 +7,7 @@ export interface Vehicle {
   id?: string;
   customer: Customer | string;
   device: Device | string;
-  billing: Billing | string;
+  billing?: Billing | string;
   plate: string;
   nroGPS: string;
   platform: string;

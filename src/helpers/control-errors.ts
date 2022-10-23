@@ -8,3 +8,9 @@ export const findError = (error: any) => {
     }
   }
 };
+
+export const errorCatch = (e: any) => {
+  return JSON.parse(JSON.stringify(e)).response.errors.map((a: any) =>
+    a.extensions.exception.response.message.map((b: any) => b)
+  );
+};

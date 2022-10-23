@@ -53,40 +53,6 @@ const VehicleTimeDefeatedMonth = ({
     state: month.state,
   });
 
-  // const updateChanges = () => {
-  //   //al activar un mes tambien actualizamos al padre
-  //   const all = elements.map((a) => {
-  //     return {
-  //       ...a,
-  //       state: a.name === selectedMonth.name ? !selectedMonth.state : a.state,
-  //     };
-  //   });
-  //   setAllMonths(all);
-
-  //   //formato para la nueva actualizacion hacia el padre
-  //   const toTime = [
-  //     {
-  //       year: {
-  //         name: stateYear.name,
-  //         state: true,
-  //       },
-  //       months: all,
-  //     },
-  //   ];
-
-  //   //por cada cambio(click) en el mes esto enviara al padre para actualizar el array time total
-  //   const updateChangesToTime = time.reduce(
-  //     (previousValue: any, currentValue: any) => {
-  //       const item = toTime.find((x) => x.year.name === currentValue.year.name);
-  //       if (!item) previousValue = [...previousValue, currentValue];
-  //       return previousValue;
-  //     },
-  //     []
-  //   );
-
-  //   setTime([...updateChangesToTime, ...toTime]);
-  // };
-
   const searchPositionMonth = (month: string) =>
     allMonthsLocal.indexOf(month) + 1;
 

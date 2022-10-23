@@ -51,12 +51,7 @@ export const useCreateRenew = () => {
     mutationFn: async ({ variables }) =>
       await graphQLClient.request(CREATE_RENEW, variables),
     onSuccess(data: any) {
-      console.log(data);
-      const { registerRenew } = data;
-      queryClient.setQueryData(["renews"], (prevRenews: any) =>
-        prevRenews.concat(registerRenew)
-      );
-      queryClient.invalidateQueries(["renews"]);
+      queryClient.invalidateQueries(["vehicles"]);
     },
   });
 };

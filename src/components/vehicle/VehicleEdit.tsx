@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IModal } from "../../interfaces/modal.interface";
 import * as Yup from "yup";
 import { useGetBilling } from "../../hooks/billing/useGetBilling";
@@ -18,6 +18,7 @@ import {
   CircularProgress,
   DialogActions,
   DialogContent,
+  DialogProps,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -36,19 +37,35 @@ import "./vehicle.css";
 import {
   differenceInDays,
   eachDayOfInterval,
+  eachMonthOfInterval,
   format,
   getDate,
   isAfter,
+  isBefore,
   monthsToYears,
 } from "date-fns";
 import { useGetOneRenew } from "../../hooks/renew/useGetRenewById";
 import VehicleTimeDefeated from "./VehicleTimeDefeated";
 import { useCreateRenew } from "../../hooks/renew/useCreateRenew";
+import { allMonthsLocal } from "../../lib/const";
+import { errorCatch } from "../../helpers/control-errors";
+import { useGetOneRenewPlate } from "../../hooks/renew/useGetRenewByVehicle";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
+import { useToCheck } from "../../hooks/renew/useCheckRenew";
 
 interface IOptions {
   label: string;
   value: string;
 }
+
+const GET = (val: string) => {
+  return {
+    day: format(new Date(String(val)), "dd"),
+    month: format(new Date(String(val)), "MMMM"),
+    year: format(new Date(String(val)), "yyyy"),
+  };
+};
 
 const validationSchema = Yup.object().shape({
   customer: Yup.string().required("Por favor seleccione al cliente"),
@@ -110,12 +127,14 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
   const { mutateAsync, isLoading: isLoadingCreateVehicle } = useUpdateVehicle();
   const { mutateAsync: mutateAsyncRenew, isLoading: isLoadingCreateRenew } =
     useCreateRenew();
+  const { mutateAsync: mutateAsyncToCheck, isLoading: isLoadingToCheck } =
+    useToCheck();
   const {
     data: dataRenew,
     isLoading: isLoadingRenew,
     isError: isErrorRenew,
     error: errorRenew,
-  } = useGetOneRenew(entity.id);
+  } = useGetOneRenewPlate(entity.plate);
   const [time, setTime] = useState<
     {
       year: { name: ""; state: false };
@@ -129,6 +148,44 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
   });
 
   const [dataYearInActives, setDataYearInActives] = useState<any[]>([]);
+  const [payInit, setPayInit] = useState<string>("");
+  const [withDialog, setWidthDialog] = useState<DialogProps["maxWidth"]>("sm");
+  const [openSearch, setOpenSearch] = useState<boolean>(false);
+  const [details, setDetails] = useState<any>({});
+
+  const onClickRemove = async (entity: any) => {
+    const { id, index } = entity;
+
+    const myalert = window.confirm(
+      `¿Esta seguro que desea solicitar la baja de la renovación NRO ${index}?`
+    );
+    if (myalert) {
+      try {
+        await mutateAsyncToCheck({
+          variables: {
+            renewInput: {
+              id: id,
+            },
+          },
+        });
+      } catch (e) {
+        const [desErrors] = errorCatch(e);
+        setErrorLocal(desErrors);
+        toast.error(
+          desErrors
+            .map((e: any, i: number) => {
+              return `${i + 1}.- ${e}`;
+            })
+            .join("\n")
+        );
+      }
+    }
+  };
+
+  const onClickDetails = (entity: any) => {
+    setOpenSearch(true);
+    setDetails(entity);
+  };
 
   const memoCustomers: IOptions[] = useMemo(() => {
     let dataCustomers: any[] = [];
@@ -289,6 +346,66 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
     setClickedTime(false);
   };
 
+  const searchPositionMonth = (month: string) => allMonthsLocal.indexOf(month);
+
+  useEffect(() => {
+    if (dataYearInActives) {
+      //isFullActive
+      const getFinalPayed = dataYearInActives
+        .filter((a: any) => a.year.state)
+        .at(-1);
+
+      if (getFinalPayed && getFinalPayed.year.state) {
+        const getEndYearPayed = getFinalPayed.year;
+        const getEndMonthPayed = getFinalPayed.months
+          .filter((b: any) => b.state)
+          .at(-1);
+        const getMonthInNumber = searchPositionMonth(getEndMonthPayed.name);
+
+        const getDayInit =
+          getDate(new Date(String(entity.billigStart))) !==
+          getDate(new Date(String(entity.billigEnd)))
+            ? getDate(new Date(String(entity.billigEnd)))
+            : getDate(new Date(String(entity.billigStart)));
+
+        const datePayedInDate = new Date(
+          Number(getEndYearPayed.name),
+          Number(getMonthInNumber),
+          Number(getDayInit)
+        );
+
+        const formatToDateInit = format(datePayedInDate, "dd/MM/yyyy");
+        setPayInit(formatToDateInit);
+        return;
+      }
+
+      setPayInit("");
+    }
+  }, [dataYearInActives, entity.billigStart, entity.billigEnd]);
+
+  const isVehicleActive =
+    differenceInDays(new Date(), new Date(String(entity.billigEnd))) <= 0;
+
+  const rangeMonthPayed = (rangeA: string, rangeB: string) =>
+    eachMonthOfInterval({
+      start: new Date(String(rangeA)),
+      end: new Date(String(rangeB)),
+    }).map((a: any) => ({ year: format(a, "yyyy"), month: format(a, "MMMM") }));
+
+  //ordena de manera descendente y trabaja con una copia. No ordena a la orginal
+  const renews = useMemo(() => {
+    let result = [];
+
+    if (dataRenew) {
+      result = dataRenew
+        .map((m: any) => ({ ...m, createdAt: new Date(m.createdAt) }))
+        .slice()
+        .sort((a: any, b: any) => b.createdAt - a.createdAt);
+    }
+
+    return result;
+  }, [dataRenew]);
+
   return (
     <MyDialogMUI
       open={open}
@@ -297,7 +414,7 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
       fullWidth
-      maxWidth="sm"
+      maxWidth={withDialog}
       //sx={{ maxHeight: 553 }}
     >
       <MyDialogTitleMUI id="scroll-dialog-title">
@@ -305,21 +422,30 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
       </MyDialogTitleMUI>
       <TabContainer>
         <TabElement
-          handleClick={() => handleChangeTab("1")}
+          handleClick={() => {
+            handleChangeTab("1");
+            setWidthDialog("sm");
+          }}
           value={valueTab}
           index={1}
         >
           General
         </TabElement>
         <TabElement
-          handleClick={() => handleChangeTab("2")}
+          handleClick={() => {
+            handleChangeTab("2");
+            setWidthDialog("sm");
+          }}
           value={valueTab}
           index={2}
         >
           Renovar
         </TabElement>
         <TabElement
-          handleClick={() => handleChangeTab("3")}
+          handleClick={() => {
+            handleChangeTab("3");
+            setWidthDialog("xl");
+          }}
           value={valueTab}
           index={3}
         >
@@ -342,45 +468,25 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
             billingReno: entity.billing.id,
             billingDay: entity.billing.day,
             billingPrice: entity.billing.price,
-            billingPayToday: "NO",
+            billingPayToday: isVehicleActive ? "" : "NO",
             billingDes: "",
             billingTime: [] as any[],
           }}
           validationSchema={validationSchema}
-          onSubmit={async (values, { resetForm }) => {
-            try {
-              await mutateAsync({
-                variables: {
-                  vehicleInput: {
-                    id: values.id,
-                    customer: values.customer,
-                    device: values.device,
-                    billing: values.billing,
-                    plate: values.plate,
-                    nroGPS: values.nroGPS,
-                    platform: values.platform,
-                    sim: values.sim,
-                    retired: values.retired,
-                  },
-                },
-              });
+          onSubmit={async (values) => {
+            if (clickedTime) {
+              const monthsJustTrue = values.billingTime
+                .filter((x: any) => x.year.state)
+                .map((a: any) => {
+                  return {
+                    year: a.year.name,
+                    months: a.months
+                      .filter((b: any) => b.state)
+                      .map((c: any) => c.name),
+                  };
+                });
 
-              toast.success(
-                "Se ha actualizado con éxito las propiedades GENERAL del vehiculo"
-              );
-
-              if (clickedTime) {
-                const monthsJustTrue = dataYearInActives
-                  .filter((x: any) => x.year.state)
-                  .map((a: any) => {
-                    return {
-                      year: a.year.name,
-                      months: a.months
-                        .filter((b: any) => b.state)
-                        .map((c: any) => c.name),
-                    };
-                  });
-
+              try {
                 await mutateAsyncRenew({
                   variables: {
                     renewInput: {
@@ -394,16 +500,39 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                 });
 
                 toast.success("El vehiculo se ha renovado con éxito");
+              } catch (e: any) {
+                const [desErrors] = errorCatch(e);
+                setErrorLocal(desErrors);
+                toast.error(
+                  desErrors
+                    .map((e: any, i: number) => {
+                      return `${i + 1}.- ${e}`;
+                    })
+                    .join("\n")
+                );
               }
+            }
+            try {
+              await mutateAsync({
+                variables: {
+                  vehicleInput: {
+                    id: values.id,
+                    customer: values.customer,
+                    device: values.device,
+                    plate: values.plate,
+                    nroGPS: values.nroGPS,
+                    platform: values.platform,
+                    sim: values.sim,
+                    retired: values.retired,
+                  },
+                },
+              });
 
-              handleClose();
-            } catch (e: any) {
-              const myErrors = JSON.parse(
-                JSON.stringify(e)
-              ).response.errors.map((a: any) =>
-                a.extensions.exception.response.message.map((b: any) => b)
+              toast.success(
+                "Se ha actualizado con éxito las propiedades GENERAL del vehiculo"
               );
-              const [desErrors] = myErrors;
+            } catch (e: any) {
+              const [desErrors] = errorCatch(e);
               setErrorLocal(desErrors);
               toast.error(
                 desErrors
@@ -413,6 +542,8 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                   .join("\n")
               );
             }
+
+            handleClose();
           }}
         >
           {({
@@ -422,31 +553,30 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
             handleBlur,
             touched,
             setValues,
-            setTouched,
           }) => {
             return (
               <Form>
+                {errorLocal.length > 0 && (
+                  <Grid item xs={12}>
+                    {errorLocal.map((a: any, i: number) => {
+                      return (
+                        <div
+                          key={i + 1}
+                          style={{
+                            background: "#D32F2F",
+                            color: "#fff",
+                            padding: 5,
+                            fontSize: 12,
+                          }}
+                        >
+                          {`${i + 1}.- ${a}`}
+                        </div>
+                      );
+                    })}
+                  </Grid>
+                )}
                 <TabItem value={valueTab} index={1}>
                   <Grid container spacing={2}>
-                    {errorLocal.length > 0 && (
-                      <Grid item xs={12}>
-                        {errorLocal.map((a: any, i: number) => {
-                          return (
-                            <div
-                              key={i + 1}
-                              style={{
-                                background: "#D32F2F",
-                                color: "#fff",
-                                padding: 5,
-                                fontSize: 12,
-                              }}
-                            >
-                              {`${i + 1}.- ${a}`}
-                            </div>
-                          );
-                        })}
-                      </Grid>
-                    )}
                     <Grid item xs={12}>
                       <Autocomplete
                         onBlur={handleBlur}
@@ -612,90 +742,6 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                           id="device-error-text"
                         >
                           {errors.device}
-                        </FormHelperText>
-                      )}
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <Autocomplete
-                        onBlur={handleBlur}
-                        size="small"
-                        id="billing"
-                        options={memoBillings}
-                        loading={isLoadingBillings}
-                        value={valueBilling}
-                        isOptionEqualToValue={(options, value) => {
-                          return options.value === value.value;
-                        }}
-                        getOptionLabel={(option) => option.label}
-                        onChange={(event, newValue) => {
-                          setValueBilling(newValue);
-                          setCustomValueBilling(String(newValue?.value));
-                          setValues({
-                            ...values,
-                            billing:
-                              String(newValue?.value) === "undefined"
-                                ? ""
-                                : String(newValue?.value),
-                          });
-                        }}
-                        inputValue={inputValueBilling}
-                        onInputChange={(event, newInputValue) => {
-                          setInputValueBilling(newInputValue);
-                        }}
-                        renderOption={(params, option) => (
-                          <li {...params}>
-                            {isLoadingBillings ? (
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  width: "100%",
-                                }}
-                              >
-                                <label>Cargando planes...</label>
-                                <CircularProgress color="inherit" size={20} />
-                              </div>
-                            ) : (
-                              option?.label
-                            )}
-                          </li>
-                        )}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Plan de facturación"
-                            error={
-                              touched.billing && errors.billing ? true : false
-                            }
-                            InputProps={{
-                              ...params.InputProps,
-                              endAdornment: (
-                                <>
-                                  {isFetchingBillings ? (
-                                    <CircularProgress
-                                      color="inherit"
-                                      size={20}
-                                    />
-                                  ) : null}
-                                  {params.InputProps.endAdornment}
-                                </>
-                              ),
-                            }}
-                          />
-                        )}
-                        noOptionsText="Sin registros"
-                        openText="Abrir lista de planes"
-                        clearText="Limpiar planes"
-                        loadingText="Cargando lista..."
-                        closeText="Cerrar lista de planes"
-                      />
-                      {touched.billing && errors.billing && (
-                        <FormHelperText
-                          sx={{ color: "#D32F2F" }}
-                          id="billing-error-text"
-                        >
-                          {errors.billing}
                         </FormHelperText>
                       )}
                     </Grid>
@@ -966,10 +1012,7 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                           </td>
                         </tr>
                         <tr>
-                          {differenceInDays(
-                            new Date(),
-                            new Date(String(entity.billigEnd))
-                          ) <= 0 ? (
+                          {isVehicleActive ? (
                             <>
                               <td className="td-edit" width={200}>
                                 <strong>Días restantes</strong>
@@ -1030,24 +1073,28 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                       </tbody>
                     </table>
 
-                    <fieldset className="mt-div fieldset_content">
+                    {/* <fieldset className="mt-div fieldset_content">
                       <legend style={{ paddingRight: 5 }}>
                         Opciones solo para planes mensuales
-                      </legend>
-                      {values.billingPayToday === "NO" && (
-                        <div>
-                          <Alert severity="warning">
-                            Los pagos correran desde hoy día
-                          </Alert>
-                        </div>
-                      )}
+                      </legend> */}
+                    {!isVehicleActive && values.billingPayToday === "NO" && (
+                      <div className="mt-div">
+                        <Alert severity="warning">
+                          Los pagos iniciaran desde hoy día(
+                          {format(new Date(), "dd/MM/yyyy")})
+                        </Alert>
+                      </div>
+                    )}
+                    {!isVehicleActive && (
                       <table className="table-edit mt-div">
                         <tbody>
                           <tr>
                             <td className="td-edit" width={200}>
                               <strong>
-                                Los pagos seran los días{" "}
-                                {getDate(new Date(String(entity.billigStart)))}{" "}
+                                El pago inicia el día{" "}
+                                {payInit === ""
+                                  ? "(Por favor seleccione un mes a pagar)"
+                                  : payInit}
                                 ?
                               </strong>
                             </td>
@@ -1059,7 +1106,10 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                                     type="radio"
                                     id="today_yes"
                                     name="billingPayToday"
-                                    onChange={handleChange}
+                                    onChange={(e: any) => {
+                                      clearErrorAnClicked();
+                                      return handleChange(e);
+                                    }}
                                     value="SI"
                                   />{" "}
                                   <label htmlFor="today_yes">Si</label>
@@ -1070,7 +1120,10 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                                     type="radio"
                                     id="today_no"
                                     name="billingPayToday"
-                                    onChange={handleChange}
+                                    onChange={(e: any) => {
+                                      clearErrorAnClicked();
+                                      return handleChange(e);
+                                    }}
                                     value="NO"
                                   />{" "}
                                   <label htmlFor="today_no">No</label>
@@ -1080,7 +1133,8 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                           </tr>
                         </tbody>
                       </table>
-                    </fieldset>
+                    )}
+                    {/* </fieldset> */}
                     <div className="mt-div content-dscrp">
                       <div className="dscrp">
                         <label style={{ fontSize: 12 }}>
@@ -1156,44 +1210,67 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                           className="mt-5"
                           style={{ float: "right" }}
                           onClick={() => {
-                            const isYearTrue = dataYearInActives.some(
-                              (a: any) => a.year.state === true
-                            );
-                            const isMonthTrue = dataYearInActives.some(
-                              (b: any) =>
-                                b.months.some((d: any) => d.state === true)
-                            );
-
-                            if (!isYearTrue && !isMonthTrue) {
-                              alert(
-                                "No hemos podido confirmar su renovaciòn porque aun no ha seleccionado el mes que el cliente va a pagar."
+                            if (!isVehicleActive) {
+                              const isYearTrue = dataYearInActives.some(
+                                (a: any) => a.year.state === true
                               );
-                              clearErrorAnClicked();
-                            } else {
-                              if (
-                                isYearTrue &&
-                                isMonthTrue &&
-                                values.billingDes === ""
-                              ) {
-                                setClickedTime(false);
-                                setErrorDes({
-                                  state: true,
-                                  message:
-                                    "Por favor complete alguna descripción. Luego presione su conformidad.",
-                                });
+                              const isMonthTrue = dataYearInActives.some(
+                                (b: any) =>
+                                  b.months.some((d: any) => d.state === true)
+                              );
+
+                              if (!isYearTrue && !isMonthTrue) {
+                                alert(
+                                  "No hemos podido confirmar su renovaciòn porque aun no ha seleccionado el mes que el cliente va a pagar."
+                                );
+                                clearErrorAnClicked();
                               } else {
-                                //todo ok
-                                setClickedTime(true);
-                                setErrorDes({
-                                  state: false,
-                                  message: "",
-                                });
-                                setValues({
-                                  ...values,
-                                  billingTime: dataYearInActives,
-                                });
+                                if (
+                                  isYearTrue &&
+                                  isMonthTrue &&
+                                  values.billingDes === ""
+                                ) {
+                                  setClickedTime(false);
+                                  setErrorDes({
+                                    state: true,
+                                    message:
+                                      "Por favor complete alguna descripción. Luego presione su conformidad.",
+                                  });
+                                } else {
+                                  //todo ok
+                                  setClickedTime(true);
+                                  setErrorDes({
+                                    state: false,
+                                    message: "",
+                                  });
+                                  setValues({
+                                    ...values,
+                                    billingTime: dataYearInActives,
+                                  });
+                                }
                               }
+                              return;
                             }
+
+                            if (values.billingDes !== "") {
+                              setClickedTime(true);
+                              setErrorDes({
+                                state: false,
+                                message: "",
+                              });
+                              setValues({
+                                ...values,
+                                billingTime: [],
+                              });
+                              return;
+                            }
+
+                            setClickedTime(false);
+                            setErrorDes({
+                              state: true,
+                              message:
+                                "Por favor complete alguna descripción. Luego presione su conformidad.",
+                            });
                           }}
                         >
                           Confirmar renovación
@@ -1204,13 +1281,222 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                 </TabItem>
                 <TabItem value={valueTab} index={3}>
                   <>
-                    {isLoadingRenew
-                      ? isErrorRenew
-                        ? "error"
-                        : "Buscando historial..."
-                      : dataRenew
-                      ? dataRenew.id
-                      : "No se ha encontrado registros."}
+                    {openSearch && (
+                      <>
+                        <div style={{ marginBottom: 15 }}>
+                          <div>Id: {details.id}</div>
+                          <div>Descripción: {details.billingDes}</div>
+                        </div>
+                      </>
+                    )}
+
+                    {isLoadingRenew ? (
+                      isErrorRenew ? (
+                        "error"
+                      ) : (
+                        "Buscando historial..."
+                      )
+                    ) : renews.length > 0 ? (
+                      <>
+                        <table className="table-edit">
+                          <thead>
+                            <tr>
+                              <th className="td-renew center-th-td">#</th>
+                              <th className="td-renew center-th-td">
+                                Plan de facturación
+                              </th>
+                              <th className="td-renew left">Fecha de pago</th>
+                              <th className="td-renew">¿Pago anticipado?</th>
+                              <th className="td-renew">Fecha de vencimiento</th>
+                              <th className="td-renew">Meses renovado</th>
+                              <th className="td-renew" style={{ width: 100 }}>
+                                ¿Corre el pago el mismo día de la Fec. Venc?
+                              </th>
+                              <th className="td-renew">
+                                Periodo de renovacion
+                              </th>
+                              <th style={{ width: 30 }} className="td-renew">
+                                Anular
+                              </th>
+                              <th style={{ width: 30 }} className="td-renew">
+                                Detalle
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {renews.map((a: any, i: number) => {
+                              return (
+                                <tr
+                                  key={i + 1}
+                                  style={
+                                    i + 1 === 1
+                                      ? {
+                                          backgroundColor: "rgb(221, 221, 221)",
+                                        }
+                                      : {}
+                                  }
+                                >
+                                  <td className="td-renew center-th-td">
+                                    {i + 1}
+                                  </td>
+                                  <td className="td-renew center-th-td">
+                                    {a.billing.name}
+                                  </td>
+                                  <td className="td-renew">
+                                    {format(
+                                      new Date(String(a.createdAt)),
+                                      "dd/MM/yyyy"
+                                    )}
+                                  </td>
+                                  <td className="td-renew center-th-td">
+                                    {isBefore(
+                                      new Date(String(a.createdAt)),
+                                      new Date(String(a.expirationDate))
+                                    )
+                                      ? "SI"
+                                      : "NO"}
+                                  </td>
+                                  <td className="td-renew center-th-td">
+                                    {format(
+                                      new Date(String(a.expirationDate)),
+                                      "dd/MM/yyyy"
+                                    )}
+                                  </td>
+
+                                  <td className="td-renew center-th-td">
+                                    {isBefore(
+                                      new Date(String(a.createdAt)),
+                                      new Date(String(a.expirationDate))
+                                    ) ? (
+                                      <>
+                                        {rangeMonthPayed(
+                                          a.expirationDate,
+                                          a.renovationEnd
+                                        ).filter(
+                                          (b: any) =>
+                                            b.month !==
+                                            GET(a.renovationEnd).month
+                                        ).length === 0
+                                          ? rangeMonthPayed(
+                                              a.expirationDate,
+                                              a.renovationEnd
+                                            )
+                                              .map(
+                                                (a: any) =>
+                                                  `${a.month}(${a.year})`
+                                              )
+                                              .join(", ")
+                                          : rangeMonthPayed(
+                                              a.expirationDate,
+                                              a.renovationEnd
+                                            )
+                                              .filter(
+                                                (b: any) =>
+                                                  b.month !==
+                                                  GET(a.renovationEnd).month
+                                              )
+                                              .map(
+                                                (a: any) =>
+                                                  `${a.month}(${a.year})`
+                                              )
+                                              .join(", ")}{" "}
+                                        - (
+                                        <strong>
+                                          {rangeMonthPayed(
+                                            a.expirationDate,
+                                            a.renovationEnd
+                                          ).filter(
+                                            (b: any) =>
+                                              b.month !==
+                                              GET(a.renovationEnd).month
+                                          ).length === 0
+                                            ? rangeMonthPayed(
+                                                a.expirationDate,
+                                                a.renovationEnd
+                                              ).length
+                                            : rangeMonthPayed(
+                                                a.expirationDate,
+                                                a.renovationEnd
+                                              ).filter(
+                                                (b: any) =>
+                                                  b.month !==
+                                                  GET(a.renovationEnd).month
+                                              ).length}{" "}
+                                          Meses
+                                        </strong>
+                                        )
+                                      </>
+                                    ) : (
+                                      <>
+                                        {rangeMonthPayed(
+                                          a.expirationDate,
+                                          a.renovationStart
+                                        )
+                                          .map(
+                                            (a: any) => `${a.month}(${a.year})`
+                                          )
+                                          .join(", ")}{" "}
+                                        - (
+                                        <strong>
+                                          {
+                                            rangeMonthPayed(
+                                              a.expirationDate,
+                                              a.renovationStart
+                                            ).length
+                                          }{" "}
+                                          Meses
+                                        </strong>
+                                        )
+                                      </>
+                                    )}
+                                  </td>
+                                  <td className="td-renew center-th-td">
+                                    {a.billingPayToday === ""
+                                      ? "PAGO ANTICIPADO"
+                                      : a.billingPayToday}
+                                  </td>
+                                  <td className="td-renew center-th-td">
+                                    {format(
+                                      new Date(String(a.renovationStart)),
+                                      "dd/MM/yyyy"
+                                    )}{" "}
+                                    -{" "}
+                                    {format(
+                                      new Date(String(a.renovationEnd)),
+                                      "dd/MM/yyyy"
+                                    )}
+                                  </td>
+                                  <td className="td-renew center-th-td">
+                                    {a.status === 2 ? (
+                                      "En revisión"
+                                    ) : (
+                                      <RemoveCircleOutlineIcon
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                          const object = {
+                                            ...a,
+                                            index: i + 1,
+                                          };
+                                          return onClickRemove(object);
+                                        }}
+                                      />
+                                    )}
+                                  </td>
+                                  <td className="td-renew center-th-td">
+                                    <ContentPasteSearchIcon
+                                      style={{ cursor: "pointer" }}
+                                      onClick={() => onClickDetails(a)}
+                                    />
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </>
+                    ) : (
+                      "No se ha encontrado registros."
+                    )}
                   </>
                 </TabItem>
                 <DialogActions>

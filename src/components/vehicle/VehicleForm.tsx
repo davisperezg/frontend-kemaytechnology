@@ -200,13 +200,6 @@ const VehicleForm = ({ open, handleClose }: IModal) => {
         >
           General
         </TabElement>
-        <TabElement
-          handleClick={() => handleChangeTab("2")}
-          value={valueTab}
-          index={2}
-        >
-          Renovar
-        </TabElement>
       </TabContainer>
       {isErrorCustomer &&
         JSON.parse(JSON.stringify(errorCustomer))
@@ -657,7 +650,10 @@ const VehicleForm = ({ open, handleClose }: IModal) => {
                           <MenuItem value="BITEL">BITEL</MenuItem>
                           <MenuItem value="INKACEL">INKACEL</MenuItem>
                           <MenuItem value="MULTIOPERADOR">
-                            MULTIOPERADOR
+                            MULTIOPERADOR CESAR
+                          </MenuItem>
+                          <MenuItem value="MULTIOPERADOR_M2MCENTER">
+                            MULTIOPERADOR M2M CENTER ORANGE
                           </MenuItem>
                         </Select>
                       </FormControl>
@@ -718,19 +714,7 @@ const VehicleForm = ({ open, handleClose }: IModal) => {
                     </Grid>
                   </Grid>
                 </TabItem>
-                <TabItem value={valueTab} index={2}>
-                  <>
-                    <p>
-                      Estas apunto de renovar la inscripción del vehiculo{" "}
-                      <strong>{values.plate}</strong> que pertenece a{" "}
-                      <strong>{inputValue}</strong> con número de DNI, 00001258.
-                    </p>
-                    <div className="flex-beetwen">
-                      <label>Actualmente tiene el plan</label>
-                      <div>PREMIUN</div>
-                    </div>
-                  </>
-                </TabItem>
+
                 <DialogActions>
                   <Button onClick={handleClose}>Cancelar</Button>
                   <Button

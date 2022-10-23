@@ -11,6 +11,7 @@ import ConsultaInstalaciones from "../pages/consulta-instalaciones";
 import ConsultaRenovaciones from "../pages/consulta-renovaciones";
 import ConsultaVencidos from "../pages/consulta-vencidos";
 import CustomerPage from "../pages/customer.page";
+import Dashboard from "../pages/dashboard.page";
 import DevicePage from "../pages/device.page";
 import EgressPage from "../pages/egress.page";
 import IngressPage from "../pages/ingress.page";
@@ -71,9 +72,7 @@ const ItemSwitch = ({ link, page }: any) => {
   const PAGES = (page: string) => {
     switch (page) {
       case "DASHBOARD":
-        const Home = () => {
-          return <h1>Bienvenido</h1>;
-        };
+        const Home = () => <Dashboard />;
         return Home;
 
       case "MODULOS":
