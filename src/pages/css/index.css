@@ -4,10 +4,15 @@
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
 }
-
+/* 
 html,
 body {
   flex-direction: column;
   display: flex;
   height: 100%;
+} */
+
+body {
+  width: 100%;
+  min-height: 100vh;
 }

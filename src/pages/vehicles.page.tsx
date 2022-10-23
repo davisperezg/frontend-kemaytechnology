@@ -208,9 +208,6 @@ const initialValueEdit: Vehicle = {
 };
 
 const VehiclesPage = () => {
-  const [contVencidos, setContVencidos] = useState<number>(0);
-  const [contActivos, setContActivos] = useState<number>(0);
-  const [contPorVencer, setContXVencer] = useState<number>(0);
   const { data, isLoading, isError, isFetching, error } = useGetVehicles();
   const [vehicleEdit, setVehicleEdit] = useState<Vehicle>(initialValueEdit);
   const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
@@ -219,35 +216,6 @@ const VehiclesPage = () => {
   const { mutateAsync, isLoading: isLoadingDelete } = useDeleteVehicle();
 
   const searchComponent = useRef<HTMLInputElement>(null);
-
-  const buscarCantVehiculosXtipo = (array: Vehicle[]) => {
-    setContVencidos(0);
-    setContXVencer(0);
-    setContActivos(0);
-    contVencidosGlobal = 0;
-    contXVencerGlobal = 0;
-    contActivosGlobal = 0;
-
-    const hoy = new Date().getTime();
-    for (let index = 0; index < array.length; index++) {
-      const vehicle = array[index];
-      const fechaFin = vehicle.billigEnd
-        ? new Date(vehicle.billigEnd).getTime()
-        : new Date().getTime();
-      const diff = fechaFin - hoy;
-      const calcDiff = diff / (1000 * 60 * 60 * 24);
-      if (hoy > fechaFin) {
-        contVencidosGlobal++;
-        setContVencidos(contVencidosGlobal);
-      } else if (calcDiff <= 10) {
-        contXVencerGlobal++;
-        setContXVencer(contXVencerGlobal);
-      } else {
-        contActivosGlobal++;
-        setContActivos(contActivosGlobal);
-      }
-    }
-  };
 
   const memoVehicles = useMemo(() => {
     const colorsError = ["VENCIDO", "ACTIVO", "POR VENCER"];
@@ -374,45 +342,6 @@ const VehiclesPage = () => {
           >
             Crear vehiculo
           </Button>
-        </div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <label>Vehiculos activos</label>
-          <div
-            style={{
-              width: "10px",
-              height: "10px",
-              background: "#5bc959",
-              marginLeft: 3,
-              marginRight: 3,
-            }}
-          />
-          <strong>{contActivos}</strong>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", marginLeft: 20 }}>
-          <label>Vehiculos por vencer</label>
-          <div
-            style={{
-              width: "10px",
-              height: "10px",
-              background: "#f7e160",
-              marginLeft: 3,
-              marginRight: 3,
-            }}
-          />
-          <strong>{contPorVencer}</strong>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", marginLeft: 20 }}>
-          <label>Vehiculos vencidos</label>
-          <div
-            style={{
-              width: "10px",
-              height: "10px",
-              background: "#fc553f",
-              marginLeft: 3,
-              marginRight: 3,
-            }}
-          />
-          <strong>{contVencidos}</strong>
         </div>
       </div>
       <div

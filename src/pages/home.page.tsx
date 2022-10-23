@@ -12,11 +12,10 @@ const Home = () => {
         <Aside />
       </section>
       <section className="content">
-        <div className="body">
-          <Header />
-          <Wrapper />
-        </div>
+        <Header />
+        <Wrapper />
         <Footer />
+        {/* <div className="body"></div> */}
       </section>
     </>
   );

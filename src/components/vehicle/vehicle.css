@@ -33,6 +33,12 @@
   border: 1px solid #d0cecf;
 }
 
+.td-renew {
+  padding: 5px 3px;
+  border: 1px solid #d0cecf;
+  font-size: 11px;
+}
+
 .table-edit {
   width: 100%;
   border-collapse: collapse;
@@ -186,4 +192,12 @@
 .year_labelNot {
   color: #d0cecf;
   user-select: none;
+}
+
+.center-th-td {
+  text-align: center;
+}
+
+.left {
+  text-align: left;
 }

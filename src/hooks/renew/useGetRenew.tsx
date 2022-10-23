@@ -1,4 +1,6 @@
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@tanstack/react-query";
+import { graphQLClient } from "../../config/config";
+import { gql } from "@apollo/client";
 
 export const GET_RENEWS = gql`
   query getRenews {
@@ -39,6 +41,9 @@ export const GET_RENEWS = gql`
 `;
 
 export const useGetRenews = () => {
-  const { data, error, loading } = useQuery(GET_RENEWS);
-  return { data, error, loading };
+  return useQuery(["renews"], async () => {
+    const { getRenews } = await graphQLClient.request(GET_RENEWS);
+
+    return getRenews;
+  });
 };
