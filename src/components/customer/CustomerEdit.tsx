@@ -85,7 +85,7 @@ const CustomerEdit = ({ open, handleClose, entity }: IModal) => {
       maxWidth="sm"
     >
       <MyDialogTitleMUI id="scroll-dialog-title">
-        Nuevo cliente
+        CLIENTE - {entity.name} {entity.lastName}
       </MyDialogTitleMUI>
       <DialogContent dividers>
         <Formik
@@ -244,7 +244,16 @@ const CustomerEdit = ({ open, handleClose, entity }: IModal) => {
                         name="document"
                         label="Documento"
                         value={values.document}
-                        onChange={handleChange}
+                        onChange={(e: any) => {
+                          setValues({
+                            ...values,
+                            numDocument: "",
+                            name: "",
+                            lastName: "",
+                          });
+
+                          return handleChange(e);
+                        }}
                         onBlur={handleBlur}
                       >
                         <MenuItem value="DNI">DNI</MenuItem>

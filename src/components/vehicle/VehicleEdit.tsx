@@ -72,10 +72,7 @@ const validationSchema = Yup.object().shape({
   device: Yup.string().required("Por favor seleccione el dispositivo"),
   billing: Yup.string().required("Por favor seleccione el plan de facturación"),
   plate: Yup.string().required("Por favor ingrese la placa"),
-  nroGPS: Yup.string()
-    .required("Por favor ingrese el nro de GPS")
-    .min(9, "Minimo debe contener 9 caracteres")
-    .max(9, "Maximo debe contener 9 caracteres"),
+  nroGPS: Yup.string().required("Por favor ingrese el nro de GPS"),
   platform: Yup.string().required(
     "Por favor ingrese a que plataforma ira el GPS"
   ),
@@ -101,13 +98,6 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
   });
   const [inputValueDevice, setInputValueDevice] = useState("");
   const [customValueDevice, setCustomValueDevice] = useState("");
-  //BILLING
-  const [valueBilling, setValueBilling] = useState<IOptions | null>({
-    label: entity.billing.name,
-    value: entity.billing.id,
-  });
-  const [inputValueBilling, setInputValueBilling] = useState("");
-  const [customValueBilling, setCustomValueBilling] = useState("");
 
   const [valueTab, setValueTab] = useState("1");
   const { data, isLoading, isError, isFetching } = useGetCustomers();
@@ -405,6 +395,8 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
 
     return result;
   }, [dataRenew]);
+
+  console.log(entity.platform);
 
   return (
     <MyDialogMUI
@@ -764,7 +756,7 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                           value={values.platform}
                           onChange={handleChange}
                         >
-                          <MenuItem value="PREMIUN">PREMIUN</MenuItem>
+                          <MenuItem value="PREMIUM">PREMIUM</MenuItem>
                           <MenuItem value="STANDAR">STANDAR</MenuItem>
                           <MenuItem value="SIN PLATAFORMA">
                             SIN PLATAFORMA

@@ -69,10 +69,7 @@ const validationSchema = Yup.object().shape({
   device: Yup.string().required("Por favor seleccione el dispositivo"),
   billing: Yup.string().required("Por favor seleccione el plan de facturación"),
   plate: Yup.string().required("Por favor ingrese la placa"),
-  nroGPS: Yup.string()
-    .required("Por favor ingrese el nro de GPS")
-    .min(9, "Minimo debe contener 9 caracteres")
-    .max(9, "Maximo debe contener 9 caracteres"),
+  nroGPS: Yup.string().required("Por favor ingrese el nro de GPS"),
   platform: Yup.string().required(
     "Por favor ingrese a que plataforma ira el GPS"
   ),
