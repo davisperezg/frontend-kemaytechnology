@@ -221,7 +221,16 @@ const CustomerForm = ({ open, handleClose }: IModal) => {
                         name="document"
                         label="Documento"
                         value={values.document}
-                        onChange={handleChange}
+                        onChange={(e: any) => {
+                          setValues({
+                            ...values,
+                            numDocument: "",
+                            name: "",
+                            lastName: "",
+                          });
+
+                          return handleChange(e);
+                        }}
                         onBlur={handleBlur}
                       >
                         <MenuItem value="DNI">DNI</MenuItem>

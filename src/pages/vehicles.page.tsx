@@ -23,11 +23,7 @@ import { toast } from "react-toastify";
 import { useDeleteVehicle } from "../hooks/vehicle/useDeleteVehicle";
 import CloseIcon from "@mui/icons-material/Close";
 import VehicleStatus from "../components/vehicle/VehicleStatus";
-import { differenceInDays } from "date-fns";
-
-let contVencidosGlobal = 0;
-let contXVencerGlobal = 0;
-let contActivosGlobal = 0;
+import { differenceInDays, format } from "date-fns";
 
 const columnHelper = createColumnHelper<Vehicle>();
 
@@ -128,8 +124,16 @@ const defaultColumns = [
     size: 100,
     minSize: 31,
   } as IdentifiedColumnDef<Vehicle, string>),
+  columnHelper.accessor("createdAt", {
+    cell: (info) => format(new Date(String(info.getValue())), "dd-MM-yyyy"),
+    classNameBody: "div-row",
+    header: () => "Fecha de instalación",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Vehicle, Date>),
   columnHelper.accessor("billigStart", {
-    cell: (info) => String(info.getValue()),
+    cell: (info) => format(new Date(String(info.getValue())), "dd-MM-yyyy"),
     classNameBody: "div-row",
     header: () => "Fecha de inicio",
     classNameHeader: "div",
@@ -137,7 +141,7 @@ const defaultColumns = [
     minSize: 31,
   } as IdentifiedColumnDef<Vehicle, string>),
   columnHelper.accessor("billigEnd", {
-    cell: (info) => String(info.getValue()),
+    cell: (info) => format(new Date(String(info.getValue())), "dd-MM-yyyy"),
     classNameBody: "div-row",
     header: () => "Fecha de termino",
     classNameHeader: "div",
