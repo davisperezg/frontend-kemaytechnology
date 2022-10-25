@@ -1,8 +1,10 @@
 import { differenceInDays, format } from "date-fns";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Line, Pie } from "react-chartjs-2";
+import { useGetBilling } from "../hooks/billing/useGetBilling";
 import { useGetRenews } from "../hooks/renew/useGetRenew";
 import { useGetVehicles } from "../hooks/vehicle/useGetVehicle";
+import { Billing } from "../interfaces/billing.interface";
 import { Vehicle } from "../interfaces/vehicle.interface";
 
 const Dashboard = () => {
@@ -21,6 +23,14 @@ const Dashboard = () => {
     isFetching: isFetchingRenew,
     error: errorRenew,
   } = useGetRenews();
+
+  const {
+    data: dataBilling,
+    isLoading: isLoadingBilling,
+    isError: isErrorBilling,
+    isFetching: isFetchingBilling,
+    error: errorBilling,
+  } = useGetBilling();
 
   const getYearNow = format(new Date(), "yyyy");
 
@@ -329,7 +339,7 @@ const Dashboard = () => {
         display: true,
         text: `"Cantidad de instalaciones(${
           memoVehiclesInsts?.size || 0
-        }) x meses - ${getYearNow}`,
+        }) - ${getYearNow}`,
       },
     },
   };
@@ -358,7 +368,7 @@ const Dashboard = () => {
         display: true,
         text: `Cantidad de renovaciones(${
           memoVehiclesRenews?.size || 0
-        }) x meses - ${getYearNow}`,
+        }) - ${getYearNow}`,
       },
     },
   };
@@ -366,8 +376,155 @@ const Dashboard = () => {
   const normalidadGen =
     ((memoVehicles?.sizeDefead || 0) * 100) / (memoVehicles?.size || 0);
 
-  const normalidadYear =
-    ((memoVehicles22?.sizeDefead || 0) * 100) / (memoVehicles22?.size || 0);
+  const memoVehiclesRenewsByParam = useCallback(
+    (billing: string) => {
+      let formatedYearData: any[] = [];
+      let formatedMonthData: any[] = [];
+
+      if (dataRenews) {
+        formatedYearData = dataRenews
+          .filter((x: any) => x.billing.name === billing)
+          .map((a: any) => {
+            return {
+              ...a,
+              year: format(new Date(String(a.createdAt)), "yyyy"),
+            };
+          });
+
+        formatedMonthData = formatedYearData
+          .filter((a: any) => a.year === getYearNow)
+          .map((b: any) => format(new Date(String(b.createdAt)), "MMMM"));
+
+        const allUearNow = formatedYearData.some(
+          (a: any) => a.year === getYearNow
+        );
+
+        if (allUearNow) {
+          const resultMonths = formatedMonthData.reduce(
+            (prev, cur) => ((prev[cur] = prev[cur] + 1 || 1), prev),
+            {}
+          );
+
+          return {
+            size: formatedYearData.filter((a: any) => a.year === getYearNow)
+              .length,
+            keys: Object.keys(resultMonths),
+            values: Object.values(resultMonths),
+          };
+        }
+      }
+
+      return {};
+    },
+    [dataRenews, getYearNow]
+  );
+
+  const memoVehiclesInstsByParam = useCallback(
+    (billing: string) => {
+      let formatedYearData: any[] = [];
+      let formatedMonthData: any[] = [];
+
+      if (dataVechiles) {
+        formatedYearData = dataVechiles
+          .filter((x: any) => x.billing.name === billing)
+          .map((a: any) => {
+            return {
+              ...a,
+              year: format(new Date(String(a.createdAt)), "yyyy"),
+            };
+          });
+
+        formatedMonthData = formatedYearData
+          .filter((a: any) => a.year === getYearNow)
+          .map((b: any) => format(new Date(String(b.createdAt)), "MMMM"));
+
+        const allUearNow = formatedYearData.some(
+          (a: any) => a.year === getYearNow
+        );
+
+        if (allUearNow) {
+          const resultMonths = formatedMonthData.reduce(
+            (prev, cur) => ((prev[cur] = prev[cur] + 1 || 1), prev),
+            {}
+          );
+
+          return {
+            size: formatedYearData.filter((a: any) => a.year === getYearNow)
+              .length,
+            keys: Object.keys(resultMonths),
+            values: Object.values(resultMonths),
+          };
+        }
+      }
+
+      return {};
+    },
+    [dataVechiles, getYearNow]
+  );
+
+  const LoadBillingRen = ({ billing }: any) => {
+    const data = {
+      labels: memoVehiclesRenewsByParam(billing.name).keys,
+      datasets: [
+        {
+          fill: true,
+          label: "Renovaciones " + billing.name,
+          data: memoVehiclesRenewsByParam(billing.name).values,
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.5)",
+        },
+      ],
+    };
+
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top" as const,
+        },
+        title: {
+          display: true,
+          text: `"Cantidad de renovaciones en ${billing.name}(${
+            memoVehiclesRenewsByParam(billing.name)?.size || 0
+          }) - ${getYearNow}`,
+        },
+      },
+    };
+
+    return <Line options={options} data={data} />;
+  };
+
+  const LoadBillingIns = ({ billing }: any) => {
+    const data = {
+      labels: memoVehiclesInstsByParam(billing.name).keys,
+      datasets: [
+        {
+          fill: true,
+          label: "Instalaciones " + billing.name,
+          data: memoVehiclesInstsByParam(billing.name).values,
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.5)",
+        },
+      ],
+    };
+
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top" as const,
+        },
+        title: {
+          display: true,
+          text: `"Cantidad de instalaciones en ${billing.name}(${
+            memoVehiclesInstsByParam(billing.name)?.size || 0
+          }) - ${getYearNow}`,
+        },
+      },
+    };
+
+    return <Line options={options} data={data} />;
+  };
 
   return (
     <>
@@ -395,17 +552,6 @@ const Dashboard = () => {
               : "😃"}
           </h1>
         </div>
-        <div style={{ width: "20%", textAlign: "center" }}>
-          <strong>Normalidad - {getYearNow}</strong>
-          <h2 style={{ margin: "13px 0 13px 0px" }}>{normalidadYear}%</h2>
-          <h1 style={{ marginTop: "30px", fontSize: 55 }}>
-            {normalidadYear < 50
-              ? "😢"
-              : normalidadYear > 50 && normalidadYear < 60
-              ? "😐"
-              : "😃"}
-          </h1>
-        </div>
       </div>
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div style={{ width: "50%" }}>
@@ -413,6 +559,27 @@ const Dashboard = () => {
         </div>
         <div style={{ width: "50%" }}>
           <Line options={optionsRenews} data={dataRenewsArea} />
+        </div>
+      </div>
+      <div style={{ width: "100%" }}>
+        <div style={{ width: "50%", float: "left" }}>
+          {dataBilling?.map((a: any, i: number) => {
+            return (
+              <div key={i + 1}>
+                <LoadBillingIns billing={a} />
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ width: "50%", float: "left" }}>
+          {dataBilling?.map((a: any, i: number) => {
+            return (
+              <div key={i + 1}>
+                <LoadBillingRen billing={a} />
+              </div>
+            );
+          })}
         </div>
       </div>
     </>
