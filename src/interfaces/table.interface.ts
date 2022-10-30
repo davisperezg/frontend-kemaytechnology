@@ -5,6 +5,7 @@ export interface ITableParam {
   columns: ColumnDef<any, unknown>[] | any[];
   data: any[];
   loading?: boolean;
+  idle?: string;
   onClickTr?: (row: any) => void;
   handleDelete?: (row: any) => void;
 }

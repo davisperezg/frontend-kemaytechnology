@@ -1,71 +1,185 @@
-import Table from "@mui/material/Table";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import Paper from "@mui/material/Paper";
-
-import { User } from "../interfaces/user.interface";
 import { Vehicle } from "../interfaces/vehicle.interface";
-import VehicleForm from "../components/vehicle/vehicle-form";
-import { findError } from "../helpers/control-errors";
-
-import {
-  useState,
-  useEffect,
-  ChangeEvent,
-  MouseEvent,
-  useCallback,
-} from "react";
-
-import { useSelector, useDispatch } from "react-redux";
-import { setAlert } from "../store/alert/action";
-import { Dialog } from "../interfaces/dialog.interface";
-
-import DialogForm from "../components/dialog/dialog.component";
-import TablePagination from "@mui/material/TablePagination";
-import { TablePaginationActions } from "../components/table/table-pagination";
-import { TextField } from "@mui/material";
-
+import { useState, useMemo, useRef } from "react";
+import { Button, TextField } from "@mui/material";
 import { Consulta } from "../interfaces/consulta.interface";
 import { InputChange } from "../lib/types";
-import VehicleConsultRenovaciones from "../components/consultas/consultas_renovaciones";
 import { useConsultaRenovaciones } from "../hooks/vehicle/useConsultaRenovaciones";
 import { ExportCSV } from "../helpers/exports/csv";
-import { useGetVehicles } from "../hooks/vehicle/useGetVehicle";
-import { useGetRenews } from "../hooks/renew/useGetRenew";
+import TableContainer from "../components/table/TableContainer";
+import SearchTable from "../components/table/search/SearchTable";
+import { createColumnHelper, DisplayColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
+import { Customer } from "../interfaces/customer.interface";
+import { Device } from "../interfaces/device.interface";
+import { Billing } from "../interfaces/billing.interface";
+import { Renew } from "../interfaces/renewinterface";
+
+const columnHelper = createColumnHelper<Renew>();
+
+const defaultColumns = [
+  columnHelper.display({
+    id: "index",
+    cell: (props) => Number(props.row.id) + 1,
+    header: () => "#",
+    classNameHeader: "div text-center",
+    classNameBody: "div-row text-center",
+    size: 28,
+    minSize: 28,
+  } as DisplayColumnDef<Renew, unknown>),
+  columnHelper.accessor(
+    (row) =>
+      `${(row.vehicle.customer as Customer).name} ${
+        (row.vehicle.customer as Customer).lastName
+      }`,
+    {
+      id: "customer",
+      cell: (info) => info.getValue(),
+      classNameBody: "div-row",
+      header: () => "Cliente",
+      classNameHeader: "div",
+      size: 100,
+      minSize: 31,
+    } as DisplayColumnDef<Renew, string>
+  ),
+  columnHelper.accessor(
+    (row) =>
+      `${(row.vehicle.customer as Customer).cellphone_1}
+       ${
+         (row.vehicle.customer as Customer).cellphone_2
+           ? " - " + (row.vehicle.customer as Customer).cellphone_2
+           : ""
+       } ${
+        (row.vehicle.customer as Customer).direction
+          ? " - " + (row.vehicle.customer as Customer).direction
+          : ""
+      }`,
+    {
+      id: "info",
+      cell: (info) => info.getValue(),
+      classNameBody: "div-row",
+      header: () => "Información",
+      classNameHeader: "div",
+      size: 100,
+      minSize: 31,
+    } as DisplayColumnDef<Renew, string>
+  ),
+  columnHelper.accessor((row) => `${(row.vehicle.device as Device).name}`, {
+    id: "device",
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Dispositivo",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Renew, string>),
+  columnHelper.accessor((row) => `${(row.vehicle as Vehicle).platform}`, {
+    id: "platform",
+    cell: (info: any) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Plataforma",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Renew, string>),
+  columnHelper.accessor((row) => `${(row.billing as Billing).name}`, {
+    id: "billing",
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Facturación",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Renew, string>),
+  columnHelper.accessor((row) => `${(row.vehicle as Vehicle).plate}`, {
+    id: "plate",
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Placa",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Renew, string>),
+  columnHelper.accessor((row) => `${(row.vehicle as Vehicle).sim}`, {
+    id: "sim",
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Chip",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Renew, string>),
+  columnHelper.accessor((row) => `${(row.vehicle as Vehicle).nroGPS}`, {
+    id: "nroGPS",
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Nro de chip",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Renew, string>),
+  columnHelper.accessor((row) => `${row.expirationDate}`, {
+    id: "expirationDate",
+    cell: (info) => format(new Date(String(info.getValue())), "dd-MM-yyyy"),
+    classNameBody: "div-row",
+    header: () => "Fecha expirada",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Renew, string>),
+  columnHelper.accessor((row) => `${row.createdAt}`, {
+    id: "createdAt",
+    cell: (info) => format(new Date(String(info.getValue())), "dd-MM-yyyy"),
+    classNameBody: "div-row",
+    header: () => "Fecha de renovación creada",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Renew, string>),
+  columnHelper.accessor((row) => `${row.renovationStart}`, {
+    id: "renovationStart",
+    cell: (info) => format(new Date(String(info.getValue())), "dd-MM-yyyy"),
+    classNameBody: "div-row",
+    header: () => "Fecha renovada",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Renew, string>),
+  columnHelper.accessor((row) => `${row.renovationEnd}`, {
+    id: "renovationEnd",
+    cell: (info) => format(new Date(String(info.getValue())), "dd-MM-yyyy"),
+    classNameBody: "div-row",
+    header: () => "Fecha de termino",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Renew, string>),
+  columnHelper.accessor((row) => `${(row.vehicle as Vehicle).retired}`, {
+    id: "retired",
+    cell: (info) => (info.getValue() === "true" ? "SI" : "NO"),
+    classNameBody: "div-row text-center",
+    header: () => "Retirado",
+    classNameHeader: "div text-center",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Renew, string>),
+];
+
+const initialConsulta: Consulta = {
+  desde: "",
+  hasta: "",
+};
 
 const ConsultaRenovaciones = () => {
-  const now = new Date();
-  const initialDialog = {
-    name: "",
-    active: false,
-  };
-
-  const initialAlert = {
-    type: "",
-    text: "",
-  };
-  const initialConsulta: Consulta = {
-    desde: now,
-    hasta: now,
-  };
-
-  const auth: User = useSelector((state: any) => state.authReducer.authUser);
-  const page = useSelector((state: any) => state.page.user.module);
-  const [dialog, setDialog] = useState<Dialog>(initialDialog);
-  const dispatch = useDispatch();
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  //const { data, loading, error } = useGetVehicles();
-  const optionsConsulta = useConsultaRenovaciones();
-  const optionListado = useGetRenews();
-  const [renews, setRenews] = useState<any[]>([]);
-  //TABLE OPTIONS
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [pagex, setPage] = useState(0);
   const [searched, setSearched] = useState<string>("");
   const [consulta, setConsulta] = useState<Consulta>(initialConsulta);
+  const { data, isLoading, error, isError, refetch, fetchStatus } =
+    useConsultaRenovaciones(consulta);
+  const refInput = useRef<HTMLInputElement>(null);
+
+  const handleSearch = (e: InputChange) => {
+    const value: string = (refInput.current?.value as string).toUpperCase();
+    setSearched(value);
+  };
 
   const handleInput = (e: InputChange) => {
     setConsulta({
@@ -74,86 +188,34 @@ const ConsultaRenovaciones = () => {
     });
   };
 
-  const handleChangePage = (
-    event: MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-  };
+  const memoRenovaciones = useMemo(() => {
+    let dataInstalaciones: any[] = [];
 
-  const handleChangeRowsPerPage = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-  //TABLE FIN
-  const handleClose = () => {
-    setDialog(initialDialog);
-    dispatch(setAlert(initialAlert));
-  };
+    if (data) {
+      dataInstalaciones = data;
 
-  const requestSearch = (searchedVal: string) => {
-    const filteredRows =
-      renews.filter((row: any) => {
-        return (
-          row.vehicle.plate
-            .toLowerCase()
-            .includes(searchedVal.trim().toLowerCase()) ||
-          row.vehicle.nroGPS
-            .toLowerCase()
-            .includes(searchedVal.trim().toLowerCase()) ||
-          row.id.toLowerCase().includes(searchedVal.trim().toLowerCase())
-        );
-      }) || [];
-    setVehicles(filteredRows);
-  };
-
-  const component = (name: string) => {
-    switch (name) {
-      case "Crear":
-        return <VehicleForm handleClose={handleClose} />;
-
-      default:
-        break;
+      if (searched !== "") {
+        dataInstalaciones = data.filter((row: any) => {
+          return (
+            row.vehicle.plate
+              .toLowerCase()
+              .includes(searched.trim().toLowerCase()) ||
+            row.vehicle.nroGPS
+              .toLowerCase()
+              .includes(searched.trim().toLowerCase()) ||
+            row.id.toLowerCase().includes(searched.trim().toLowerCase())
+          );
+        });
+      }
     }
-  };
 
-  const cancelSearch = () => {
-    setSearched("");
-    requestSearch(searched);
-  };
+    return dataInstalaciones;
+  }, [data, searched]);
 
-  const memoizedResult = useCallback(() => {
-    optionsConsulta.getVehiculosRenovadosXFecha({
-      variables: {
-        desde: consulta.desde,
-        hasta: consulta.hasta,
-      },
-    });
-  }, [consulta.desde, consulta.hasta]);
+  const handleClick = () => refetch();
 
-  // useEffect(() => {
-  //   memoizedResult();
-  //   if (optionsConsulta.data) {
-  //     setVehicles(optionsConsulta.data.getVehiculosRenovadosXFecha || []);
-  //   }
-  //   if (optionListado.data) {
-  //     setRenews(optionListado.data.getRenews);
-  //   }
-  // }, [memoizedResult, optionsConsulta.data, optionListado.data]);
-
-  if (optionsConsulta.error) {
-    return <h1>{findError(optionsConsulta.error)}</h1>;
-  }
   return (
     <>
-      <DialogForm
-        open={dialog.active}
-        title={`${dialog.name} Vehiculo`}
-        component={component(dialog.name)}
-        handleClose={handleClose}
-      />
       <div style={{ width: "100%", display: "flex" }}>
         <TextField
           value={consulta.desde}
@@ -164,6 +226,9 @@ const ConsultaRenovaciones = () => {
           label="Fecha desde"
           variant="outlined"
           style={{ marginRight: 20 }}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
 
         <TextField
@@ -174,95 +239,63 @@ const ConsultaRenovaciones = () => {
           type="date"
           label="Fecha hasta"
           variant="outlined"
+          style={{ marginRight: 20 }}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
+
+        <Button
+          onClick={handleClick}
+          variant="contained"
+          color="primary"
+          size="small"
+        >
+          Consultar
+        </Button>
       </div>
       {/* Generar PDF */}
       <div
         style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
       >
         <ExportCSV
-          csvData={vehicles}
+          csvData={memoRenovaciones}
           nameTipoReporte="RENOVACIONES"
           fileName={`Vehiculos renovados desde ${consulta.desde} hasta ${consulta.hasta}`}
         />
       </div>
-      aqui search
-      {/* <SearchBar
-        style={{ width: "100%" }}
-        placeholder="Puede buscar por ID de transacción, placa o nro de gps"
-        value={searched}
-        onChange={(searchVal) => requestSearch(searchVal)}
-        onCancelSearch={() => cancelSearch()}
-      /> */}
-      {optionsConsulta.loading ? (
-        <h1>Cargando...</h1>
+
+      <div style={{ marginBottom: 20 }}>
+        <SearchTable
+          handleSearch={handleSearch}
+          searchComponent={refInput}
+          placeholder="Buscar placa, nro gps o id de renovación..."
+        />
+      </div>
+
+      {isError ? (
+        JSON.parse(JSON.stringify(error))
+          .response.errors.map((a: any) =>
+            a.extensions.exception.response.message.map((b: any) => b)
+          )
+          .map((b: any, i: number) => (
+            <>
+              <div
+                key={i + 1}
+                style={{ background: "red", color: "#fff", padding: 10 }}
+              >
+                {i + 1}.- {b}
+              </div>
+              <br />
+            </>
+          ))
       ) : (
-        <>
-          <TableContainer
-            component={Paper}
-            style={{ whiteSpace: "nowrap", marginTop: 10 }}
-          >
-            <Table stickyHeader size="small" aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID Transaccion</TableCell>
-                  <TableCell>Cliente</TableCell>
-                  <TableCell>N°.Contacto</TableCell>
-                  <TableCell>Fecha Renovada</TableCell>
-                  <TableCell>Fecha Expirada</TableCell>
-                  <TableCell>Nueva Fecha de Termino </TableCell>
-                  <TableCell>Dispositivo</TableCell>
-                  <TableCell>Plataforma</TableCell>
-                  <TableCell>Plan</TableCell>
-                  <TableCell>Placa</TableCell>
-                  <TableCell>SIM</TableCell>
-                  <TableCell>Nro SIM</TableCell>
-                  <TableCell align="right">PDF Renovados</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {(rowsPerPage > 0
-                  ? vehicles.slice(
-                      pagex * rowsPerPage,
-                      pagex * rowsPerPage + rowsPerPage
-                    )
-                  : vehicles
-                ).map((vehicle) => (
-                  <VehicleConsultRenovaciones
-                    key={vehicle.id}
-                    vehicle={vehicle}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <div>
-            <TablePagination
-              rowsPerPageOptions={[
-                5,
-                10,
-                25,
-                { label: "Todos los registros", value: -1 },
-              ]}
-              //colSpan={3}
-              style={{ borderBottom: "none" }}
-              count={vehicles.length}
-              rowsPerPage={rowsPerPage}
-              page={pagex}
-              SelectProps={{
-                inputProps: { "aria-label": "filas por página" },
-                native: true,
-              }}
-              labelRowsPerPage="filas por página"
-              labelDisplayedRows={({ from, to, count }) =>
-                `${from}-${to} de ${count}`
-              }
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </div>
-        </>
+        <TableContainer
+          data={memoRenovaciones}
+          columns={defaultColumns}
+          loading={isLoading}
+          idle={fetchStatus}
+        />
       )}
     </>
   );

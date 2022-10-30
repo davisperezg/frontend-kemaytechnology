@@ -1,4 +1,6 @@
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
+import { graphQLClient } from "../../config/config";
+import { useQuery } from "@tanstack/react-query";
 
 export const GET_CONSULTA_VENCIDOS_VEHICLE = gql`
   query getVehiculosVencidosXFecha($desde: DateTime!, $hasta: DateTime!) {
@@ -6,6 +8,7 @@ export const GET_CONSULTA_VENCIDOS_VEHICLE = gql`
       id
       billigStart
       billigEnd
+      createdAt
       platform
       plate
       sim
@@ -19,6 +22,7 @@ export const GET_CONSULTA_VENCIDOS_VEHICLE = gql`
         lastName
         cellphone_1
         cellphone_2
+        direction
       }
       device {
         name
@@ -27,10 +31,20 @@ export const GET_CONSULTA_VENCIDOS_VEHICLE = gql`
   }
 `;
 
-export const useConsultaVencidos = () => {
-  const [getVehiculosVencidosXFecha, { data, error, loading }] = useLazyQuery(
-    GET_CONSULTA_VENCIDOS_VEHICLE
-  );
+export const useConsultaVencidos = (range: any) => {
+  return useQuery(["cn-vencidos", range], {
+    queryFn: async () => {
+      const { getVehiculosVencidosXFecha } = await graphQLClient.request(
+        GET_CONSULTA_VENCIDOS_VEHICLE,
+        {
+          desde: range.desde,
+          hasta: range.hasta,
+        }
+      );
+      return getVehiculosVencidosXFecha;
+    },
 
-  return { getVehiculosVencidosXFecha, data, error, loading };
+    enabled: false,
+    cacheTime: 0,
+  });
 };

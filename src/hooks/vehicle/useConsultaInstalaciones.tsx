@@ -1,4 +1,6 @@
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
+import { graphQLClient } from "../../config/config";
+import { useQuery } from "@tanstack/react-query";
 
 export const GET_CONSULTA_INSTALACIONES_VEHICLE = gql`
   query getVehiculosInstaladosXrango($desde: DateTime!, $hasta: DateTime!) {
@@ -11,8 +13,12 @@ export const GET_CONSULTA_INSTALACIONES_VEHICLE = gql`
         lastName
         cellphone_1
         cellphone_2
+        direction
       }
       createdAt
+      billigStart
+      billigEnd
+      retired
       device {
         name
       }
@@ -26,10 +32,20 @@ export const GET_CONSULTA_INSTALACIONES_VEHICLE = gql`
   }
 `;
 
-export const useConsultaInstalaciones = () => {
-  const [getVehiculosInstaladosXrango, { data, error, loading }] = useLazyQuery(
-    GET_CONSULTA_INSTALACIONES_VEHICLE
-  );
+export const useConsultaInstalaciones = (range: any) => {
+  return useQuery(["cn-instalaciones", range], {
+    queryFn: async () => {
+      const { getVehiculosInstaladosXrango } = await graphQLClient.request(
+        GET_CONSULTA_INSTALACIONES_VEHICLE,
+        {
+          desde: range.desde,
+          hasta: range.hasta,
+        }
+      );
+      return getVehiculosInstaladosXrango;
+    },
 
-  return { getVehiculosInstaladosXrango, data, error, loading };
+    enabled: false,
+    cacheTime: 0,
+  });
 };

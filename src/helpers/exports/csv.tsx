@@ -25,13 +25,16 @@ export const ExportCSV = ({
             cliente: data.customer.name + " " + data.customer.lastName,
             contacto:
               data.customer.cellphone_1 + " " + data.customer.cellphone_2,
-            fecha_instalacion: data.createdAt,
             dispositivo: data.device.name,
             plataforma: data.platform,
             plan_facturacion: data.billing.name,
             placa: data.plate,
             sim: data.sim,
             nro_sim: data.nroGPS,
+            fecha_instalacion: data.createdAt,
+            fecha_inicio: data.billigStart,
+            fecha_termino: data.billigEnd,
+            retirado: data.retired ? "SI" : "NO",
           };
         });
         break;
@@ -46,15 +49,17 @@ export const ExportCSV = ({
               data.vehicle.customer.cellphone_1 +
               " " +
               data.vehicle.customer.cellphone_2,
-            fecha_renovada: data.renovationStart,
-            fecha_expirada: data.expirationDate,
-            nueva_fecha_termino: data.renovationEnd,
             dispositivo: data.vehicle.device.name,
             plataforma: data.vehicle.platform,
             plan: data.billing.name,
             placa: data.vehicle.plate,
             sim: data.vehicle.sim,
             nro_sim: data.vehicle.nroGPS,
+            fecha_expirada: data.expirationDate,
+            fecha_revacion_creada: data.createdAt,
+            fecha_renovada: data.renovationStart,
+            fecha_termino: data.renovationEnd,
+            retirado: data.vehicle.retired ? "SI" : "NO",
           };
         });
         break;
@@ -66,14 +71,16 @@ export const ExportCSV = ({
             cliente: data.customer.name + " " + data.customer.lastName,
             contacto:
               data.customer.cellphone_1 + " " + data.customer.cellphone_2,
-            fecha_inicio: data.billigStart,
-            fecha_termino: data.billigEnd,
             dispositivo: data.device.name,
             plataforma: data.platform,
             plan_facturacion: data.billing.name,
             placa: data.plate,
             sim: data.sim,
             nro_sim: data.nroGPS,
+            fecha_instalacion: data.createdAt,
+            fecha_inicio: data.billigStart,
+            fecha_termino: data.billigEnd,
+            retirado: data.retired ? "SI" : "NO",
           };
         });
         break;

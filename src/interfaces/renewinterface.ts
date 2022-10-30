@@ -11,4 +11,5 @@ export interface Renew {
   expirationDate?: Date | string;
   renovationStart?: Date | string;
   renovationEnd?: Date | string;
+  createdAt?: Date;
 }

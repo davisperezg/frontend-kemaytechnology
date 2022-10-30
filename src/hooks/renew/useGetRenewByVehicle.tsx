@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { graphQLClient } from "../../config/config";
 
 const GETONE_RENEW_BY_PLATE = gql`
@@ -44,32 +44,17 @@ const GETONE_RENEW_BY_PLATE = gql`
 `;
 
 export const useGetOneRenewPlate = (id: string) => {
-  const queryClient = useQueryClient();
+  return useQuery(["vehicles", id], {
+    queryFn: async () => {
+      const { getRenewByPlate } = await graphQLClient.request(
+        GETONE_RENEW_BY_PLATE,
+        {
+          id,
+        }
+      );
+      return getRenewByPlate;
+    },
 
-  return useQuery(
-    ["vehicles", id],
-    {
-      queryFn: async () => {
-        const { getRenewByPlate } = await graphQLClient.request(
-          GETONE_RENEW_BY_PLATE,
-          {
-            id,
-          }
-        );
-        return getRenewByPlate;
-      },
-
-      enabled: !!id,
-    }
-
-    // async () => {
-    //   const { getRenewByPlate } = await graphQLClient.request(
-    //     GETONE_RENEW_BY_PLATE,
-    //     {
-    //       id,
-    //     }
-    //   );
-    //   return getRenewByPlate;
-    // },
-  );
+    enabled: !!id,
+  });
 };
