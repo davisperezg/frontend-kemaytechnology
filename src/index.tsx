@@ -44,10 +44,10 @@ ReactDOM.render(
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <App />
+            <ReactQueryDevtools initialIsOpen={false} />
           </PersistGate>
         </Provider>
       </ApolloProvider>
-      {/* <ReactQueryDevtools /> */}
     </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById("root")

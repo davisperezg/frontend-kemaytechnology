@@ -1,143 +1,179 @@
-import Table from "@mui/material/Table";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import Paper from "@mui/material/Paper";
-
 import { Vehicle } from "../interfaces/vehicle.interface";
-
-import VehicleForm from "../components/vehicle/vehicle-form";
-import { findError } from "../helpers/control-errors";
-
-import {
-  useState,
-  useCallback,
-  useEffect,
-  ChangeEvent,
-  MouseEvent,
-} from "react";
-
-import { setAlert } from "../store/alert/action";
-import { Dialog } from "../interfaces/dialog.interface";
-
-import TablePagination from "@mui/material/TablePagination";
-import { TablePaginationActions } from "../components/table/table-pagination";
+import { useState, useMemo } from "react";
 import { Button, TextField } from "@mui/material";
-
-import VehicleConsult from "../components/consultas/consultas_instalaciones";
 import { InputChange } from "../lib/types";
 import { Consulta } from "../interfaces/consulta.interface";
 import { useConsultaInstalaciones } from "../hooks/vehicle/useConsultaInstalaciones";
-import { useDispatch } from "react-redux";
-import DialogForm from "../components/dialog/dialog.component";
 import { ExportCSV } from "../helpers/exports/csv";
+import {
+  createColumnHelper,
+  DisplayColumnDef,
+  IdentifiedColumnDef,
+} from "@tanstack/react-table";
+import { Customer } from "../interfaces/customer.interface";
+import { Device } from "../interfaces/device.interface";
+import { Billing } from "../interfaces/billing.interface";
+import { format } from "date-fns";
+import TableContainer from "../components/table/TableContainer";
+
+const columnHelper = createColumnHelper<Vehicle>();
+
+const defaultColumns = [
+  columnHelper.display({
+    id: "index",
+    cell: (props) => Number(props.row.id) + 1,
+    header: () => "#",
+    classNameHeader: "div text-center",
+    classNameBody: "div-row text-center",
+    size: 28,
+    minSize: 28,
+  } as DisplayColumnDef<Vehicle, unknown>),
+  columnHelper.accessor(
+    (row) =>
+      `${(row.customer as Customer).name} ${
+        (row.customer as Customer).lastName
+      }`,
+    {
+      id: "customer",
+      cell: (info) => info.getValue(),
+      classNameBody: "div-row",
+      header: () => "Cliente",
+      classNameHeader: "div",
+      size: 100,
+      minSize: 31,
+    } as DisplayColumnDef<Vehicle, string>
+  ),
+  columnHelper.accessor(
+    (row) =>
+      `${(row.customer as Customer).cellphone_1} 
+      ${
+        (row.customer as Customer).cellphone_2
+          ? " - " + (row.customer as Customer).cellphone_2
+          : ""
+      } ${
+        (row.customer as Customer).direction
+          ? " - " + (row.customer as Customer).direction
+          : ""
+      }`,
+    {
+      id: "info",
+      cell: (info) => info.getValue(),
+      classNameBody: "div-row",
+      header: () => "Información",
+      classNameHeader: "div",
+      size: 100,
+      minSize: 31,
+    } as DisplayColumnDef<Vehicle, string>
+  ),
+  columnHelper.accessor((row) => `${(row.device as Device).name}`, {
+    id: "device",
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Dispositivo",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Vehicle, string>),
+  columnHelper.accessor("platform", {
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Plataforma",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Vehicle, string>),
+  columnHelper.accessor((row) => `${(row.billing as Billing).name}`, {
+    id: "billing",
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Facturación",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as DisplayColumnDef<Vehicle, string>),
+  columnHelper.accessor("plate", {
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Placa",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Vehicle, string>),
+  columnHelper.accessor("sim", {
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Chip",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Vehicle, string>),
+  columnHelper.accessor("nroGPS", {
+    cell: (info) => info.getValue(),
+    classNameBody: "div-row",
+    header: () => "Nro de chip",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Vehicle, string>),
+  columnHelper.accessor("createdAt", {
+    cell: (info) => format(new Date(String(info.getValue())), "dd-MM-yyyy"),
+    classNameBody: "div-row",
+    header: () => "Fecha de instalación",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Vehicle, Date>),
+  columnHelper.accessor("billigStart", {
+    cell: (info) => format(new Date(String(info.getValue())), "dd-MM-yyyy"),
+    classNameBody: "div-row",
+    header: () => "Fecha de inicio",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Vehicle, string>),
+  columnHelper.accessor("billigEnd", {
+    cell: (info) => format(new Date(String(info.getValue())), "dd-MM-yyyy"),
+    classNameBody: "div-row",
+    header: () => "Fecha de termino",
+    classNameHeader: "div",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Vehicle, string>),
+  columnHelper.accessor("retired", {
+    cell: (info) => (info.getValue() ? "SI" : "NO"),
+    classNameBody: "div-row text-center",
+    header: () => "Retirado",
+    classNameHeader: "div text-center",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Vehicle, boolean>),
+];
+
+const initialConsulta: Consulta = {
+  desde: "",
+  hasta: "",
+};
 
 const ConsultaInstalaciones = () => {
-  const now = new Date();
-
-  const initialDialog = {
-    name: "",
-    active: false,
-  };
-
-  const initialAlert = {
-    type: "",
-    text: "",
-  };
-  const initialConsulta: Consulta = {
-    desde: now,
-    hasta: now,
-  };
-
-  const [dialog, setDialog] = useState<Dialog>(initialDialog);
-  const dispatch = useDispatch();
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-
-  const optionsConsulta = useConsultaInstalaciones();
-  //TABLE OPTIONS
-
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [pagex, setPage] = useState(0);
-
   const [consulta, setConsulta] = useState<Consulta>(initialConsulta);
+  const { data, isLoading, error, isError, refetch, fetchStatus } =
+    useConsultaInstalaciones(consulta);
 
   const handleInput = (e: InputChange) => {
     setConsulta({
       ...consulta,
       [e.target.name]: e.target.value,
     });
-    optionsConsulta.getVehiculosInstaladosXrango({
-      variables: {
-        desde: e.target.value,
-        hasta: e.target.value,
-      },
-    });
-    if (optionsConsulta.data) {
-      // console.log(optionsConsulta.data.getVehiculosInstaladosXrango  )
-      setVehicles(optionsConsulta.data.getVehiculosInstaladosXrango);
-    }
   };
 
-  const handleChangePage = (
-    event: MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-  };
+  const handleClick = () => refetch();
 
-  const handleChangeRowsPerPage = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-  //TABLE FIN
-  const handleClose = () => {
-    setDialog(initialDialog);
-    dispatch(setAlert(initialAlert));
-  };
-
-  const component = (name: string) => {
-    switch (name) {
-      case "Crear":
-        return <VehicleForm handleClose={handleClose} />;
-
-      default:
-        break;
-    }
-  };
-
-  const memoizedResult = useCallback(() => {
-    optionsConsulta.getVehiculosInstaladosXrango({
-      variables: {
-        desde: consulta.desde,
-        hasta: consulta.hasta,
-      },
-    });
-  }, [consulta.desde, consulta.hasta]);
-
-  useEffect(() => {
-    memoizedResult();
-    if (optionsConsulta.data) {
-      setVehicles(optionsConsulta.data.getVehiculosInstaladosXrango);
-    }
-  }, [memoizedResult, optionsConsulta.data]);
-
-  if (optionsConsulta.error) {
-    return <h1>{findError(optionsConsulta.error)}</h1>;
-  }
+  const memoInstalaciones = useMemo(() => {
+    if (data) return data;
+  }, [data]);
 
   return (
     <>
-      <DialogForm
-        open={dialog.active}
-        title={`${dialog.name} Vehiculo`}
-        component={component(dialog.name)}
-        handleClose={handleClose}
-      />
-
       <div style={{ width: "100%", display: "flex" }}>
         <TextField
           value={consulta.desde}
@@ -148,90 +184,69 @@ const ConsultaInstalaciones = () => {
           label="Fecha desde"
           variant="outlined"
           style={{ marginRight: 20 }}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
 
         <TextField
           value={consulta.hasta}
+          style={{ marginRight: 20 }}
           id="outlined-hasta"
           name="hasta"
           onChange={handleInput}
           type="date"
           label="Fecha hasta"
           variant="outlined"
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
+
+        <Button
+          onClick={handleClick}
+          variant="contained"
+          color="primary"
+          size="small"
+        >
+          Consultar
+        </Button>
       </div>
+
       {/* Generar PDF */}
       <div
         style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
       >
         <ExportCSV
-          csvData={vehicles}
+          csvData={memoInstalaciones}
           nameTipoReporte="INSTALACIONES"
           fileName={`Vehiculos instalados desde ${consulta.desde} hasta ${consulta.hasta}`}
         />
       </div>
-      {optionsConsulta.loading ? (
-        <h1>Cargando...</h1>
+
+      {isError ? (
+        JSON.parse(JSON.stringify(error))
+          .response.errors.map((a: any) =>
+            a.extensions.exception.response.message.map((b: any) => b)
+          )
+          .map((b: any, i: number) => (
+            <>
+              <div
+                key={i + 1}
+                style={{ background: "red", color: "#fff", padding: 10 }}
+              >
+                {i + 1}.- {b}
+              </div>
+              <br />
+            </>
+          ))
       ) : (
-        <>
-          <TableContainer
-            component={Paper}
-            style={{ whiteSpace: "nowrap", marginTop: 10 }}
-          >
-            <Table stickyHeader size="small" aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Cliente</TableCell>
-                  <TableCell>N°.Contacto</TableCell>
-                  <TableCell>Fecha de instalación</TableCell>
-                  <TableCell>Dispositivo</TableCell>
-                  <TableCell>Plataforma</TableCell>
-                  <TableCell>Plan</TableCell>
-                  <TableCell>Placa</TableCell>
-                  <TableCell>SIM</TableCell>
-                  <TableCell>Nro SIM</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {(rowsPerPage > 0
-                  ? vehicles.slice(
-                      pagex * rowsPerPage,
-                      pagex * rowsPerPage + rowsPerPage
-                    )
-                  : vehicles
-                ).map((vehicle) => (
-                  <VehicleConsult key={vehicle.id} vehicle={vehicle} />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <div>
-            <TablePagination
-              rowsPerPageOptions={[
-                5,
-                10,
-                25,
-                { label: "Todos los registros", value: -1 },
-              ]}
-              //colSpan={3}
-              style={{ borderBottom: "none" }}
-              count={vehicles.length}
-              rowsPerPage={rowsPerPage}
-              page={pagex}
-              SelectProps={{
-                inputProps: { "aria-label": "filas por página" },
-                native: true,
-              }}
-              labelRowsPerPage="filas por página"
-              labelDisplayedRows={({ from, to, count }) =>
-                `${from}-${to} de ${count}`
-              }
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </div>
-        </>
+        <TableContainer
+          data={memoInstalaciones}
+          columns={defaultColumns}
+          loading={isLoading}
+          idle={fetchStatus}
+        />
       )}
     </>
   );

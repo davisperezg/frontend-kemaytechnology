@@ -23,7 +23,7 @@ const Footer = () => {
           >
             dperez@kemaytechnology.com
           </a>
-          <br /> Version: 0.1.3 | Powered by
+          <br /> Version: 0.1.4 | Powered by
           <a
             href="http://github.com/davisperezg"
             target="_blank"

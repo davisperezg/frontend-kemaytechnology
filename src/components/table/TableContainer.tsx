@@ -16,6 +16,7 @@ const TableContainer = ({
   data = [],
   columns,
   loading,
+  idle,
   onClickTr,
   handleDelete,
 }: ITableParam) => {
@@ -109,7 +110,12 @@ const TableContainer = ({
         alignItems: loading || !dataQuery.rows[0] ? "center" : "",
       }}
     >
-      {loading ? (
+      {idle === "idle" && loading === true ? (
+        <label>
+          Para iniciar la busqueda por favor ingrese el rango de fechas y haga
+          click en consultar.
+        </label>
+      ) : loading ? (
         <label>Cargando registros...</label>
       ) : (
         !dataQuery.rows[0] && (
@@ -201,7 +207,7 @@ const TableContainer = ({
                   key={row.id}
                   row={row}
                   i={i}
-                  onClickTr={() => onClickTr!(row)}
+                  onClickTr={() => onClickTr !== undefined && onClickTr!(row)}
                   handleDelete={() => handleDelete!(row)}
                 />
               ))}

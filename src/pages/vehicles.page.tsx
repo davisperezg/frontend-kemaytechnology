@@ -37,6 +37,16 @@ const defaultColumns = [
     size: 28,
     minSize: 28,
   } as DisplayColumnDef<Vehicle, unknown>),
+  columnHelper.accessor("status", {
+    cell: (props) => {
+      return <VehicleStatus row={props.row} />;
+    },
+    classNameBody: "div-row text-center",
+    header: () => "Estado",
+    classNameHeader: "div text-center",
+    size: 100,
+    minSize: 31,
+  } as IdentifiedColumnDef<Vehicle, any>),
   columnHelper.accessor(
     (row) =>
       `${(row.customer as Customer).name} ${
@@ -178,16 +188,6 @@ const defaultColumns = [
   //   size: 100,
   //   minSize: 31,
   // } as DisplayColumnDef<Vehicle, unknown>),
-  columnHelper.accessor("status", {
-    cell: (props) => {
-      return <VehicleStatus row={props.row} />;
-    },
-    classNameBody: "div-row text-center",
-    header: () => "Estado",
-    classNameHeader: "div text-center",
-    size: 100,
-    minSize: 31,
-  } as IdentifiedColumnDef<Vehicle, any>),
   columnHelper.display({
     id: "actions",
     cell: (props) => "",
