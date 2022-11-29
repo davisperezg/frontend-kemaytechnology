@@ -6,7 +6,7 @@ const Footer = () => {
     <footer>
       <div className="center">
         <p>
-          © 2020-2021 by{" "}
+          © 2020-2022 by{" "}
           <a
             href="https://kemaytechnology.com/"
             target="_blank"
@@ -23,7 +23,7 @@ const Footer = () => {
           >
             dperez@kemaytechnology.com
           </a>
-          <br /> Version: 0.1.4 | Powered by
+          <br /> Version: 1.0.0 | Powered by
           <a
             href="http://github.com/davisperezg"
             target="_blank"

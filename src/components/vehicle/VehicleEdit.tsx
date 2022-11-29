@@ -396,8 +396,6 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
     return result;
   }, [dataRenew]);
 
-  console.log(entity.platform);
-
   return (
     <MyDialogMUI
       open={open}
@@ -515,7 +513,7 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                     nroGPS: values.nroGPS,
                     platform: values.platform,
                     sim: values.sim,
-                    retired: values.retired,
+                    retired: values.retired === null ? false : values.retired,
                   },
                 },
               });
@@ -756,7 +754,7 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                           value={values.platform}
                           onChange={handleChange}
                         >
-                          <MenuItem value="PREMIUM">PREMIUM</MenuItem>
+                          <MenuItem value="PREMIUN">PREMIUM</MenuItem>
                           <MenuItem value="STANDAR">STANDAR</MenuItem>
                           <MenuItem value="SIN PLATAFORMA">
                             SIN PLATAFORMA
@@ -861,14 +859,28 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                           Marca la casilla si el gps del cliente ha sido
                           retirado
                         </label>
-                        <FormGroup style={{ float: "right" }}>
+                        <FormGroup
+                          style={{ float: "right", userSelect: "none" }}
+                        >
                           <FormControlLabel
                             control={
                               <Checkbox
                                 size="small"
                                 id="retired"
+                                name="retired"
                                 checked={values.retired}
-                                onChange={handleChange}
+                                onChange={(e: any) => {
+                                  setValues({
+                                    ...values,
+                                    retired:
+                                      values.retired === null
+                                        ? true
+                                        : values.retired === false
+                                        ? true
+                                        : false,
+                                  });
+                                  //return handleChange(e);
+                                }}
                                 onBlur={handleBlur}
                               />
                             }
