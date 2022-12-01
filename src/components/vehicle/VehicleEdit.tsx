@@ -754,7 +754,7 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                           value={values.platform}
                           onChange={handleChange}
                         >
-                          <MenuItem value="PREMIUM">PREMIUM</MenuItem>
+                          <MenuItem value="PREMIUM">PREMIUMA</MenuItem>
                           <MenuItem value="STANDAR">STANDAR</MenuItem>
                           <MenuItem value="SIN PLATAFORMA">
                             SIN PLATAFORMA
