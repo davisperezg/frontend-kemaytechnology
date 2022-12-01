@@ -588,7 +588,7 @@ const VehicleForm = ({ open, handleClose }: IModal) => {
                           value={values.platform}
                           onChange={handleChange}
                         >
-                          <MenuItem value="PREMIUN">PREMIUN</MenuItem>
+                          <MenuItem value="PREMIUM">PREMIUM</MenuItem>
                           <MenuItem value="STANDAR">STANDAR</MenuItem>
                           <MenuItem value="SIN PLATAFORMA">
                             SIN PLATAFORMA
