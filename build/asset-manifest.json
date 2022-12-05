@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/static/css/main.651765d2.css",
-    "main.js": "/static/js/main.cf3ba674.js",
+    "main.js": "/static/js/main.f591a39f.js",
     "static/media/B_logo_kemay.png": "/static/media/B_logo_kemay.bec2fe6e94f33aaf73c4.png",
     "static/media/logo_kemay_antena.png": "/static/media/logo_kemay_antena.16ba1da397b54225d4ce.png",
     "index.html": "/index.html",
     "main.651765d2.css.map": "/static/css/main.651765d2.css.map",
-    "main.cf3ba674.js.map": "/static/js/main.cf3ba674.js.map"
+    "main.f591a39f.js.map": "/static/js/main.f591a39f.js.map"
   },
   "entrypoints": [
     "static/css/main.651765d2.css",
-    "static/js/main.cf3ba674.js"
+    "static/js/main.f591a39f.js"
   ]
 }
