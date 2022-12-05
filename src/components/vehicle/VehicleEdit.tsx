@@ -1435,25 +1435,8 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                                       </>
                                     ) : (
                                       <>
-                                        {rangeMonthPayed(
-                                          a.renovationStart,
-                                          a.expirationDate
-                                        )
-                                          .map(
-                                            (a: any) => `${a.month}(${a.year})`
-                                          )
-                                          .join(", ")}{" "}
-                                        - (
-                                        <strong>
-                                          {
-                                            rangeMonthPayed(
-                                              a.renovationStart,
-                                              a.expirationDate
-                                            ).length
-                                          }{" "}
-                                          Meses
-                                        </strong>
-                                        )
+                                        {" "}
+                                        - (<strong> Mesesxxxx</strong>)
                                       </>
                                     )}
                                   </td>
