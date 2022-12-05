@@ -376,11 +376,19 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
   const isVehicleActive =
     differenceInDays(new Date(), new Date(String(entity.billigEnd))) <= 0;
 
-  const rangeMonthPayed = (rangeA: string, rangeB: string) =>
-    eachMonthOfInterval({
-      start: new Date(String(rangeA)),
-      end: new Date(String(rangeB)),
-    }).map((a: any) => ({ year: format(a, "yyyy"), month: format(a, "MMMM") }));
+  const rangeMonthPayed = (rangeA: string, rangeB: string) => {
+    console.log(rangeA, rangeB);
+
+    return (
+      eachMonthOfInterval({
+        start: new Date(String(rangeA)),
+        end: new Date(String(rangeB)),
+      }).map((a: any) => ({
+        year: format(a, "yyyy"),
+        month: format(a, "MMMM"),
+      })) || []
+    );
+  };
 
   //ordena de manera descendente y trabaja con una copia. No ordena a la orginal
   const renews = useMemo(() => {
