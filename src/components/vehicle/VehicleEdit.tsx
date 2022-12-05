@@ -379,10 +379,11 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
   const rangeMonthPayed = (rangeA: string, rangeB: string) => {
     console.log(rangeA, rangeB);
     console.log(typeof rangeA, typeof rangeB);
+    console.log(new Date(String(rangeA)), new Date(String(rangeB)));
     console.log(
       eachMonthOfInterval({
-        start: new Date(String(rangeA)),
-        end: new Date(String(rangeB)),
+        start: rangeA ? new Date(String(rangeA)) : new Date(),
+        end: rangeB ? new Date(String(rangeB)) : new Date(),
       })
     );
 
