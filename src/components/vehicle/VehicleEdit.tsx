@@ -376,14 +376,17 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
   const isVehicleActive =
     differenceInDays(new Date(), new Date(String(entity.billigEnd))) <= 0;
 
-  const rangeMonthPayed = (rangeA: string, rangeB: string) =>
-    eachMonthOfInterval({
+  const rangeMonthPayed = (rangeA: string, rangeB: string) => {
+    console.log(rangeA, rangeB);
+
+    return eachMonthOfInterval({
       start: new Date(String(rangeA)),
       end: new Date(String(rangeB)),
     }).map((a: any) => ({
       year: format(a, "yyyy"),
       month: format(a, "MMMM"),
     }));
+  };
 
   //ordena de manera descendente y trabaja con una copia. No ordena a la orginal
   const renews = useMemo(() => {
@@ -1433,10 +1436,50 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                                         </strong>
                                         )
                                       </>
+                                    ) : isBefore(
+                                        new Date(String(a.renovationStart)),
+                                        new Date(String(a.expirationDate))
+                                      ) ? (
+                                      <>
+                                        {rangeMonthPayed(
+                                          a.renovationStart,
+                                          a.expirationDate
+                                        )
+                                          .map(
+                                            (a: any) => `${a.month}(${a.year})`
+                                          )
+                                          .join(", ")}{" "}
+                                        -{" "}
+                                        <strong>
+                                          {
+                                            rangeMonthPayed(
+                                              a.renovationStart,
+                                              a.expirationDate
+                                            ).length
+                                          }{" "}
+                                          Meses
+                                        </strong>
+                                      </>
                                     ) : (
                                       <>
-                                        {" "}
-                                        - (<strong> Mesesxxxx</strong>)
+                                        {rangeMonthPayed(
+                                          a.expirationDate,
+                                          a.renovationStart
+                                        )
+                                          .map(
+                                            (a: any) => `${a.month}(${a.year})`
+                                          )
+                                          .join(", ")}{" "}
+                                        -{" "}
+                                        <strong>
+                                          {
+                                            rangeMonthPayed(
+                                              a.expirationDate,
+                                              a.renovationStart
+                                            ).length
+                                          }{" "}
+                                          Meses
+                                        </strong>
                                       </>
                                     )}
                                   </td>
