@@ -23,6 +23,7 @@ import { PERMIT_ONE } from "../const";
 import { User } from "../interfaces/user.interface";
 import { formatMoney } from "../lib/currency/money";
 import { PagoContext } from "../context/caja-context";
+import { Button } from "@mui/material";
 
 const initialAlert = {
   type: "",
@@ -96,15 +97,12 @@ const EgressPage = ({ checkMoney, resultEgress }: Option) => {
 
   const showOptionsToCreate = () => (
     <>
-      <Tooltip title="Crear Egreso">
-        <IconButton
-          aria-label="add"
-          size="small"
-          onClick={() => setDialog({ name: "Crear", active: true })}
-        >
-          <AddRoundedIcon />
-        </IconButton>
-      </Tooltip>
+      <Button
+        onClick={() => setDialog({ name: "Crear", active: true })}
+        variant="contained"
+      >
+        Crear egreso
+      </Button>
     </>
   );
 
