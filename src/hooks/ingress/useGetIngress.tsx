@@ -6,6 +6,7 @@ export const GET_INGRESS = gql`
       id
       category {
         name
+        id
       }
       user {
         name

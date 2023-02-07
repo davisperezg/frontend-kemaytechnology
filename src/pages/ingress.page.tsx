@@ -24,6 +24,7 @@ import { loadAccess } from "../components/acceso/filter-access.component";
 import { PERMIT_ONE } from "../const";
 import { formatMoney } from "../lib/currency/money";
 import { PagoContext } from "../context/caja-context";
+import { Button } from "@mui/material";
 
 const initialAlert = {
   type: "",
@@ -98,15 +99,12 @@ const IngressPage = ({ checkMoney, resultIngress }: Option) => {
 
   const showOptionsToCreate = () => (
     <>
-      <Tooltip title="Crear Ingreso">
-        <IconButton
-          aria-label="add"
-          size="small"
-          onClick={() => setDialog({ name: "Crear", active: true })}
-        >
-          <AddRoundedIcon />
-        </IconButton>
-      </Tooltip>
+      <Button
+        onClick={() => setDialog({ name: "Crear", active: true })}
+        variant="contained"
+      >
+        Crear ingreso
+      </Button>
     </>
   );
 

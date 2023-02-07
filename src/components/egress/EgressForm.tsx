@@ -23,6 +23,11 @@ interface Options {
   egress?: Egress;
 }
 
+interface IOptions {
+  label: string;
+  value: string;
+}
+
 const initialAlert = {
   type: "",
   text: "",
@@ -32,6 +37,8 @@ const initialAutoCompleteInput = {
   category: "",
 };
 
+const options = [{ label: "[SELECCIONE UNA CATEGORIA]", value: "999" }];
+
 const EgressForm = ({ handleClose, egress }: Options) => {
   const auth: User = useSelector((state: any) => state.authReducer.authUser);
 
@@ -39,7 +46,7 @@ const EgressForm = ({ handleClose, egress }: Options) => {
     detail: "",
     amount: 0,
     units: 0,
-    category: "",
+    category: options[0],
     user: auth.name,
   };
 
@@ -48,7 +55,10 @@ const EgressForm = ({ handleClose, egress }: Options) => {
     detail: egress?.detail || "",
     amount: egress?.amount || 0,
     units: egress?.units || 0,
-    category: egress?.category?.name || "",
+    category: {
+      label: egress?.category.name,
+      value: egress?.category.id,
+    },
     observation: egress?.observation || "",
     //user: auth.name
   };
@@ -56,9 +66,14 @@ const EgressForm = ({ handleClose, egress }: Options) => {
   const [egressForm, setEgressForm] = useState<Egress>(
     initialValueUpdate.id ? initialValueUpdate : initialValueCreate
   );
-  const [valueInput, setValueInput] = useState<AutoCompleteInput>(
-    initialAutoCompleteInput
+
+  //categoria
+  const [value, setValue] = useState<any>(
+    initialValueUpdate.id ? initialValueUpdate.category : options[0]
   );
+  const [inputValue, setInputValue] = useState("");
+  const [customValue, setCustomValue] = useState("");
+
   const [categorys, setCategorys] = useState<Category[]>([]);
   const { data } = useGetCategorys();
   const optionsUpdateEgress = useUpdateEgress();
@@ -74,7 +89,15 @@ const EgressForm = ({ handleClose, egress }: Options) => {
   };
 
   const dataCategorys = useCallback(() => {
-    setCategorys(data?.getCategorys || []);
+    const formated =
+      data?.getCategorys.map((a: any) => {
+        return {
+          label: a.name,
+          value: a.id,
+        };
+      }) || [];
+
+    setCategorys([options[0], ...formated]);
   }, [data]);
 
   const onSubmit = async (e: FormChange) => {
@@ -140,27 +163,35 @@ const EgressForm = ({ handleClose, egress }: Options) => {
   return (
     <form onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        {/* <Grid item xs={12}>
+        <Grid item xs={12}>
           <Autocomplete
             id="idCategory"
-            value={egressForm.category}
-            onChange={(event, value) => {
+            value={value}
+            options={categorys}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+              setCustomValue(String(newValue?.value));
               setEgressForm({
                 ...egressForm,
-                category: value?.name || "",
+                category:
+                  String(newValue?.value) === "undefined"
+                    ? ""
+                    : String(newValue?.value),
               });
 
               dispatch(setAlert(initialAlert));
             }}
-            inputValue={
-              valueInput.category ? valueInput.category : egressForm.category
-            }
-            onInputChange={(e, newValue) => {
-              setValueInput({ ...valueInput, category: newValue });
+            isOptionEqualToValue={(options, value) => {
+              return options.value === value.value;
             }}
-            options={categorys}
-            getOptionLabel={(category) => (category.name ? category.name : "")}
-            getOptionSelected={(option, value) => option.name === value}
+            getOptionLabel={(option) => option.label}
+            getOptionDisabled={(option) => {
+              return option.value === options[0].value;
+            }}
+            inputValue={inputValue}
+            onInputChange={(event, newInputValue) => {
+              setInputValue(newInputValue);
+            }}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -169,8 +200,13 @@ const EgressForm = ({ handleClose, egress }: Options) => {
                 variant="outlined"
               />
             )}
+            noOptionsText="Sin registros"
+            openText="Abrir lista de clientes"
+            clearText="Limpiar cliente"
+            loadingText="Cargando lista..."
+            closeText="Cerrar lista de clientes"
           />
-        </Grid> */}
+        </Grid>
 
         <Grid item xs={4}>
           <TextField
