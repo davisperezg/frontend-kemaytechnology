@@ -760,10 +760,13 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                           value={values.platform}
                           onChange={handleChange}
                         >
-                          <MenuItem value="PREMIUM">PREMIUM</MenuItem>
-                          <MenuItem value="STANDAR">STANDAR</MenuItem>
+                          <MenuItem value="PREMIUM">PREMIUM - WIALOM</MenuItem>
+                          <MenuItem value="STANDAR">STANDAR - IOP</MenuItem>
                           <MenuItem value="SIN PLATAFORMA">
                             SIN PLATAFORMA
+                          </MenuItem>
+                          <MenuItem value="PLATAFORMA_GRATUITA_SMAKE">
+                            PLATAFORMA GRATUITA - SMAKE
                           </MenuItem>
                         </Select>
                       </FormControl>
@@ -819,11 +822,16 @@ const VehicleEdit = ({ open, handleClose, entity }: IModal) => {
                           <MenuItem value="BITEL">BITEL</MenuItem>
                           <MenuItem value="INKACEL">INKACEL</MenuItem>
                           <MenuItem value="MULTIOPERADOR">
-                            MULTIOPERADOR CESAR
+                            MULTIOPERADOR EX-CESAR
                           </MenuItem>
                           <MenuItem value="MULTIOPERADOR_M2MCENTER">
                             MULTIOPERADOR M2M CENTER ORANGE
                           </MenuItem>
+                          <MenuItem value="EMNIFY_10_MB">EMNIFY 10 MB</MenuItem>
+                          <MenuItem value="EMNIFY_15_MB">EMNIFY 15 MB</MenuItem>
+                          <MenuItem value="EMNIFY_05_MB">EMNIFY 05 MB</MenuItem>
+                          <MenuItem value="GUINEA">GUINEA</MenuItem>
+                          <MenuItem value="CUY">CUY</MenuItem>
                         </Select>
                       </FormControl>
                       {touched.sim && errors.sim && (
